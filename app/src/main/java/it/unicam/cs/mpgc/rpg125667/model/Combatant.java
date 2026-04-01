@@ -9,4 +9,6 @@ public interface Combatant {
     boolean isAlive();
     
     void takeDamage(int damage);
+
+    void attack(Combatant target);
 }

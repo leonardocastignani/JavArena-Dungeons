@@ -1,5 +1,9 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
+import lombok.*;
+
+@Getter
+@Setter
 public class Monster implements Combatant {
     
     private final String name;
@@ -8,11 +12,6 @@ public class Monster implements Combatant {
     public Monster(String name, CharacterStats stats) {
         this.name = name;
         this.stats = stats;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class Monster implements Combatant {
     public void takeDamage(int damage) {
         int actualDamage = Math.max(0, damage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
-        System.out.println("Il mostro " + this.name + " subisce " + actualDamage + " danni! Salute rimanente: " + getCurrentHealth());
+        System.out.println("Il mostro " + this.name + " subisce " + actualDamage + " danni! Salute rimanente: " + this.stats.getCurrentHealth());
     }
 
     public void attack(Combatant target) {
