@@ -31,3 +31,7 @@ build
 
 # Ignore Kotlin plugin data
 .kotlin
+
+# Ignore H2 database files
+app/src/data/*.db
+app/src/data/*.trace.db
