@@ -14,8 +14,10 @@ public class ArenaController {
 
     @FXML private Label playerNameLabel;
     @FXML private Label playerHpLabel;
+    @FXML private Label playerStatsLabel;
     @FXML private Label monsterNameLabel;
     @FXML private Label monsterHpLabel;
+    @FXML private Label monsterStatsLabel;
     @FXML private TextArea battleLog;
     @FXML private Button attackButton;
     @FXML private Button backButton;
@@ -60,9 +62,13 @@ public class ArenaController {
     private void updateUI() {
         this.playerNameLabel.setText(this.engine.getPlayer().getName());
         this.playerHpLabel.setText("HP: " + this.engine.getPlayer().getCurrentHealth());
+        this.playerStatsLabel.setText("⚔️ Att: " + this.engine.getPlayer().getStats().getBaseAttack() + 
+                                 "  |  🛡️ Dif: " + this.engine.getPlayer().getStats().getBaseDefense());
         
         this.monsterNameLabel.setText(this.engine.getMonster().getName());
         this.monsterHpLabel.setText("HP: " + this.engine.getMonster().getCurrentHealth());
+        this.monsterStatsLabel.setText("⚔️ Att: " + this.engine.getMonster().getStats().getBaseAttack() + 
+                                  "  |  🛡️ Dif: " + this.engine.getMonster().getStats().getBaseDefense());
     }
 
     private void log(String message) {
