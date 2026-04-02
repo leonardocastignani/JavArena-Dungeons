@@ -1,27 +1,32 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
+import java.util.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class Player implements Combatant {
 
-    private Long id = 1L;
+    private String id;
     private String name;
     private CharacterStats stats;
 
     public Player(String name, CharacterStats stats) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.stats = stats;
     }
 
     @Override
+    @JsonIgnore
     public int getCurrentHealth() {
         return this.stats.getCurrentHealth();
     }
 
     @Override
+    @JsonIgnore
     public boolean isAlive() {
         return this.stats.getCurrentHealth() > 0;
     }
