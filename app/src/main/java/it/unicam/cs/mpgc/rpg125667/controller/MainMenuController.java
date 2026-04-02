@@ -23,10 +23,15 @@ public class MainMenuController {
 
     @FXML
     protected void onNewGameClick() {
-        CharacterStats stats = new CharacterStats(100, 100, 15, 5);
-        Player hero = new Player("Artù", stats);
-        this.repository.save(hero);
-        this.goToArena(hero);
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/character-creation.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) this.statusLabel.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 400));
+        } catch (IOException e) {
+            e.printStackTrace();
+            this.statusLabel.setText("Errore di caricamento schermata!");
+        }
     }
 
     @FXML
@@ -48,12 +53,11 @@ public class MainMenuController {
             ArenaController arenaController = loader.getController();
             arenaController.initData(player);
 
-            Stage stage = (Stage) statusLabel.getScene().getWindow();
-
+            Stage stage = (Stage) this.statusLabel.getScene().getWindow();
             stage.setScene(new Scene(root, 600, 400));
         } catch (IOException e) {
             e.printStackTrace();
-            statusLabel.setText("Errore di caricamento dell'Arena!");
+            this.statusLabel.setText("Errore di caricamento dell'Arena!");
         }
     }
 
