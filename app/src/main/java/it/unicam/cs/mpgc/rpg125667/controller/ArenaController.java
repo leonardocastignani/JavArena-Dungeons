@@ -1,9 +1,14 @@
 package it.unicam.cs.mpgc.rpg125667.controller;
 
+import java.io.IOException;
+
 import it.unicam.cs.mpgc.rpg125667.engine.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
+import it.unicam.cs.mpgc.rpg125667.repository.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.stage.*;
 
 public class ArenaController {
 
@@ -13,12 +18,16 @@ public class ArenaController {
     @FXML private Label monsterHpLabel;
     @FXML private TextArea battleLog;
     @FXML private Button attackButton;
+    @FXML private Button backButton;
 
     private BattleEngine engine;
+    private PlayerRepository repository;
 
     public void initData(Player player) {
+        this.repository = new PlayerRepository();
         Monster randomEnemy = MonsterFactory.generateRandomMonster();
         this.engine = new BattleEngine(player, randomEnemy);
+        
         this.battleLog.clear();
         this.log("Un " + randomEnemy.getName() + " ti sbarra la strada!");
         this.updateUI();
@@ -64,6 +73,27 @@ public class ArenaController {
         this.updateUI();
         this.log("\n--- FINE BATTAGLIA ---");
         this.log(this.engine.getBattleResult());
+        
         this.attackButton.setDisable(true);
+        this.backButton.setDisable(false);
+
+        if (this.engine.getPlayer().isAlive()) {
+            this.repository.save(this.engine.getPlayer());
+            this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth());
+        } else {
+            this.log("Sei morto... I tuoi progressi non verranno salvati.");
+        }
+    }
+
+    @FXML
+    protected void onBackToMenuClick() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) this.backButton.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 400));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
