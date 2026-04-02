@@ -1,0 +1,12 @@
+{
+  "id" : 1,
+  "name" : "Leonardo",
+  "stats" : {
+    "maxHealth" : 100,
+    "currentHealth" : 100,
+    "baseAttack" : 12,
+    "baseDefense" : 3
+  },
+  "alive" : true,
+  "currentHealth" : 100
+}

@@ -1,10 +1,9 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
-import jakarta.persistence.*;
 import lombok.*;
 
-@Embeddable
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterStats {
