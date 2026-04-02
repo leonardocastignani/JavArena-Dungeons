@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.repository;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
+import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 import java.io.*;
 import java.util.*;
@@ -10,28 +11,37 @@ public class PlayerRepository {
     private final File saveFile = new File("src/data/savegame.json");
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public void save(Player player) {
+    public List<Player> findAll() {
+        if (!this.saveFile.exists()) return new ArrayList<Player>();
+
         try {
-            this.saveFile.getParentFile().mkdirs();
-            this.mapper.writerWithDefaultPrettyPrinter().writeValue(this.saveFile, player);
-            System.out.println("Partita salvata con successo in JSON!");
+            return this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
         } catch (IOException e) {
-            System.out.println("Errore durante il salvataggio: " + e.getMessage());
+            System.err.println("Errore durante la lettura dei salvataggi: " + e.getMessage());
+            return new ArrayList<>();
         }
     }
 
-    public Optional<Player> findById(Long id) {
-        if (!this.saveFile.exists()) return Optional.empty();
+    public void save(Player player) {
+        List<Player> players = this.findAll();
+        
+        players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
+
+        players.add(player);
 
         try {
-            Player loadedPlayer = this.mapper.readValue(this.saveFile, Player.class);
-            System.out.println("Salvataggio caricato con successo!");
-            return Optional.ofNullable(loadedPlayer);
-            
+            this.saveFile.getParentFile().mkdirs();
+            this.mapper.writerWithDefaultPrettyPrinter().writeValue(this.saveFile, players);
+            System.out.println("Salvataggio aggiornato nel file JSON multiplo!");
         } catch (IOException e) {
-            System.err.println("Errore durante il caricamento: " + e.getMessage());
-            return Optional.empty();
+            System.err.println("Errore durante il salvataggio: " + e.getMessage());
         }
+    }
+
+    public Optional<Player> findById(String id) {
+        return findAll().stream()
+                .filter(p -> id.equals(p.getId()))
+                .findFirst();
     }
 
     public void close() {}
