@@ -17,11 +17,10 @@ public class ArenaController {
     private BattleEngine engine;
 
     public void initData(Player player) {
-        CharacterStats goblinStats = new CharacterStats(50, 50, 10, 2);
-        Monster goblin = new Monster("Goblin Infuriato", goblinStats);
-        this.engine = new BattleEngine(player, goblin);
+        Monster randomEnemy = MonsterFactory.generateRandomMonster();
+        this.engine = new BattleEngine(player, randomEnemy);
         this.battleLog.clear();
-        this.log("Un " + goblin.getName() + " ti sbarra la strada!");
+        this.log("Un " + randomEnemy.getName() + " ti sbarra la strada!");
         this.updateUI();
     }
 
