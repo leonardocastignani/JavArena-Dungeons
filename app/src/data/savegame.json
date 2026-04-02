@@ -12,7 +12,7 @@
   "name" : "Eroe1",
   "stats" : {
     "maxHealth" : 100,
-    "currentHealth" : 80,
+    "currentHealth" : 64,
     "baseAttack" : 19,
     "baseDefense" : 5
   }
