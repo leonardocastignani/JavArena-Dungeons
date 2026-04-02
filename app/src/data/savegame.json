@@ -1,13 +1,4 @@
 [ {
-  "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
-  "name" : "Eroe1",
-  "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 100,
-    "baseAttack" : 19,
-    "baseDefense" : 5
-  }
-}, {
   "id" : "6c5ed5ab-d498-493c-a1df-1269cda2365c",
   "name" : "Eroe2",
   "stats" : {
@@ -15,5 +6,14 @@
     "currentHealth" : 100,
     "baseAttack" : 12,
     "baseDefense" : 4
+  }
+}, {
+  "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
+  "name" : "Eroe1",
+  "stats" : {
+    "maxHealth" : 100,
+    "currentHealth" : 80,
+    "baseAttack" : 19,
+    "baseDefense" : 5
   }
 } ]
