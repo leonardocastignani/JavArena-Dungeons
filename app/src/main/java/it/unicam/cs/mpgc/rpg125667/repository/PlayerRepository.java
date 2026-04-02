@@ -1,42 +1,38 @@
 package it.unicam.cs.mpgc.rpg125667.repository;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.databind.*;
+import java.io.*;
 import java.util.*;
 
 public class PlayerRepository {
     
-    private final EntityManagerFactory emf;
-
-    public PlayerRepository() {
-        this.emf = Persistence.createEntityManagerFactory("RpgPU");
-    }
+    private final File saveFile = new File("src/data/savegame.json");
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public void save(Player player) {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        
-        if (player.getId() == null) {
-            em.persist(player);
-        } else {
-            em.merge(player);
+        try {
+            this.saveFile.getParentFile().mkdirs();
+            this.mapper.writerWithDefaultPrettyPrinter().writeValue(this.saveFile, player);
+            System.out.println("Partita salvata con successo in JSON!");
+        } catch (IOException e) {
+            System.out.println("Errore durante il salvataggio: " + e.getMessage());
         }
-        
-        em.getTransaction().commit();
-        em.close();
     }
 
-    @SuppressWarnings("null")
     public Optional<Player> findById(Long id) {
-        EntityManager em = emf.createEntityManager();
-        Player player = em.find(Player.class, id);
-        em.close();
-        return Optional.ofNullable(player);
-    }
+        if (!this.saveFile.exists()) return Optional.empty();
 
-    public void close() {
-        if (emf != null && emf.isOpen()) {
-            emf.close();
+        try {
+            Player loadedPlayer = this.mapper.readValue(this.saveFile, Player.class);
+            System.out.println("Salvataggio caricato con successo!");
+            return Optional.ofNullable(loadedPlayer);
+            
+        } catch (IOException e) {
+            System.err.println("Errore durante il caricamento: " + e.getMessage());
+            return Optional.empty();
         }
     }
+
+    public void close() {}
 }

@@ -1,20 +1,14 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
-import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Player implements Combatant {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
+    private Long id = 1L;
     private String name;
-
-    @Embedded
     private CharacterStats stats;
 
     public Player(String name, CharacterStats stats) {
