@@ -42,4 +42,9 @@ public class Player implements Combatant {
         System.out.println(this.name + " attacca " + target.getName() + "!");
         target.takeDamage(this.stats.getBaseAttack());
     }
+
+    @Override
+    public String toString() {
+        return this.name + " (Attacco: " + this.stats.getBaseAttack() + " | Difesa: " + this.stats.getBaseDefense() + ")";
+    }
 }
