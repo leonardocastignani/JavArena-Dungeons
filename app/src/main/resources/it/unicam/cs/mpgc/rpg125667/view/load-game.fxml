@@ -13,18 +13,35 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
 
-    <Label text="Seleziona il tuo Eroe">
+    <Label text="L'Archivio degli Eroi">
         <font>
             <Font name="System Bold" size="24.0" />
         </font>
     </Label>
 
-    <ListView fx:id="playerListView" prefHeight="200.0" prefWidth="400.0" />
+    <HBox alignment="CENTER" spacing="30.0" prefHeight="220.0">
+        
+        <ListView fx:id="playerListView" prefWidth="200.0" />
+
+        <VBox fx:id="detailsPanel" visible="false" spacing="10.0" prefWidth="250.0" style="-fx-border-color: gray; -fx-border-radius: 5; -fx-padding: 15; -fx-background-color: #f4f4f4;">
+            <Label fx:id="detailNameLabel" text="Nome Eroe">
+                <font><Font name="System Bold" size="18.0" /></font>
+            </Label>
+            <Label fx:id="detailLevelLabel" text="Livello: ?" />
+            <Label fx:id="detailHpLabel" text="Salute: ?/?" textFill="GREEN">
+                <font><Font name="System Bold" size="14.0" /></font>
+            </Label>
+            <Label fx:id="detailXpLabel" text="XP: ?" textFill="BLUE" />
+            <Label fx:id="detailStatsLabel" text="Att: ? | Dif: ?" />
+            <Label fx:id="detailPotionsLabel" text="Pozioni: ?" />
+        </VBox>
+
+    </HBox>
 
     <Label fx:id="errorLabel" textFill="RED" />
 
     <HBox alignment="CENTER" spacing="20.0">
-        <Button text="🔙 Torna al Menu" onAction="#onBackToMenuClick" />
-        <Button text="⚔️ Carica e Combatti" onAction="#onLoadHeroClick" prefHeight="40.0" />
+        <Button text="Torna al Menu" onAction="#onBackToMenuClick" />
+        <Button text="Carica e Combatti" onAction="#onLoadHeroClick" prefHeight="40.0" />
     </HBox>
 </VBox>

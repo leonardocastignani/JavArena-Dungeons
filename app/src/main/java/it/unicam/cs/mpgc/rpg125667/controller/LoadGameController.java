@@ -6,6 +6,7 @@ import javafx.collections.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.*;
 import java.io.*;
 import java.util.*;
@@ -14,6 +15,13 @@ public class LoadGameController {
 
     @FXML private ListView<Player> playerListView;
     @FXML private Label errorLabel;
+    @FXML private VBox detailsPanel;
+    @FXML private Label detailNameLabel;
+    @FXML private Label detailLevelLabel;
+    @FXML private Label detailHpLabel;
+    @FXML private Label detailXpLabel;
+    @FXML private Label detailStatsLabel;
+    @FXML private Label detailPotionsLabel;
     
     private PlayerRepository repository;
 
@@ -23,6 +31,23 @@ public class LoadGameController {
         List<Player> players = this.repository.findAll();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
+        this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                this.showPlayerDetails(newValue);
+            }
+        });
+    }
+
+    private void showPlayerDetails(Player p) {
+        this.detailsPanel.setVisible(true);
+        this.errorLabel.setText("");
+
+        this.detailNameLabel.setText(p.getName());
+        this.detailLevelLabel.setText("Livello: " + p.getLevel());
+        this.detailHpLabel.setText("Salute: " + p.getCurrentHealth() + " / " + p.getStats().getMaxHealth());
+        this.detailXpLabel.setText("XP: " + p.getXp() + " / " + (p.getLevel() * 50));
+        this.detailStatsLabel.setText("Att: " + p.getStats().getBaseAttack() + "  |  Dif: " + p.getStats().getBaseDefense());
+        this.detailPotionsLabel.setText("Pozioni rimanenti: " + p.getPotions());
     }
 
     @FXML

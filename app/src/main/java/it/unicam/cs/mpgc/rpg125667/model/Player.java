@@ -81,6 +81,6 @@ public class Player implements Combatant {
 
     @Override
     public String toString() {
-        return this.name + " (Attacco: " + this.stats.getBaseAttack() + " | Difesa: " + this.stats.getBaseDefense() + ")";
+        return this.name + " (Lvl. " + this.level + ")";
     }
 }
