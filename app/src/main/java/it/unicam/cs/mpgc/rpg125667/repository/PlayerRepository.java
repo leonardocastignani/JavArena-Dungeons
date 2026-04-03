@@ -26,7 +26,6 @@ public class PlayerRepository {
         List<Player> players = this.findAll();
         
         players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
-
         players.add(player);
 
         try {
@@ -42,6 +41,19 @@ public class PlayerRepository {
         return findAll().stream()
                 .filter(p -> id.equals(p.getId()))
                 .findFirst();
+    }
+
+    public void delete(Player player) {
+        List<Player> players = new ArrayList<Player>(this.findAll());
+
+        players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
+
+        try {
+            this.mapper.writerWithDefaultPrettyPrinter().writeValue(this.saveFile, players);
+            System.out.println("L'eroe è caduto. Salvataggio eliminato per sempre.");
+        } catch (IOException e) {
+            System.err.println("Errore durante l'eliminazione: " + e.getMessage());
+        }
     }
 
     public void close() {}
