@@ -13,6 +13,8 @@ public class Player implements Combatant {
     private String name;
     private CharacterStats stats;
     private int potions = 3;
+    private int level = 1;
+    private int xp = 0;
 
     public Player(String name, CharacterStats stats) {
         this.id = UUID.randomUUID().toString();
@@ -51,6 +53,30 @@ public class Player implements Combatant {
             return true;
         }
         return false;
+    }
+
+    public boolean gainXp(int amount) {
+        this.xp += amount;
+
+        int xpNeeded = this.level * 50;
+        
+        if (this.xp >= xpNeeded) {
+            this.levelUp();
+            return true;
+        }
+        return false;
+    }
+
+    private void levelUp() {
+        this.level++;
+        this.xp = 0;
+
+        this.stats.setMaxHealth(this.stats.getMaxHealth() + 20);
+        this.stats.setBaseAttack(this.stats.getBaseAttack() + 3);
+        this.stats.setBaseDefense(this.stats.getBaseDefense() + 1);
+
+        this.stats.setCurrentHealth(this.stats.getMaxHealth());
+        this.potions = 3;
     }
 
     @Override

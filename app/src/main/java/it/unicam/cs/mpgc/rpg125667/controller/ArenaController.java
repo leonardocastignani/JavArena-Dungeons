@@ -77,17 +77,18 @@ public class ArenaController {
     }
 
     private void updateUI() {
-        this.playerNameLabel.setText(this.engine.getPlayer().getName());
+        this.playerNameLabel.setText(this.engine.getPlayer().getName()+ " (Lv. " + this.engine.getPlayer().getLevel() + ")");
         this.playerHpLabel.setText("HP: " + this.engine.getPlayer().getCurrentHealth());
         this.playerStatsLabel.setText("⚔️ Att: " + this.engine.getPlayer().getStats().getBaseAttack() + 
                                  "  |  🛡️ Dif: " + this.engine.getPlayer().getStats().getBaseDefense());
-        this.healButton.setText("💊 Curati (" + this.engine.getPlayer().getPotions() + ")");
-        this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0);
         
         this.monsterNameLabel.setText(this.engine.getMonster().getName());
         this.monsterHpLabel.setText("HP: " + this.engine.getMonster().getCurrentHealth());
         this.monsterStatsLabel.setText("⚔️ Att: " + this.engine.getMonster().getStats().getBaseAttack() + 
                                   "  |  🛡️ Dif: " + this.engine.getMonster().getStats().getBaseDefense());
+
+        this.healButton.setText("💊 Curati (" + this.engine.getPlayer().getPotions() + ")");
+        this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0);
     }
 
     private void log(String message) {
@@ -104,6 +105,16 @@ public class ArenaController {
         this.backButton.setDisable(false);
 
         if (this.engine.getPlayer().isAlive()) {
+            int xpReward = 20 + (this.engine.getMonster().getStats().getMaxHealth() / 2);
+            this.log("Hai ottenuto " + xpReward + " punti esperienza!");
+
+            boolean leveledUp = this.engine.getPlayer().gainXp(xpReward);
+            if (leveledUp) {
+                this.log("🎉 SALI DI LIVELLO! Sei ora al Livello " + this.engine.getPlayer().getLevel() + "!");
+                this.log("Salute e pozioni ripristinate. Statistiche aumentate!");
+                this.updateUI();
+            }
+
             this.repository.save(this.engine.getPlayer());
             this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth());
         } else {
