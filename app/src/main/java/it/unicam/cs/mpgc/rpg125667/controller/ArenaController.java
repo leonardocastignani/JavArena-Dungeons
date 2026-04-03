@@ -102,9 +102,10 @@ public class ArenaController {
         
         this.attackButton.setDisable(true);
         this.healButton.setDisable(true);
-        this.backButton.setDisable(false);
 
         if (this.engine.getPlayer().isAlive()) {
+            this.backButton.setDisable(false);
+
             int xpReward = 20 + (this.engine.getMonster().getStats().getMaxHealth() / 2);
             this.log("Hai ottenuto " + xpReward + " punti esperienza!");
 
@@ -118,7 +119,9 @@ public class ArenaController {
             this.repository.save(this.engine.getPlayer());
             this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth());
         } else {
-            this.log("Sei morto... I tuoi progressi non verranno salvati.");
+            // this.log("Sei morto... I tuoi progressi non verranno salvati.");
+            this.repository.delete(this.engine.getPlayer());
+            this.goToGameOver();
         }
     }
 
@@ -128,6 +131,17 @@ public class ArenaController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) this.backButton.getScene().getWindow();
+            stage.setScene(new Scene(root, 600, 400));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void goToGameOver() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml"));
+            Parent root = loader.load();
+            Stage stage = (Stage) this.attackButton.getScene().getWindow();
             stage.setScene(new Scene(root, 600, 400));
         } catch (IOException e) {
             e.printStackTrace();
