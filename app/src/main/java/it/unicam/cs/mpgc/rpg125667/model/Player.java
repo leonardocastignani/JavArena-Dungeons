@@ -12,6 +12,7 @@ public class Player implements Combatant {
     private String id;
     private String name;
     private CharacterStats stats;
+    private int potions = 3;
 
     public Player(String name, CharacterStats stats) {
         this.id = UUID.randomUUID().toString();
@@ -41,6 +42,15 @@ public class Player implements Combatant {
     public void attack(Combatant target) {
         System.out.println(this.name + " attacca " + target.getName() + "!");
         target.takeDamage(this.stats.getBaseAttack());
+    }
+
+    public boolean usePotion() {
+        if (this.potions > 0) {
+            this.potions--;
+            this.stats.heal(30); 
+            return true;
+        }
+        return false;
     }
 
     @Override

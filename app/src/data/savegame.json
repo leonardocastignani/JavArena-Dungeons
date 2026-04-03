@@ -6,7 +6,8 @@
     "currentHealth" : 100,
     "baseAttack" : 12,
     "baseDefense" : 4
-  }
+  },
+  "potions" : 3
 }, {
   "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
   "name" : "Eroe1",
@@ -15,5 +16,16 @@
     "currentHealth" : 64,
     "baseAttack" : 19,
     "baseDefense" : 5
-  }
+  },
+  "potions" : 3
+}, {
+  "id" : "7499daf8-83aa-46b5-9c5e-eee051bb3d2e",
+  "name" : "Prova",
+  "stats" : {
+    "maxHealth" : 100,
+    "currentHealth" : 100,
+    "baseAttack" : 20,
+    "baseDefense" : 2
+  },
+  "potions" : 2
 } ]
