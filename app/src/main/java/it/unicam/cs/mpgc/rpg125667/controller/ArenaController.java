@@ -20,6 +20,7 @@ public class ArenaController {
     @FXML private Label monsterStatsLabel;
     @FXML private TextArea battleLog;
     @FXML private Button attackButton;
+    @FXML private Button healButton;
     @FXML private Button backButton;
 
     private BattleEngine engine;
@@ -59,11 +60,29 @@ public class ArenaController {
         }
     }
 
+    @FXML
+    protected void onHealClick() {
+        if (this.engine.getPlayer().usePotion()) {
+            this.log(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
+
+            int playerStartHp = this.engine.getPlayer().getCurrentHealth();
+            this.engine.executeMonsterAttack();
+            int monsterDamage = playerStartHp - this.engine.getPlayer().getCurrentHealth();
+            
+            this.log(this.engine.getMonster().getName() + " approfitta del momento e infligge " + monsterDamage + " danni.");
+            this.updateUI();
+
+            if (this.engine.isBattleOver()) this.endBattle();
+        }
+    }
+
     private void updateUI() {
         this.playerNameLabel.setText(this.engine.getPlayer().getName());
         this.playerHpLabel.setText("HP: " + this.engine.getPlayer().getCurrentHealth());
         this.playerStatsLabel.setText("⚔️ Att: " + this.engine.getPlayer().getStats().getBaseAttack() + 
                                  "  |  🛡️ Dif: " + this.engine.getPlayer().getStats().getBaseDefense());
+        this.healButton.setText("💊 Curati (" + this.engine.getPlayer().getPotions() + ")");
+        this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0);
         
         this.monsterNameLabel.setText(this.engine.getMonster().getName());
         this.monsterHpLabel.setText("HP: " + this.engine.getMonster().getCurrentHealth());
@@ -81,6 +100,7 @@ public class ArenaController {
         this.log(this.engine.getBattleResult());
         
         this.attackButton.setDisable(true);
+        this.healButton.setDisable(true);
         this.backButton.setDisable(false);
 
         if (this.engine.getPlayer().isAlive()) {
