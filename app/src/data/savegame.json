@@ -7,7 +7,9 @@
     "baseAttack" : 12,
     "baseDefense" : 4
   },
-  "potions" : 3
+  "potions" : 3,
+  "level" : 1,
+  "xp" : 0
 }, {
   "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
   "name" : "Eroe1",
@@ -17,15 +19,19 @@
     "baseAttack" : 19,
     "baseDefense" : 5
   },
-  "potions" : 3
+  "potions" : 3,
+  "level" : 1,
+  "xp" : 0
 }, {
   "id" : "7499daf8-83aa-46b5-9c5e-eee051bb3d2e",
   "name" : "Prova",
   "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 100,
-    "baseAttack" : 20,
-    "baseDefense" : 2
+    "maxHealth" : 120,
+    "currentHealth" : 120,
+    "baseAttack" : 23,
+    "baseDefense" : 3
   },
-  "potions" : 2
+  "potions" : 3,
+  "level" : 2,
+  "xp" : 0
 } ]
