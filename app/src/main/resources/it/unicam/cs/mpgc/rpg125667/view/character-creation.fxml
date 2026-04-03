@@ -41,10 +41,10 @@
         </VBox>
     </HBox>
 
-    <Button text="🎲 Rilancia Statistiche" onAction="#onRollStatsClick" />
+    <Button text="Rilancia Statistiche" onAction="#onRollStatsClick" />
 
     <Label fx:id="errorLabel" textFill="RED" />
 
-    <Button text="⚔️ Inizia l'Avventura" onAction="#onCreateHeroClick" prefHeight="40.0" />
+    <Button text="Inizia l'Avventura" onAction="#onCreateHeroClick" prefHeight="40.0" />
     <Button text="Torna al Menu" onAction="#onBackToMenuClick" />
 </VBox>
