@@ -26,12 +26,12 @@
   "id" : "7499daf8-83aa-46b5-9c5e-eee051bb3d2e",
   "name" : "Prova",
   "stats" : {
-    "maxHealth" : 120,
-    "currentHealth" : 120,
-    "baseAttack" : 23,
-    "baseDefense" : 3
+    "maxHealth" : 180,
+    "currentHealth" : 180,
+    "baseAttack" : 32,
+    "baseDefense" : 6
   },
   "potions" : 3,
-  "level" : 2,
+  "level" : 5,
   "xp" : 0
 } ]

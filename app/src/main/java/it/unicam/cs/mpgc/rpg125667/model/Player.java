@@ -38,11 +38,9 @@ public class Player implements Combatant {
     public void takeDamage(int damage) {
         int actualDamage = Math.max(0, damage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
-        System.out.println(this.name + " subisce " + actualDamage + " danni! Salute rimanente: " + this.stats.getCurrentHealth());
     }
 
     public void attack(Combatant target) {
-        System.out.println(this.name + " attacca " + target.getName() + "!");
         target.takeDamage(this.stats.getBaseAttack());
     }
 

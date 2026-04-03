@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg125667.engine;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import lombok.*;
+import java.util.*;
 
 @Getter
 public class BattleEngine {
@@ -9,24 +10,52 @@ public class BattleEngine {
     private final Player player;
     private final Monster monster;
     private boolean isPlayerTurn;
+    private final Random random;
 
     public BattleEngine(Player player, Monster monster) {
         this.player = player;
         this.monster = monster;
         this.isPlayerTurn = true;
+        this.random = new Random();
     }
 
-    public void executePlayerAttack() {
+    public String executePlayerAttack() {
         if (!this.isBattleOver() && this.isPlayerTurn) {
-            this.player.attack(this.monster);
             this.isPlayerTurn = false;
+            return this.resolveStrike(this.player, this.monster);
         }
+        return null;
     }
 
-    public void executeMonsterAttack() {
+    public String executeMonsterAttack() {
         if (!this.isBattleOver() && !this.isPlayerTurn) {
-            this.monster.attack(this.player);
             this.isPlayerTurn = true;
+            return this.resolveStrike(this.monster, this.player);
+        }
+        return null;
+    }
+
+    private String resolveStrike(Combatant attacker, Combatant defender) {
+        int roll = this.random.nextInt(100) + 1;
+
+        if (roll <= 10) return "SCHIVATA! " + defender.getName() + " evita agilmente l'attacco di " + attacker.getName() + "!";
+
+        int baseDmg = attacker.getStats().getBaseAttack();
+        boolean isCrit = false;
+
+        if (roll > 90) {
+            baseDmg *= 2;
+            isCrit = true;
+        }
+
+        int startHp = defender.getCurrentHealth();
+        defender.takeDamage(baseDmg);
+        int actualDamage = startHp - defender.getCurrentHealth();
+
+        if (isCrit) {
+            return "CRITICO! " + attacker.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
+        } else {
+            return attacker.getName() + " attacca e infligge " + actualDamage + " danni.";
         }
     }
 

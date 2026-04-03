@@ -32,32 +32,28 @@ public class ArenaController {
         this.engine = new BattleEngine(player, randomEnemy);
         
         this.battleLog.clear();
+        System.out.println("\n========================================");
         this.log("Un " + randomEnemy.getName() + " ti sbarra la strada!");
+        this.log("--- INIZIO BATTAGLIA ---");
         this.updateUI();
     }
 
     @FXML
     protected void onAttackClick() {
-        int monsterStartHp = this.engine.getMonster().getCurrentHealth();
-        this.engine.executePlayerAttack();
-        int playerDamage = monsterStartHp - this.engine.getMonster().getCurrentHealth();
-        this.log(this.engine.getPlayer().getName() + " attacca e infligge " + playerDamage + " danni.");
+        String playerLog = this.engine.executePlayerAttack();
+        this.log(playerLog);
 
         if (this.engine.isBattleOver()) {
             this.endBattle();
             return;
         }
 
-        int playerStartHp = this.engine.getPlayer().getCurrentHealth();
-        this.engine.executeMonsterAttack();
-        int monsterDamage = playerStartHp - this.engine.getPlayer().getCurrentHealth();
-        this.log(this.engine.getMonster().getName() + " contrattacca e infligge " + monsterDamage + " danni.");
+        String monsterLog = this.engine.executeMonsterAttack();
+        this.log(monsterLog);
 
         this.updateUI();
 
-        if (this.engine.isBattleOver()) {
-            this.endBattle();
-        }
+        if (this.engine.isBattleOver()) this.endBattle();
     }
 
     @FXML
@@ -65,11 +61,9 @@ public class ArenaController {
         if (this.engine.getPlayer().usePotion()) {
             this.log(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
 
-            int playerStartHp = this.engine.getPlayer().getCurrentHealth();
-            this.engine.executeMonsterAttack();
-            int monsterDamage = playerStartHp - this.engine.getPlayer().getCurrentHealth();
-            
-            this.log(this.engine.getMonster().getName() + " approfitta del momento e infligge " + monsterDamage + " danni.");
+            String monsterLog = this.engine.executeMonsterAttack();
+            this.log(monsterLog);
+
             this.updateUI();
 
             if (this.engine.isBattleOver()) this.endBattle();
@@ -93,6 +87,7 @@ public class ArenaController {
 
     private void log(String message) {
         this.battleLog.appendText(message + "\n");
+        System.out.println(message);
     }
 
     private void endBattle() {
@@ -117,9 +112,9 @@ public class ArenaController {
             }
 
             this.repository.save(this.engine.getPlayer());
-            this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth());
+            this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
-            // this.log("Sei morto... I tuoi progressi non verranno salvati.");
+            this.log("Sei morto... I tuoi progressi non verranno salvati.");
             this.repository.delete(this.engine.getPlayer());
             this.goToGameOver();
         }
