@@ -2,12 +2,13 @@ package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.util.*;
+
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
-import java.io.*;
-import java.util.Random;
+
+import java.util.*;
 
 public class CharacterCreationController {
 
@@ -63,28 +64,13 @@ public class CharacterCreationController {
     @FXML
     protected void onBackToMenuClick() {
         this.repository.close();
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) this.nameField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.nameField.getScene().getWindow();
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
     }
 
     private void goToArena(Player player) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/arena.fxml"));
-            Parent root = loader.load();
-
-            ArenaController arenaController = loader.getController();
-            arenaController.initData(player);
-
-            Stage stage = (Stage) this.nameField.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.nameField.getScene().getWindow();
+        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml");
+        arenaController.initData(player);
     }
 }

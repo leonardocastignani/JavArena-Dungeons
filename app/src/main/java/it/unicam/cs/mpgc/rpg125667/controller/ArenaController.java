@@ -1,12 +1,11 @@
 package it.unicam.cs.mpgc.rpg125667.controller;
 
-import java.io.IOException;
-
 import it.unicam.cs.mpgc.rpg125667.engine.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.util.*;
+
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
@@ -122,24 +121,12 @@ public class ArenaController {
 
     @FXML
     protected void onBackToMenuClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) this.backButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.backButton.getScene().getWindow();
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
     }
 
     private void goToGameOver() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) this.attackButton.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.attackButton.getScene().getWindow();
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml");
     }
 }
