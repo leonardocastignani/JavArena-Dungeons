@@ -71,4 +71,21 @@ public class BattleEngine {
         }
         return "La battaglia è ancora in corso...";
     }
+
+    public String grantRewards() {
+        if (!this.player.isAlive() || this.monster.isAlive()) return "";
+
+        int xpReward = 20 + (this.monster.getStats().getMaxHealth() / 2);
+        boolean leveledUp = this.player.gainXp(xpReward);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("Hai ottenuto ").append(xpReward).append(" punti esperienza!");
+        
+        if (leveledUp) {
+            sb.append("\nSALI DI LIVELLO! Sei ora al Livello ").append(this.player.getLevel()).append("!");
+            sb.append("\nSalute e pozioni ripristinate. Statistiche aumentate!");
+        }
+
+        return sb.toString();
+    }
 }

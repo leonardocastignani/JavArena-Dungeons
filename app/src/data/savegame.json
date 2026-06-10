@@ -1,16 +1,4 @@
 [ {
-  "id" : "6c5ed5ab-d498-493c-a1df-1269cda2365c",
-  "name" : "Eroe2",
-  "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 100,
-    "baseAttack" : 12,
-    "baseDefense" : 4
-  },
-  "potions" : 3,
-  "level" : 1,
-  "xp" : 0
-}, {
   "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
   "name" : "Eroe1",
   "stats" : {
@@ -23,15 +11,15 @@
   "level" : 1,
   "xp" : 0
 }, {
-  "id" : "7499daf8-83aa-46b5-9c5e-eee051bb3d2e",
-  "name" : "Prova",
+  "id" : "6c5ed5ab-d498-493c-a1df-1269cda2365c",
+  "name" : "Eroe2",
   "stats" : {
-    "maxHealth" : 180,
-    "currentHealth" : 66,
-    "baseAttack" : 32,
-    "baseDefense" : 6
+    "maxHealth" : 100,
+    "currentHealth" : 72,
+    "baseAttack" : 12,
+    "baseDefense" : 4
   },
   "potions" : 3,
-  "level" : 5,
-  "xp" : 153
+  "level" : 1,
+  "xp" : 40
 } ]
