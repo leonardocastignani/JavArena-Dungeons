@@ -100,15 +100,10 @@ public class ArenaController {
         if (this.engine.getPlayer().isAlive()) {
             this.backButton.setDisable(false);
 
-            int xpReward = 20 + (this.engine.getMonster().getStats().getMaxHealth() / 2);
-            this.log("Hai ottenuto " + xpReward + " punti esperienza!");
+            String rewardLog = this.engine.grantRewards();
+            this.log(rewardLog);
 
-            boolean leveledUp = this.engine.getPlayer().gainXp(xpReward);
-            if (leveledUp) {
-                this.log("SALI DI LIVELLO! Sei ora al Livello " + this.engine.getPlayer().getLevel() + "!");
-                this.log("Salute e pozioni ripristinate. Statistiche aumentate!");
-                this.updateUI();
-            }
+            this.updateUI();
 
             this.repository.save(this.engine.getPlayer());
             this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
