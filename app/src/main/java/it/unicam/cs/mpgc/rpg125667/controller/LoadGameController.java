@@ -2,13 +2,14 @@ package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.util.*;
+
 import javafx.collections.*;
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.*;
-import java.io.*;
+
 import java.util.*;
 
 public class LoadGameController {
@@ -32,9 +33,7 @@ public class LoadGameController {
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
         this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                this.showPlayerDetails(newValue);
-            }
+            if (newValue != null) this.showPlayerDetails(newValue);
         });
     }
 
@@ -64,26 +63,13 @@ public class LoadGameController {
 
     @FXML
     protected void onBackToMenuClick() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) this.playerListView.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.playerListView.getScene().getWindow();
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
     }
 
     private void goToArena(Player player) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/it/unicam/cs/mpgc/rpg125667/view/arena.fxml"));
-            Parent root = loader.load();
-            ArenaController arenaController = loader.getController();
-            arenaController.initData(player);
-            Stage stage = (Stage) this.playerListView.getScene().getWindow();
-            stage.setScene(new Scene(root, 600, 400));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) this.playerListView.getScene().getWindow();
+        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml");
+        arenaController.initData(player);
     }
 }
