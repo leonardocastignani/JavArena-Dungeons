@@ -38,3 +38,5 @@ app/src/data/*.trace.db
 
 # Extra
 docs/
+*.txt
+
