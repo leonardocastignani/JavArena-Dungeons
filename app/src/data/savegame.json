@@ -27,11 +27,11 @@
   "name" : "Prova",
   "stats" : {
     "maxHealth" : 180,
-    "currentHealth" : 180,
+    "currentHealth" : 80,
     "baseAttack" : 32,
     "baseDefense" : 6
   },
   "potions" : 3,
   "level" : 5,
-  "xp" : 0
+  "xp" : 110
 } ]
