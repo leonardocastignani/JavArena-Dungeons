@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Goblin Infuriato",
+    "minHp": 30, "maxHp": 50,
+    "minAtk": 6, "maxAtk": 12,
+    "minDef": 1, "maxDef": 3
+  },
+  {
+    "name": "Orco Crudele",
+    "minHp": 50, "maxHp": 85,
+    "minAtk": 10, "maxAtk": 18,
+    "minDef": 3, "maxDef": 6
+  },
+  {
+    "name": "Scheletro Guerriero",
+    "minHp": 40, "maxHp": 65,
+    "minAtk": 8, "maxAtk": 15,
+    "minDef": 2, "maxDef": 5
+  },
+  {
+    "name": "Lupo Mannaro",
+    "minHp": 45, "maxHp": 75,
+    "minAtk": 12, "maxAtk": 20,
+    "minDef": 1, "maxDef": 4
+  },
+  {
+    "name": "Bandito della Via",
+    "minHp": 35, "maxHp": 60,
+    "minAtk": 7, "maxAtk": 14,
+    "minDef": 2, "maxDef": 4
+  },
+  {
+    "name": "Drago Sputafuoco",
+    "minHp": 100, "maxHp": 150,
+    "minAtk": 20, "maxAtk": 30,
+    "minDef": 5, "maxDef": 10
+  }
+]
