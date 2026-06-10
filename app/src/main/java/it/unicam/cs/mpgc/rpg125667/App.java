@@ -1,10 +1,12 @@
 package it.unicam.cs.mpgc.rpg125667;
 
 import it.unicam.cs.mpgc.rpg125667.controller.*;
+
 import javafx.application.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.stage.*;
+
 import java.io.*;
 
 public class App extends Application {

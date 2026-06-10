@@ -1,14 +1,16 @@
 package it.unicam.cs.mpgc.rpg125667.repository;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
+
 import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
+
 import java.io.*;
 import java.util.*;
 
 public class PlayerRepository {
     
-    private final File saveFile = new File("src/data/savegame.json");
+    private final File saveFile = new File("data/saves/savegame.json");
     private final ObjectMapper mapper = new ObjectMapper();
 
     public List<Player> findAll() {
