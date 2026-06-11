@@ -29,8 +29,4 @@ public class Monster implements Combatant {
         int actualDamage = Math.max(0, damage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
     }
-
-    public void attack(Combatant target) {
-        target.takeDamage(this.stats.getBaseAttack());
-    }
 }

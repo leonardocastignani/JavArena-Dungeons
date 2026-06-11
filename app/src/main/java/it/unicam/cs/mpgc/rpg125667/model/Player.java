@@ -42,10 +42,6 @@ public class Player implements Combatant {
         this.stats.reduceHealth(actualDamage);
     }
 
-    public void attack(Combatant target) {
-        target.takeDamage(this.stats.getBaseAttack());
-    }
-
     public boolean usePotion() {
         if (this.potions > 0) {
             this.potions--;

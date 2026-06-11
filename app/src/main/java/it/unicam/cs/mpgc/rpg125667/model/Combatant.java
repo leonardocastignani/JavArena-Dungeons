@@ -10,7 +10,5 @@ public interface Combatant {
     
     void takeDamage(int damage);
 
-    void attack(Combatant target);
-
     CharacterStats getStats();
 }
