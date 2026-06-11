@@ -14,11 +14,15 @@ public class BattleEngine {
     private boolean isPlayerTurn;
     private final Random random;
 
-    public BattleEngine(Player player, Monster monster) {
+    public BattleEngine(Player player, Monster monster, Random random) {
         this.player = player;
         this.monster = monster;
         this.isPlayerTurn = true;
-        this.random = new Random();
+        this.random = random;
+    }
+
+    public BattleEngine(Player player, Monster monster) {
+        this(player, monster, new Random());
     }
 
     public String executePlayerAttack() {
