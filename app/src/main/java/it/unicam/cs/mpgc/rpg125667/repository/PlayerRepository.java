@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 
 public class PlayerRepository {
@@ -20,22 +21,30 @@ public class PlayerRepository {
             return this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
         } catch (IOException e) {
             System.err.println("Errore durante la lettura dei salvataggi: " + e.getMessage());
-            return new ArrayList<>();
+            return new ArrayList<Player>();
         }
     }
 
     public void save(Player player) {
-        List<Player> players = this.findAll();
+        List<Player> players = new ArrayList<Player>(this.findAll());
         
         players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
         players.add(player);
 
+        File tempFile = new File(this.saveFile.getAbsolutePath() + ".tmp");
+
         try {
             this.saveFile.getParentFile().mkdirs();
-            this.mapper.writerWithDefaultPrettyPrinter().writeValue(this.saveFile, players);
-            System.out.println("Salvataggio aggiornato nel file JSON multiplo!");
+            this.mapper.writerWithDefaultPrettyPrinter().writeValue(tempFile, players);
+            
+            Files.move(tempFile.toPath(), this.saveFile.toPath(), 
+                       StandardCopyOption.REPLACE_EXISTING, 
+                       StandardCopyOption.ATOMIC_MOVE);
+                       
+            System.out.println("Salvataggio atomico eseguito con successo!");
         } catch (IOException e) {
-            System.err.println("Errore durante il salvataggio: " + e.getMessage());
+            System.err.println("Errore critico durante il salvataggio: " + e.getMessage());
+            if (tempFile.exists()) tempFile.delete();
         }
     }
 
