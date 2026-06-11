@@ -36,7 +36,22 @@ build
 app/src/data/*.db
 app/src/data/*.trace.db
 
+# Ignore IntelliJ IDEA project files
+.idea/
+
+# Ignore Eclipse project files
+.project
+.classpath
+
+# Ignore NetBeans project files
+nbproject/
+
+# Ignore VS Code project files
+.vscode/
+
+# Ignore Maven target directory
+target/
+
 # Extra
 docs/
 *.txt
-
