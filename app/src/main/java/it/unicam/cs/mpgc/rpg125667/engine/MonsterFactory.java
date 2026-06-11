@@ -29,15 +29,17 @@ public class MonsterFactory {
         }
     }
 
-    public static Monster generateRandomMonster() {
+    public static Monster generateRandomMonster(int playerLevel) {
         MonsterTemplate t = templates.get(random.nextInt(templates.size()));
 
-        int hp = random.nextInt((t.maxHp - t.minHp) + 1) + t.minHp;
-        int attack = random.nextInt((t.maxAtk - t.minAtk) + 1) + t.minAtk;
-        int defense = random.nextInt((t.maxDef - t.minDef) + 1) + t.minDef;
+        double multiplier = 1.0 + ((playerLevel - 1) * 0.2);
+
+        int hp = (int) ((random.nextInt((t.getMaxHp() - t.getMinHp()) + 1) + t.getMinHp()) * multiplier);
+        int attack = (int) ((random.nextInt((t.getMaxAtk() - t.getMinAtk()) + 1) + t.getMinAtk()) * multiplier);
+        int defense = (int) ((random.nextInt((t.getMaxDef() - t.getMinDef()) + 1) + t.getMinDef()) * multiplier);
 
         CharacterStats stats = new CharacterStats(hp, hp, attack, defense);
-        return new Monster(t.name, stats);
+        return new Monster(t.getName(), stats);
     }
 
     @Data

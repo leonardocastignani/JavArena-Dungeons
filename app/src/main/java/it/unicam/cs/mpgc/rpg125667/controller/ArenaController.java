@@ -27,7 +27,7 @@ public class ArenaController {
 
     public void initData(Player player) {
         this.repository = new PlayerRepository();
-        Monster randomEnemy = MonsterFactory.generateRandomMonster();
+        Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
         this.engine = new BattleEngine(player, randomEnemy);
         
         this.battleLog.clear();
