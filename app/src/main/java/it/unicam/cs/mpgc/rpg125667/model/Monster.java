@@ -26,7 +26,7 @@ public class Monster implements Combatant {
 
     @Override
     public void takeDamage(int damage) {
-        int actualDamage = Math.max(0, damage - this.stats.getBaseDefense());
+        int actualDamage = Math.max(1, damage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
     }
 }

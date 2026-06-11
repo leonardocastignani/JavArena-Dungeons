@@ -38,7 +38,7 @@ public class Player implements Combatant {
 
     @Override
     public void takeDamage(int damage) {
-        int actualDamage = Math.max(0, damage - this.stats.getBaseDefense());
+        int actualDamage = Math.max(1, damage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
     }
 
@@ -53,24 +53,21 @@ public class Player implements Combatant {
 
     public boolean gainXp(int amount) {
         this.xp += amount;
-
-        int xpNeeded = this.level * 50;
+        boolean leveledUp = false;
         
-        if (this.xp >= xpNeeded) {
+        while (this.xp >= (this.level * 50)) {
+            this.xp -= (this.level * 50);
             this.levelUp();
-            return true;
+            leveledUp = true;
         }
-        return false;
+        return leveledUp;
     }
 
     private void levelUp() {
         this.level++;
-        this.xp = 0;
-
         this.stats.setMaxHealth(this.stats.getMaxHealth() + 20);
-        this.stats.setBaseAttack(this.stats.getBaseAttack() + 3);
+        this.stats.setBaseAttack(this.stats.getBaseAttack() + 2);
         this.stats.setBaseDefense(this.stats.getBaseDefense() + 1);
-
         this.stats.setCurrentHealth(this.stats.getMaxHealth());
         this.potions = 3;
     }
