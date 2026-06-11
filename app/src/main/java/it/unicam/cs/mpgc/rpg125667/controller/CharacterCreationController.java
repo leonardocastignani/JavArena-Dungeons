@@ -47,10 +47,12 @@ public class CharacterCreationController {
     protected void onCreateHeroClick() {
         String heroName = this.nameField.getText().trim();
 
-        if (heroName.isEmpty() || heroName == null) {
+        if (heroName == null || heroName.trim().isEmpty()) {
             this.errorLabel.setText("Devi inserire un nome per iniziare!");
             return;
         }
+
+        heroName = heroName.trim();
 
         CharacterStats stats = new CharacterStats(100, 100, this.currentAttack, this.currentDefense);
         Player newHero = new Player(heroName, stats);
