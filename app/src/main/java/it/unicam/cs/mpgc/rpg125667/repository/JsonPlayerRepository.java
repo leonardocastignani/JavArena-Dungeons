@@ -15,24 +15,23 @@ public class JsonPlayerRepository implements IPlayerRepository {
     private final File saveFile = new File("data/saves/savegame.json");
     private final ObjectMapper mapper = new ObjectMapper();
     
-    private List<Player> cachedPlayers = null;
+    private List<Player> cachedPlayers = new CopyOnWriteArrayList<Player>();
 
     @Override
     public List<Player> findAll() {
-        if (this.cachedPlayers != null) {
+        if (!this.cachedPlayers.isEmpty()) {
             return this.cachedPlayers;
         }
 
         if (!this.saveFile.exists()) {
-            this.cachedPlayers = new ArrayList<Player>();
             return this.cachedPlayers;
         }
 
         try {
-            this.cachedPlayers = this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
+            List<Player> loaded = this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
+            this.cachedPlayers.addAll(loaded);
         } catch (Exception e) {
             System.err.println("Errore lettura DB: " + e.getMessage());
-            this.cachedPlayers = new ArrayList<Player>();
         }
         return this.cachedPlayers;
     }
