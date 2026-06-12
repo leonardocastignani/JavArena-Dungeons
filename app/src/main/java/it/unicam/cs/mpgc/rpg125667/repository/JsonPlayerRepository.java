@@ -9,7 +9,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-public class PlayerRepository {
+public class JsonPlayerRepository implements IPlayerRepository {
     
     private final File saveFile = new File("data/saves/savegame.json");
     private final ObjectMapper mapper = new ObjectMapper();

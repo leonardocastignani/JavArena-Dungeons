@@ -17,7 +17,7 @@ public class CharacterCreationController {
     @FXML private Label attackLabel;
     @FXML private Label defenseLabel;
 
-    private PlayerRepository repository;
+    private IPlayerRepository repository;
     private Random random;
 
     private int currentAttack;
@@ -25,7 +25,7 @@ public class CharacterCreationController {
 
     @FXML
     public void initialize() {
-        this.repository = new PlayerRepository();
+        this.repository = ServiceLocator.getPlayerRepository();
         this.random = new Random();
         this.rollStats();
     }

@@ -23,10 +23,10 @@ public class ArenaController {
     @FXML private Button backButton;
 
     private BattleEngine engine;
-    private PlayerRepository repository;
+    private IPlayerRepository repository;
 
     public void initData(Player player) {
-        this.repository = new PlayerRepository();
+        this.repository = ServiceLocator.getPlayerRepository();
         Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
         this.engine = new BattleEngine(player, randomEnemy);
         

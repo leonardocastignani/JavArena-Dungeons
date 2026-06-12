@@ -11,11 +11,11 @@ public class MainMenuController {
 
     @FXML private Label statusLabel;
 
-    private PlayerRepository repository;
+    private IPlayerRepository repository;
 
     @FXML
     public void initialize() {
-        this.repository = new PlayerRepository();
+        this.repository = ServiceLocator.getPlayerRepository();
     }
 
     @FXML
