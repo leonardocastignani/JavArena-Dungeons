@@ -1,25 +1,25 @@
 [ {
-  "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
-  "name" : "Eroe1",
-  "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 64,
-    "baseAttack" : 19,
-    "baseDefense" : 5
-  },
-  "potions" : 3,
-  "level" : 1,
-  "xp" : 0
-}, {
   "id" : "6c5ed5ab-d498-493c-a1df-1269cda2365c",
   "name" : "Eroe2",
   "stats" : {
     "maxHealth" : 120,
-    "currentHealth" : 120,
+    "currentHealth" : 15,
     "baseAttack" : 14,
     "baseDefense" : 5
   },
   "potions" : 3,
   "level" : 2,
-  "xp" : 32
+  "xp" : 94
+}, {
+  "id" : "8cca5c3c-156b-4cc0-bb95-ba362d5d7f77",
+  "name" : "Eroe1",
+  "stats" : {
+    "maxHealth" : 100,
+    "currentHealth" : 58,
+    "baseAttack" : 19,
+    "baseDefense" : 5
+  },
+  "potions" : 3,
+  "level" : 1,
+  "xp" : 42
 } ]
