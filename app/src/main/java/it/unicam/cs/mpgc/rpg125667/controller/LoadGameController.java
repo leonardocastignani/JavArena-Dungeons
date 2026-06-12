@@ -24,11 +24,11 @@ public class LoadGameController {
     @FXML private Label detailStatsLabel;
     @FXML private Label detailPotionsLabel;
     
-    private PlayerRepository repository;
+    private IPlayerRepository repository;
 
     @FXML
     public void initialize() {
-        this.repository = new PlayerRepository();
+        this.repository = ServiceLocator.getPlayerRepository();
         List<Player> players = this.repository.findAll();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
