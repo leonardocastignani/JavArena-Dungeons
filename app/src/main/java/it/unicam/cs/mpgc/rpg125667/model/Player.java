@@ -43,9 +43,9 @@ public class Player implements Combatant {
     }
 
     public boolean usePotion() {
-        if (this.potions > 0) {
+        if (this.potions > 0 && this.stats.getCurrentHealth() < this.stats.getMaxHealth()) {
             this.potions--;
-            this.stats.heal(30); 
+            this.stats.heal(30);
             return true;
         }
         return false;
@@ -65,10 +65,7 @@ public class Player implements Combatant {
 
     private void levelUp() {
         this.level++;
-        this.stats.setMaxHealth(this.stats.getMaxHealth() + 20);
-        this.stats.setBaseAttack(this.stats.getBaseAttack() + 2);
-        this.stats.setBaseDefense(this.stats.getBaseDefense() + 1);
-        this.stats.setCurrentHealth(this.stats.getMaxHealth());
+        this.stats.upgradeStats(20, 2, 1);
         this.potions = 3;
     }
 
