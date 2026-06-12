@@ -3,7 +3,6 @@ package it.unicam.cs.mpgc.rpg125667.model;
 import lombok.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterStats {
@@ -22,5 +21,16 @@ public class CharacterStats {
         if (amount > 0) {
             this.currentHealth = Math.min(this.maxHealth, this.currentHealth + amount);
         }
+    }
+
+    public void fullHeal() {
+        this.currentHealth = this.maxHealth;
+    }
+
+    public void upgradeStats(int healthBonus, int attackBonus, int defenseBonus) {
+        this.maxHealth += healthBonus;
+        this.baseAttack += attackBonus;
+        this.baseDefense += defenseBonus;
+        this.fullHeal();
     }
 }
