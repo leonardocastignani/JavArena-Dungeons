@@ -5,10 +5,13 @@ import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.repository.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 
+import lombok.extern.slf4j.*;
+
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
+@Slf4j
 public class ArenaController {
 
     @FXML private Label playerNameLabel;
@@ -31,16 +34,17 @@ public class ArenaController {
         this.engine = new BattleEngine(player, randomEnemy);
         
         this.battleLog.clear();
+        log.info("Inizializzazione battaglia: {} vs {}", player.getName(), randomEnemy.getName());
         System.out.println("\n========================================");
-        this.log("Un " + randomEnemy.getName() + " ti sbarra la strada!");
-        this.log("--- INIZIO BATTAGLIA ---");
+        this.logMessage("Un " + randomEnemy.getName() + " ti sbarra la strada!");
+        this.logMessage("--- INIZIO BATTAGLIA ---");
         this.updateUI();
     }
 
     @FXML
     protected void onAttackClick() {
         String playerLog = this.engine.executePlayerAttack();
-        this.log(playerLog);
+        this.logMessage(playerLog);
 
         if (this.engine.isBattleOver()) {
             this.endBattle();
@@ -48,7 +52,7 @@ public class ArenaController {
         }
 
         String monsterLog = this.engine.executeMonsterAttack();
-        this.log(monsterLog);
+        this.logMessage(monsterLog);
 
         this.updateUI();
 
@@ -58,10 +62,12 @@ public class ArenaController {
     @FXML
     protected void onHealClick() {
         if (this.engine.getPlayer().usePotion()) {
-            this.log(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
+            this.logMessage(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
 
-            String monsterLog = this.engine.executeMonsterAttack();
-            this.log(monsterLog);
+            if (!this.engine.isBattleOver()) {
+                String monsterLog = this.engine.executeMonsterAttack();
+                this.logMessage(monsterLog);
+            }
 
             this.updateUI();
 
@@ -81,18 +87,20 @@ public class ArenaController {
                                   "  |  Dif: " + this.engine.getMonster().getStats().getBaseDefense());
 
         this.healButton.setText("Curati (" + this.engine.getPlayer().getPotions() + ")");
-        this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0);
+        boolean isBattleFinished = this.engine != null && this.engine.isBattleOver();
+        this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0 || isBattleFinished);
     }
 
-    private void log(String message) {
+    private void logMessage(String message) {
+        if (message == null || message.isEmpty()) return;
         this.battleLog.appendText(message + "\n");
-        System.out.println(message);
+        log.debug("Azione: {}", message);
     }
 
     private void endBattle() {
         this.updateUI();
-        this.log("\n--- FINE BATTAGLIA ---");
-        this.log(this.engine.getBattleResult());
+        this.logMessage("\n--- FINE BATTAGLIA ---");
+        this.logMessage(this.engine.getBattleResult());
         
         this.attackButton.setDisable(true);
         this.healButton.setDisable(true);
@@ -101,14 +109,14 @@ public class ArenaController {
             this.backButton.setDisable(false);
 
             String rewardLog = this.engine.grantRewards();
-            this.log(rewardLog);
+            this.logMessage(rewardLog);
 
             this.updateUI();
 
             this.repository.save(this.engine.getPlayer());
-            this.log("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
+            this.logMessage("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
-            this.log("Sei morto... I tuoi progressi non verranno salvati.");
+            this.logMessage("Sei morto... I tuoi progressi non verranno salvati.");
             this.repository.delete(this.engine.getPlayer());
             this.goToGameOver();
         }
