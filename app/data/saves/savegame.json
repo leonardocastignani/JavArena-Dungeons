@@ -14,12 +14,12 @@
   "id" : "6c5ed5ab-d498-493c-a1df-1269cda2365c",
   "name" : "Eroe2",
   "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 72,
-    "baseAttack" : 12,
-    "baseDefense" : 4
+    "maxHealth" : 120,
+    "currentHealth" : 120,
+    "baseAttack" : 14,
+    "baseDefense" : 5
   },
   "potions" : 3,
-  "level" : 1,
-  "xp" : 40
+  "level" : 2,
+  "xp" : 32
 } ]
