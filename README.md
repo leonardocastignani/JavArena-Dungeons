@@ -33,7 +33,7 @@ Per lanciare l'applicazione desktop, utilizza il comando:
 ```
 
 ### 🤖 Uso di strumenti di AI
-Durante lo sviluppo di questo progetto è stato fatto un uso ragionato, consapevole e didattico di strumenti di Intelligenza Artificiale (ChatGPT), impiegati con il ruolo di "Senior Developer / Code Reviewer".
+Durante lo sviluppo di questo progetto è stato fatto un uso ragionato, consapevole e didattico di strumenti di Intelligenza Artificiale (Gemini), impiegati con il ruolo di "Senior Developer / Code Reviewer".
 
 L'AI non è stata usata per farsi scrivere il progetto da zero, ma come supporto per:
 - **Comprendere concetti teorici avanzati**, come la differenza tra l'accoppiamento forte nei Controller e la Dependency Injection nativa di JavaFX.
