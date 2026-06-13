@@ -14,7 +14,7 @@
 
 Clona il repository sul tuo computer in una cartella a tua scelta:
 ```bash
-git clone [<url-del-tuo-repository-github>](https://github.com/leonardocastignani/JavArena-Dungeons.git)
+git clone https://github.com/leonardocastignani/JavArena-Dungeons.git
 cd JavArena-Dungeons
 ```
 
