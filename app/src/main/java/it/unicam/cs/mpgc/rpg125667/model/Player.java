@@ -7,7 +7,7 @@ import lombok.*;
 import java.util.*;
 
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class Player implements Combatant {
 

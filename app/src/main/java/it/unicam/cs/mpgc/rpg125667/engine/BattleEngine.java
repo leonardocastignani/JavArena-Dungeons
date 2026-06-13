@@ -25,44 +25,48 @@ public class BattleEngine {
         this(player, monster, new Random());
     }
 
-    public String executePlayerAttack() {
-        if (!this.isBattleOver() && this.isPlayerTurn) {
-            this.isPlayerTurn = false;
-            return this.resolveStrike(this.player, this.monster);
+    public TurnResult executePlayerAttack() {
+        int attackRoll = this.random.nextInt(100) + 1;
+
+        if (attackRoll <= 10) {
+            String log = "SCHIVATA! " + this.monster.getName() + " evita agilmente l'attacco di " + this.player.getName() + "!";
+            return new TurnResult(log, 0, false, true);
         }
-        return null;
+
+        int damage = Math.max(1, this.player.getStats().getBaseAttack() - this.monster.getStats().getBaseDefense());
+
+        if (attackRoll > 90) {
+            damage *= 2;
+            this.monster.getStats().reduceHealth(damage);
+            String log = "CRITICO! " + this.player.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
+            return new TurnResult(log, damage, true, false);
+        }
+
+        this.monster.getStats().reduceHealth(damage);
+        String log = this.player.getName() + " attacca e infligge " + damage + " danni.";
+        return new TurnResult(log, damage, false, false);
     }
 
-    public String executeMonsterAttack() {
-        if (!this.isBattleOver() && !this.isPlayerTurn) {
-            this.isPlayerTurn = true;
-            return this.resolveStrike(this.monster, this.player);
-        }
-        return null;
-    }
+    public TurnResult executeMonsterAttack() {
+        int attackRoll = this.random.nextInt(100) + 1;
 
-    private String resolveStrike(Combatant attacker, Combatant defender) {
-        int roll = this.random.nextInt(100) + 1;
-
-        if (roll <= 10) return "SCHIVATA! " + defender.getName() + " evita agilmente l'attacco di " + attacker.getName() + "!";
-
-        int baseDmg = attacker.getStats().getBaseAttack();
-        boolean isCrit = false;
-
-        if (roll > 90) {
-            baseDmg *= 2;
-            isCrit = true;
+        if (attackRoll <= 10) {
+            String log = "SCHIVATA! " + this.player.getName() + " evita agilmente l'attacco di " + this.monster.getName() + "!";
+            return new TurnResult(log, 0, false, true);
         }
 
-        int startHp = defender.getCurrentHealth();
-        defender.takeDamage(baseDmg);
-        int actualDamage = startHp - defender.getCurrentHealth();
+        int damage = Math.max(1, this.monster.getStats().getBaseAttack() - this.player.getStats().getBaseDefense());
 
-        if (isCrit) {
-            return "CRITICO! " + attacker.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
-        } else {
-            return attacker.getName() + " attacca e infligge " + actualDamage + " danni.";
+        if (attackRoll > 90) {
+            damage *= 2;
+            this.player.getStats().reduceHealth(damage);
+            String log = "CRITICO! " + this.monster.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
+            return new TurnResult(log, damage, true, false);
         }
+
+        this.player.getStats().reduceHealth(damage);
+        String log = this.monster.getName() + " attacca e infligge " + damage + " danni.";
+        return new TurnResult(log, damage, false, false);
     }
 
     public boolean isBattleOver() {

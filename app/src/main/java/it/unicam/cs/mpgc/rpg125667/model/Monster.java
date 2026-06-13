@@ -3,7 +3,7 @@ package it.unicam.cs.mpgc.rpg125667.model;
 import lombok.*;
 
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 public class Monster implements Combatant {
     
     private final String name;
