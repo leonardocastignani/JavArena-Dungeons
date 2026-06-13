@@ -83,7 +83,7 @@ public class CharacterCreationController implements InjectableController {
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.nameField.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
+        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
         arenaController.initData(player);
     }
 }

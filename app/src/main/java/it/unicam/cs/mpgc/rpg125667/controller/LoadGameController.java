@@ -52,7 +52,7 @@ public class LoadGameController implements InjectableController {
         this.detailNameLabel.setText(p.getName());
         this.detailLevelLabel.setText("Livello: " + p.getLevel());
         this.detailHpLabel.setText("Salute: " + p.getCurrentHealth() + " / " + p.getStats().getMaxHealth());
-        this.detailXpLabel.setText("XP: " + p.getXp() + " / " + (p.getLevel() * 50));
+        this.detailXpLabel.setText("XP: " + p.getXp() + " / " + (p.getLevel() * GameConfig.LEVEL_UP_XP_MULTIPLIER));
         this.detailStatsLabel.setText("Att: " + p.getStats().getBaseAttack() + "  |  Dif: " + p.getStats().getBaseDefense());
         this.detailPotionsLabel.setText("Pozioni rimanenti: " + p.getPotions());
     }
@@ -77,7 +77,7 @@ public class LoadGameController implements InjectableController {
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
+        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
         arenaController.initData(player);
     }
 }

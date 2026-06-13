@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
 
 import lombok.*;
+import lombok.extern.slf4j.*;
 
 import java.io.*;
 import java.util.*;
 
+@Slf4j
 public class MonsterFactory {
 
     private static final Random random = new Random();
@@ -24,7 +26,7 @@ public class MonsterFactory {
             MonsterTemplate[] loadedArray = mapper.readValue(is, MonsterTemplate[].class);
             templates = Arrays.asList(loadedArray);
         } catch (Exception e) {
-            System.err.println("Errore critico durante il caricamento dei mostri: " + e.getMessage());
+            log.error("Errore critico durante il caricamento dei mostri: {}", e.getMessage());
             templates = List.of(new MonsterTemplate("Mostro Buggato", 10, 10, 1, 1, 0, 0));
         }
     }

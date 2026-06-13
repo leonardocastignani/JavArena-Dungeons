@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.type.*;
 import com.fasterxml.jackson.databind.*;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
+import lombok.extern.slf4j.*;
 
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+@Slf4j
 public class JsonPlayerRepository implements IPlayerRepository {
 
     private final File saveFile = new File("data/saves/savegame.json");
@@ -27,7 +29,7 @@ public class JsonPlayerRepository implements IPlayerRepository {
             List<Player> loaded = this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
             this.cachedPlayers.addAll(loaded);
         } catch (Exception e) {
-            System.err.println("Errore lettura DB: " + e.getMessage());
+            log.error("Errore lettura DB: {}", e.getMessage());
         }
     }
 
@@ -64,7 +66,7 @@ public class JsonPlayerRepository implements IPlayerRepository {
                         StandardCopyOption.REPLACE_EXISTING,
                         StandardCopyOption.ATOMIC_MOVE);
             } catch (IOException e) {
-                System.err.println("[I/O Queue] Errore critico I/O: " + e.getMessage());
+                log.error("[I/O Queue] Errore critico I/O: {}", e.getMessage());
                 if (tempFile.exists()) tempFile.delete();
             }
         });
