@@ -1,8 +1,8 @@
 package it.unicam.cs.mpgc.rpg125667.util;
 
-import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.service.*;
 
 public interface InjectableController {
     
-    void setRepository(IPlayerRepository repository);
+    void setGameService(GameService service);
 }

@@ -39,15 +39,17 @@ public class Player implements Combatant {
     }
 
     @Override
-    public void takeDamage(int damage) {
-        int actualDamage = Math.max(1, damage - this.stats.getBaseDefense());
+    public int takeDamage(int rawDamage) {
+        int actualDamage = Math.max(GameConfig.MIN_DAMAGE, rawDamage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
+        return actualDamage;
     }
 
     public boolean usePotion() {
         if (this.potions > 0 && this.stats.getCurrentHealth() < this.stats.getMaxHealth()) {
             this.potions--;
-            this.stats.heal(GameConfig.POTION_HEAL_AMOUNT);
+            int healAmount = (int) (this.stats.getMaxHealth() * GameConfig.POTION_HEAL_PERCENTAGE);
+            this.stats.heal(healAmount);
             return true;
         }
         return false;

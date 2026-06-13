@@ -9,10 +9,10 @@ public final class GameConfig {
     public static final int MIN_DAMAGE = 1;       // Danno minimo garantito
 
     // --- GIOCATORE E PROGRESSIONE ---
-    public static final int POTION_HEAL_AMOUNT = 30;     // HP curati dalla pozione
-    public static final int BASE_POTIONS = 3;            // Pozioni resettate al level up
-    public static final int LEVEL_UP_XP_MULTIPLIER = 50; // Es. Livello 2 richiede 100 XP
-    public static final int BASE_XP_REWARD = 20;         // XP base ottenuti a fine battaglia
+    public static final double POTION_HEAL_PERCENTAGE = 0.30; // Cura il 30% degli HP Massimi
+    public static final int BASE_POTIONS = 3;                 // Pozioni resettate al level up
+    public static final int LEVEL_UP_XP_MULTIPLIER = 50;      // Es. Livello 2 richiede 100 XP
+    public static final int BASE_XP_REWARD = 20;              // XP base ottenuti a fine battaglia
     
     // Bonus ricevuti al Level Up
     public static final int HP_BONUS_PER_LEVEL = 20;
