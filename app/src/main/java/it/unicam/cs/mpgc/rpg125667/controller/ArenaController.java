@@ -47,16 +47,16 @@ public class ArenaController implements InjectableController {
 
     @FXML
     protected void onAttackClick() {
-        String playerLog = this.engine.executePlayerAttack();
-        this.logMessage(playerLog);
+        TurnResult playerTurn = this.engine.executePlayerAttack();
+        this.logMessage(playerTurn.logMessage());
 
         if (this.engine.isBattleOver()) {
             this.endBattle();
             return;
         }
 
-        String monsterLog = this.engine.executeMonsterAttack();
-        this.logMessage(monsterLog);
+        TurnResult monsterTurn = this.engine.executeMonsterAttack();
+        this.logMessage(monsterTurn.logMessage());
 
         this.updateUI();
 
@@ -69,8 +69,8 @@ public class ArenaController implements InjectableController {
             this.logMessage(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
 
             if (!this.engine.isBattleOver()) {
-                String monsterLog = this.engine.executeMonsterAttack();
-                this.logMessage(monsterLog);
+                TurnResult monsterTurn = this.engine.executeMonsterAttack();
+                this.logMessage(monsterTurn.logMessage());
             }
 
             this.updateUI();
