@@ -12,7 +12,11 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
             Parent root = loader.load();
-            stage.setScene(new Scene(root, 600, 400));
+            Scene scene = new Scene(root, 600, 400);
+            String css = SceneManager.class.getResource("/it/unicam/cs/mpgc/rpg125667/style/style.css").toExternalForm();
+            scene.getStylesheets().add(css);
+            stage.setScene(scene);
+            stage.show();
         } catch (IOException e) {
             System.err.println("Errore fatale: Impossibile caricare la scena " + fxmlPath);
             e.printStackTrace();
@@ -24,7 +28,11 @@ public class SceneManager {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
             Parent root = loader.load();
-            stage.setScene(new Scene(root, 600, 400));
+            Scene scene = new Scene(root, 600, 400);
+            String css = SceneManager.class.getResource("/it/unicam/cs/mpgc/rpg125667/style/style.css").toExternalForm();
+            scene.getStylesheets().add(css);
+            stage.setScene(scene);
+            stage.show();
             return loader.getController();
         } catch (IOException e) {
             System.err.println("Errore fatale: Impossibile caricare la scena " + fxmlPath);
