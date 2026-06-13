@@ -7,8 +7,8 @@
 ## 🚀 Come eseguire il progetto
 
 ### Prerequisiti
-- **Java 21 (LTS)** (Il progetto utilizza feature moderne come i `Record` e richiede una versione LTS stabile).
-- **Gradle** (incluso tramite wrapper).
+- **Java 25 (LTS)** (Il progetto utilizza feature moderne come i `Record` e richiede una versione LTS stabile).
+- **Gradle 9.5.1** (incluso tramite wrapper).
 
 ### Istruzioni
 
