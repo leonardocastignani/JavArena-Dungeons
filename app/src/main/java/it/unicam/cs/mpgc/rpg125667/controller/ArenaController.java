@@ -113,6 +113,17 @@ public class ArenaController {
 
             this.updateUI();
 
+            this.monsterNameLabel.setText("VITTORIA!");
+            this.monsterNameLabel.getStyleClass().add("victory-label");
+            this.monsterHpLabel.setText("Nemico annientato");
+            this.monsterStatsLabel.setText("💀"); 
+            
+            // 2. Trasformiamo il bottone "Torna al menu" in un trofeo!
+            this.backButton.setText("Torna al Menu");
+            if (!this.backButton.getStyleClass().contains("victory-button")) {
+                this.backButton.getStyleClass().add("victory-button");
+            }
+
             this.repository.save(this.engine.getPlayer());
             this.logMessage("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
