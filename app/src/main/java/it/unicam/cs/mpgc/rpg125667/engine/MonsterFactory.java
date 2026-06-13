@@ -10,12 +10,24 @@ import lombok.extern.slf4j.*;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Factory responsabile della generazione procedurale dei nemici.
+ * Il caricamento delle risorse base avviene tramite bootstrapping esplicito all'avvio.
+ * Segue il principio "Fail-Fast": se il file JSON dei template è corrotto o mancante,
+ * impedisce l'avvio dell'applicazione sollevando un'eccezione critica.
+ */
 @Slf4j
 public class MonsterFactory {
 
     private static final Random random = new Random();
     private static List<MonsterTemplate> templates;
 
+    /**
+     * Esegue il parsing asincrono del file JSON risorse al boot dell'applicazione.
+     * Segue il pattern Fail-Fast se la risorsa non è trovata.
+     *
+     * @throws RuntimeException in caso di errore di lettura del JSON.
+     */
     public static void loadMonsters() {
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -32,6 +44,13 @@ public class MonsterFactory {
         }
     }
 
+    /**
+     * Crea una nuova istanza giocabile di un {@link Monster}, scalando le sue
+     * statistiche in base al livello attuale del giocatore per garantire sfida.
+     *
+     * @param playerLevel Il livello del giocatore, usato per il bilanciamento.
+     * @return L'entità Mostro istanziata.
+     */
     public static Monster generateRandomMonster(int playerLevel) {
         MonsterTemplate t = templates.get(random.nextInt(templates.size()));
 
@@ -45,6 +64,9 @@ public class MonsterFactory {
         return new Monster(t.getName(), stats);
     }
 
+    /**
+     * Classe interna per la mappatura del formato JSON dei mostri.
+     */
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

@@ -1,5 +1,10 @@
 package it.unicam.cs.mpgc.rpg125667.util;
 
+/**
+ * Classe di utilità che centralizza tutte le costanti di bilanciamento del gioco.
+ * Previene l'utilizzo di "Magic Numbers" all'interno della logica di business,
+ * facilitando future modifiche al bilanciamento delle meccaniche.
+ */
 public final class GameConfig {
     
     // --- COMBATTIMENTO ---

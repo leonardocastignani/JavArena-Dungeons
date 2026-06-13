@@ -12,6 +12,12 @@ import javafx.stage.*;
 
 import java.util.*;
 
+
+/**
+ * Controller JavaFX responsabile della schermata di caricamento dei salvataggi.
+ * Permette all'utente di visualizzare la lista degli eroi salvati, esaminarne 
+ * i dettagli statistici e riprendere la partita.
+ */
 public class LoadGameController implements InjectableController {
 
     @FXML private ListView<Player> playerListView;
@@ -26,6 +32,10 @@ public class LoadGameController implements InjectableController {
     
     private GameService service;
 
+    /**
+     * Metodo chiamato automaticamente dal runtime di JavaFX dopo il caricamento del file FXML.
+     * Inizializza i componenti grafici se le dipendenze sono già state soddisfatte.
+     */
     @FXML
     public void initialize() {
         if (this.service != null) {
@@ -33,11 +43,20 @@ public class LoadGameController implements InjectableController {
         }
     }
 
+    /**
+     * Inietta il servizio di gioco e avvia il popolamento della lista dei salvataggi.
+     *
+     * @param service Il servizio applicativo (GameService) per l'accesso ai dati.
+     */
     @Override
     public void setGameService(GameService service) {
         this.service = service;
     }
 
+    /**
+     * Recupera la lista dei giocatori salvati dal database e la inserisce nella ListView.
+     * Configura inoltre un listener per aggiornare i dettagli quando cambia la selezione.
+     */
     private void loadPlayers() {
         List<Player> players = this.service.getAllSavedPlayers();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
@@ -48,6 +67,11 @@ public class LoadGameController implements InjectableController {
         });
     }
 
+    /**
+     * Aggiorna il pannello laterale mostrando le statistiche dettagliate del giocatore selezionato.
+     *
+     * @param p Il giocatore di cui mostrare i dettagli.
+     */
     private void showPlayerDetails(Player p) {
         this.detailsPanel.setVisible(true);
         this.errorLabel.setText("");
@@ -60,6 +84,10 @@ public class LoadGameController implements InjectableController {
         this.detailPotionsLabel.setText("Pozioni rimanenti: " + p.getPotions());
     }
 
+    /**
+     * Gestisce il click sul pulsante di caricamento dell'eroe.
+     * Se un eroe è selezionato, avvia una nuova battaglia nell'Arena.
+     */
     @FXML
     protected void onLoadHeroClick() {
         Player selectedPlayer = this.playerListView.getSelectionModel().getSelectedItem();
@@ -72,12 +100,20 @@ public class LoadGameController implements InjectableController {
         this.goToArena(selectedPlayer);
     }
 
+    /**
+     * Gestisce il click sul pulsante per tornare al menu principale.
+     */
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
         SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.service);
     }
 
+    /**
+     * Cambia la scena attiva portando il giocatore nell'Arena di combattimento.
+     *
+     * @param player Il giocatore che deve affrontare la battaglia.
+     */
     private void goToArena(Player player) {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
         ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.service);
