@@ -14,49 +14,48 @@ public class JsonPlayerRepository implements IPlayerRepository {
 
     private final File saveFile = new File("data/saves/savegame.json");
     private final ObjectMapper mapper = new ObjectMapper();
-    
-    private List<Player> cachedPlayers = new CopyOnWriteArrayList<Player>();
+    private final List<Player> cachedPlayers = new CopyOnWriteArrayList<Player>();    
+    private final ExecutorService ioExecutor = Executors.newSingleThreadExecutor();
 
-    @Override
-    public List<Player> findAll() {
-        if (!this.cachedPlayers.isEmpty()) {
-            return this.cachedPlayers;
-        }
+    public JsonPlayerRepository() {
+        this.loadCache();
+    }
 
-        if (!this.saveFile.exists()) {
-            return this.cachedPlayers;
-        }
-
+    private void loadCache() {
+        if (!this.saveFile.exists()) return;
         try {
             List<Player> loaded = this.mapper.readValue(this.saveFile, new TypeReference<List<Player>>() {});
             this.cachedPlayers.addAll(loaded);
         } catch (Exception e) {
             System.err.println("Errore lettura DB: " + e.getMessage());
         }
-        return this.cachedPlayers;
+    }
+
+    @Override
+    public List<Player> findAll() {
+        return new ArrayList<Player>(this.cachedPlayers);
     }
 
     @Override
     public void save(Player player) {
-        List<Player> players = this.findAll();
-        players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
-        players.add(player);
-        
-        this.flushAsync(new ArrayList<Player>(players));
+        this.cachedPlayers.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
+        this.cachedPlayers.add(player);
+        this.flushAsync(new ArrayList<Player>(this.cachedPlayers));
     }
 
     @Override
     public void delete(Player player) {
-        List<Player> players = this.findAll();
-        players.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
-        this.flushAsync(new ArrayList<Player>(players));
+        this.cachedPlayers.removeIf(p -> p.getId() != null && p.getId().equals(player.getId()));
+        this.flushAsync(new ArrayList<Player>(this.cachedPlayers));
     }
 
     @Override
-    public void close() {}
+    public void close() {
+        this.ioExecutor.shutdown();
+    }
 
     private void flushAsync(List<Player> snapshot) {
-        CompletableFuture.runAsync(() -> {
+        this.ioExecutor.submit(() -> {
             File tempFile = new File(this.saveFile.getAbsolutePath() + ".tmp");
             try {
                 this.saveFile.getParentFile().mkdirs();
@@ -64,9 +63,8 @@ public class JsonPlayerRepository implements IPlayerRepository {
                 Files.move(tempFile.toPath(), this.saveFile.toPath(),
                         StandardCopyOption.REPLACE_EXISTING,
                         StandardCopyOption.ATOMIC_MOVE);
-                System.out.println("[ASYNC] DB JSON aggiornato in background.");
             } catch (IOException e) {
-                System.err.println("[ASYNC] Errore critico I/O: " + e.getMessage());
+                System.err.println("[I/O Queue] Errore critico I/O: " + e.getMessage());
                 if (tempFile.exists()) tempFile.delete();
             }
         });
