@@ -48,11 +48,20 @@ public class CharacterCreationController {
         String heroName = this.nameField.getText().trim();
 
         if (heroName == null || heroName.trim().isEmpty()) {
-            this.errorLabel.setText("Devi inserire un nome per iniziare!");
+            this.errorLabel.setText("Errore: Il nome non può essere vuoto.");
             return;
         }
 
         heroName = heroName.trim();
+
+        if (heroName.length() < 3 || heroName.length() > 15) {
+            this.errorLabel.setText("Errore: Il nome deve avere tra 3 e 15 caratteri.");
+            return;
+        }
+        if (!heroName.matches("^[a-zA-Z0-9 ]+$")) {
+            this.errorLabel.setText("Errore: Ammessi solo caratteri alfanumerici.");
+            return;
+        }
 
         CharacterStats stats = new CharacterStats(100, 100, this.currentAttack, this.currentDefense);
         Player newHero = new Player(heroName, stats);
