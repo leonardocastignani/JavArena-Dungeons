@@ -2,18 +2,24 @@ package it.unicam.cs.mpgc.rpg125667;
 
 import it.unicam.cs.mpgc.rpg125667.repository.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
+import it.unicam.cs.mpgc.rpg125667.engine.*;
 
 import javafx.application.*;
 import javafx.stage.*;
 
+import lombok.extern.slf4j.*;
+
 import java.io.*;
 
+@Slf4j
 public class App extends Application {
 
     private IPlayerRepository repository;
 
     @Override
     public void init() {
+        log.info("Inizializzazione motore di gioco...");
+        MonsterFactory.loadMonsters();
         this.repository = new JsonPlayerRepository();
     }
 

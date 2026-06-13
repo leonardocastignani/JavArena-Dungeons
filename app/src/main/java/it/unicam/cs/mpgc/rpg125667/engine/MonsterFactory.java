@@ -16,18 +16,19 @@ public class MonsterFactory {
     private static final Random random = new Random();
     private static List<MonsterTemplate> templates;
 
-    static {
+    public static void loadMonsters() {
         try {
             ObjectMapper mapper = new ObjectMapper();
             InputStream is = MonsterFactory.class.getResourceAsStream("/it/unicam/cs/mpgc/rpg125667/data/monsters.json");
             if (is == null) {
-                throw new RuntimeException("File monsters.json non trovato nelle risorse!");
+                throw new FileNotFoundException("File monsters.json non trovato nelle risorse!");
             }
             MonsterTemplate[] loadedArray = mapper.readValue(is, MonsterTemplate[].class);
             templates = Arrays.asList(loadedArray);
+            log.info("Caricati {} template mostri con successo.", templates.size());
         } catch (Exception e) {
             log.error("Errore critico durante il caricamento dei mostri: {}", e.getMessage());
-            templates = List.of(new MonsterTemplate("Mostro Buggato", 10, 10, 1, 1, 0, 0));
+            throw new RuntimeException("Impossibile avviare il gioco: file mostri corrotto o mancante.", e);
         }
     }
 
