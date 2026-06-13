@@ -12,7 +12,7 @@ import javafx.stage.*;
 
 import java.util.*;
 
-public class LoadGameController {
+public class LoadGameController implements InjectableController {
 
     @FXML private ListView<Player> playerListView;
     @FXML private Label errorLabel;
@@ -27,11 +27,19 @@ public class LoadGameController {
     private IPlayerRepository repository;
 
     @FXML
-    public void initialize() {
-        this.repository = ServiceLocator.getPlayerRepository();
+    public void initialize() {}
+
+    @Override
+    public void setRepository(IPlayerRepository repository) {
+        this.repository = repository;
+        this.loadPlayers();
+    }
+
+    private void loadPlayers() {
         List<Player> players = this.repository.findAll();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
+        
         this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) this.showPlayerDetails(newValue);
         });
@@ -64,12 +72,12 @@ public class LoadGameController {
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
     }
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml");
+        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
         arenaController.initData(player);
     }
 }

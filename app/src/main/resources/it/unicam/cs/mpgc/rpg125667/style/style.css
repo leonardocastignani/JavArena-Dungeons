@@ -1,26 +1,23 @@
-/* Sfondo principale: Effetto Pergamena chiara */
 .root {
     -fx-background-color: #f4ecd8;
-    -fx-font-family: "Georgia", "Times New Roman", serif; /* Font elegante stile libro */
+    -fx-font-family: "Georgia", "Times New Roman", serif;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
 
-/* Testo leggibile color inchiostro scuro */
 .label {
     -fx-text-fill: #3e2723;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
 }
 
-/* Bottoni stile Legno/Cuoio */
 .button {
     -fx-background-color: #8d6e63;
     -fx-text-fill: #ffffff;
     -fx-font-weight: bold;
     -fx-font-size: 14px;
-    -fx-padding: 8px 15px; /* Respiro interno */
-    -fx-min-width: 160px; /* <--- FIX: Forza la larghezza per non troncare il testo! */
+    -fx-padding: 8px 15px;
+    -fx-min-width: 160px;
     -fx-border-color: #5d4037;
     -fx-border-width: 2px;
     -fx-border-radius: 5px;
@@ -54,38 +51,34 @@
     -fx-font-size: 14px;
 }
 
-/* --- IL NUOVO LOG DI BATTAGLIA (Stile Manoscritto Antico) --- */
 .text-area {
-    -fx-font-family: "Georgia", "Times New Roman", serif; /* Font da libro stampato */
+    -fx-font-family: "Georgia", "Times New Roman", serif;
     -fx-font-size: 15px;
-    -fx-font-style: italic; /* Effetto scrittura corsiva */
-    -fx-control-inner-background: #efebe0; /* Sfondo pergamena scurita dal tempo */
-    -fx-border-color: #5d4037; /* Bordo spesso tipo rilegatura in cuoio */
+    -fx-font-style: italic;
+    -fx-control-inner-background: #efebe0;
+    -fx-border-color: #5d4037;
     -fx-border-width: 3px;
     -fx-border-radius: 5px;
     -fx-background-radius: 5px;
-    /* Un bellissimo effetto 3D di ombra interna per dare profondità alla casella */
     -fx-effect: innershadow(gaussian, rgba(93, 64, 55, 0.5), 10, 0, 2, 2); 
     -fx-padding: 5px;
 }
 
-/* Colore dell'inchiostro nel Log */
 .text-area .text {
-    -fx-fill: #2a1600; /* Marrone talmente scuro da sembrare inchiostro antico */
+    -fx-fill: #2a1600;
 }
 
-/* --- PERSONALIZZAZIONE SCROLLBAR (Pergamena e Legno) --- */
 .scroll-bar:vertical, .scroll-bar:horizontal {
     -fx-background-color: transparent;
 }
 
 .scroll-bar:vertical .track, .scroll-bar:horizontal .track {
-    -fx-background-color: #e6dfcb; /* Binario della barra color pergamena */
+    -fx-background-color: #e6dfcb;
     -fx-border-color: #d7ccc8;
 }
 
 .scroll-bar:vertical .thumb, .scroll-bar:horizontal .thumb {
-    -fx-background-color: #8d6e63; /* Il cursore che trascini è color cuoio */
+    -fx-background-color: #8d6e63;
     -fx-background-radius: 5px;
 }
 
@@ -93,7 +86,6 @@
     -fx-background-color: #5d4037;
 }
 
-/* --- LISTA SALVATAGGI (Allineata al nuovo stile) --- */
 .list-view {
     -fx-background-color: #fffbf0;
     -fx-border-color: #8d6e63;
@@ -123,12 +115,11 @@
     -fx-background-color: #efebe0;
 }
 
-/* --- GAME OVER --- */
 #game-over-root {
-    -fx-background-color: #1a0f0f; /* Sfondo rosso scurissimo/nero */
+    -fx-background-color: #1a0f0f;
 }
 #game-over-root .label {
-    -fx-text-fill: #ff4c4c; /* Testo rosso sangue per risaltare */
+    -fx-text-fill: #ff4c4c;
 }
 #game-over-root .button {
     -fx-background-color: #4a0000;
@@ -140,22 +131,20 @@
     -fx-text-fill: #1a0f0f;
 }
 
-/* --- VITTORIA --- */
 .victory-button {
-    -fx-background-color: #2e7d32; /* Verde foresta trionfale */
-    -fx-border-color: #d4af37;     /* Bordo oro */
+    -fx-background-color: #2e7d32;
+    -fx-border-color: #d4af37;
     -fx-text-fill: #ffffff;
     -fx-font-size: 16px;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 5); /* Leggera ombra per farlo "uscire" dallo schermo */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 0, 5);
 }
 .victory-button:hover {
     -fx-background-color: #1b5e20;
     -fx-border-color: #ffea00;
 }
 .victory-label {
-    -fx-text-fill: #2e7d32; /* Verde scuro trionfale */
+    -fx-text-fill: #2e7d32;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
-    /* Un bagliore dorato attorno alla scritta */
     -fx-effect: dropshadow(gaussian, rgba(212, 175, 55, 0.8), 10, 0, 0, 0); 
 }

@@ -12,7 +12,7 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 
 @Slf4j
-public class ArenaController {
+public class ArenaController implements InjectableController {
 
     @FXML private Label playerNameLabel;
     @FXML private Label playerHpLabel;
@@ -29,7 +29,6 @@ public class ArenaController {
     private IPlayerRepository repository;
 
     public void initData(Player player) {
-        this.repository = ServiceLocator.getPlayerRepository();
         Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
         this.engine = new BattleEngine(player, randomEnemy);
         
@@ -39,6 +38,11 @@ public class ArenaController {
         this.logMessage("Un " + randomEnemy.getName() + " ti sbarra la strada!");
         this.logMessage("--- INIZIO BATTAGLIA ---");
         this.updateUI();
+    }
+
+    @Override
+    public void setRepository(IPlayerRepository repository) {
+        this.repository = repository;
     }
 
     @FXML
@@ -136,11 +140,11 @@ public class ArenaController {
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.backButton.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
     }
 
     private void goToGameOver() {
         Stage stage = (Stage) this.attackButton.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml");
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.repository);
     }
 }
