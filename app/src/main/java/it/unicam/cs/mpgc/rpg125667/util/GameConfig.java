@@ -1,0 +1,29 @@
+package it.unicam.cs.mpgc.rpg125667.util;
+
+public final class GameConfig {
+    
+    // --- COMBATTIMENTO ---
+    public static final int DODGE_THRESHOLD = 10; // Fino a 10 su 100 (10% Schivata)
+    public static final int CRIT_THRESHOLD = 90;  // Oltre 90 su 100 (10% Critico)
+    public static final int CRIT_MULTIPLIER = 2;  // Il danno raddoppia
+    public static final int MIN_DAMAGE = 1;       // Danno minimo garantito
+
+    // --- GIOCATORE E PROGRESSIONE ---
+    public static final int POTION_HEAL_AMOUNT = 30;     // HP curati dalla pozione
+    public static final int BASE_POTIONS = 3;            // Pozioni resettate al level up
+    public static final int LEVEL_UP_XP_MULTIPLIER = 50; // Es. Livello 2 richiede 100 XP
+    public static final int BASE_XP_REWARD = 20;         // XP base ottenuti a fine battaglia
+    
+    // Bonus ricevuti al Level Up
+    public static final int HP_BONUS_PER_LEVEL = 20;
+    public static final int ATK_BONUS_PER_LEVEL = 2;
+    public static final int DEF_BONUS_PER_LEVEL = 1;
+
+    // --- CONDIZIONE DI VITTORIA ---
+    public static final int VICTORY_LEVEL = 5;
+
+    /**
+     * Costruttore privato per impedire l'istanziamento di questa classe di utilità
+     */
+    private GameConfig() {}
+}

@@ -6,49 +6,36 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.stage.*;
 
+import lombok.extern.slf4j.*;
+
 import java.io.*;
 
+@Slf4j
 public class SceneManager {
 
-    public static void switchScene(Stage stage, String fxmlPath, IPlayerRepository repository) {
+    public static <T> T switchScene(Stage stage, String fxmlPath, IPlayerRepository repository) {
         try {
             FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
             Parent root = loader.load();
             Scene scene = new Scene(root, 600, 400);
 
             String css = SceneManager.class.getResource("/it/unicam/cs/mpgc/rpg125667/style/style.css").toExternalForm();
-            scene.getStylesheets().add(css);
+            if (css != null) {
+                scene.getStylesheets().add(css);
+            }
 
-            Object controller = loader.getController();
-            if (controller instanceof InjectableController) {
-                ((InjectableController) controller).setRepository(repository);
+            T controller = loader.getController();
+            if (controller instanceof InjectableController injectable) {
+                injectable.setRepository(repository);
             }
 
             stage.setScene(scene);
             stage.show();
+            return controller;
+            
         } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> T switchSceneWithController(Stage stage, String fxmlPath, IPlayerRepository repository) {
-        try {
-            FXMLLoader loader = new FXMLLoader(SceneManager.class.getResource(fxmlPath));
-            Parent root = loader.load();
-            Scene scene = new Scene(root, 600, 400);
-
-            String css = SceneManager.class.getResource("/it/unicam/cs/mpgc/rpg125667/style/style.css").toExternalForm();
-            scene.getStylesheets().add(css);
-
-            Object controller = loader.getController();
-            if (controller instanceof InjectableController) {
-                ((InjectableController) controller).setRepository(repository);
-            }
-
-            stage.setScene(scene);
-            return loader.getController();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("Errore fatale: Impossibile caricare la scena {}", fxmlPath, e);
+            throw new RuntimeException("Impossibile caricare " + fxmlPath, e);
         }
     }
 }

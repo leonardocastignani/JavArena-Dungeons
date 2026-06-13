@@ -2,6 +2,8 @@ package it.unicam.cs.mpgc.rpg125667.model;
 
 import com.fasterxml.jackson.annotation.*;
 
+import it.unicam.cs.mpgc.rpg125667.util.*;
+
 import lombok.*;
 
 import java.util.*;
@@ -45,7 +47,7 @@ public class Player implements Combatant {
     public boolean usePotion() {
         if (this.potions > 0 && this.stats.getCurrentHealth() < this.stats.getMaxHealth()) {
             this.potions--;
-            this.stats.heal(30);
+            this.stats.heal(GameConfig.POTION_HEAL_AMOUNT);
             return true;
         }
         return false;
@@ -55,8 +57,8 @@ public class Player implements Combatant {
         this.xp += amount;
         boolean leveledUp = false;
         
-        while (this.xp >= (this.level * 50)) {
-            this.xp -= (this.level * 50);
+        while (this.xp >= (this.level * GameConfig.LEVEL_UP_XP_MULTIPLIER)) {
+            this.xp -= (this.level * GameConfig.LEVEL_UP_XP_MULTIPLIER);
             this.levelUp();
             leveledUp = true;
         }
@@ -65,8 +67,8 @@ public class Player implements Combatant {
 
     private void levelUp() {
         this.level++;
-        this.stats.upgradeStats(20, 2, 1);
-        this.potions = 3;
+        this.stats.upgradeStats(GameConfig.HP_BONUS_PER_LEVEL, GameConfig.ATK_BONUS_PER_LEVEL, GameConfig.DEF_BONUS_PER_LEVEL);
+        this.potions = GameConfig.BASE_POTIONS;
     }
 
     @Override

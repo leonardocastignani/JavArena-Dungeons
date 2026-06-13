@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.engine;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
+import it.unicam.cs.mpgc.rpg125667.util.*;
 
 import lombok.*;
 
@@ -28,15 +29,15 @@ public class BattleEngine {
     public TurnResult executePlayerAttack() {
         int attackRoll = this.random.nextInt(100) + 1;
 
-        if (attackRoll <= 10) {
+        if (attackRoll <= GameConfig.DODGE_THRESHOLD) {
             String log = "SCHIVATA! " + this.monster.getName() + " evita agilmente l'attacco di " + this.player.getName() + "!";
             return new TurnResult(log, 0, false, true);
         }
 
-        int damage = Math.max(1, this.player.getStats().getBaseAttack() - this.monster.getStats().getBaseDefense());
+        int damage = Math.max(GameConfig.MIN_DAMAGE, this.player.getStats().getBaseAttack() - this.monster.getStats().getBaseDefense());
 
-        if (attackRoll > 90) {
-            damage *= 2;
+        if (attackRoll > GameConfig.CRIT_THRESHOLD) {
+            damage *= GameConfig.CRIT_MULTIPLIER;
             this.monster.getStats().reduceHealth(damage);
             String log = "CRITICO! " + this.player.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
             return new TurnResult(log, damage, true, false);
@@ -50,15 +51,15 @@ public class BattleEngine {
     public TurnResult executeMonsterAttack() {
         int attackRoll = this.random.nextInt(100) + 1;
 
-        if (attackRoll <= 10) {
+        if (attackRoll <= GameConfig.DODGE_THRESHOLD) {
             String log = "SCHIVATA! " + this.player.getName() + " evita agilmente l'attacco di " + this.monster.getName() + "!";
             return new TurnResult(log, 0, false, true);
         }
 
-        int damage = Math.max(1, this.monster.getStats().getBaseAttack() - this.player.getStats().getBaseDefense());
+        int damage = Math.max(GameConfig.MIN_DAMAGE, this.monster.getStats().getBaseAttack() - this.player.getStats().getBaseDefense());
 
-        if (attackRoll > 90) {
-            damage *= 2;
+        if (attackRoll > GameConfig.CRIT_THRESHOLD) {
+            damage *= GameConfig.CRIT_MULTIPLIER;
             this.player.getStats().reduceHealth(damage);
             String log = "CRITICO! " + this.monster.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
             return new TurnResult(log, damage, true, false);
@@ -85,7 +86,7 @@ public class BattleEngine {
     public String grantRewards() {
         if (!this.player.isAlive() || this.monster.isAlive()) return "";
 
-        int xpReward = 20 + (this.monster.getStats().getMaxHealth() / 2);
+        int xpReward = GameConfig.BASE_XP_REWARD + (this.monster.getStats().getMaxHealth() / 2);
         boolean leveledUp = this.player.gainXp(xpReward);
 
         StringBuilder sb = new StringBuilder();
