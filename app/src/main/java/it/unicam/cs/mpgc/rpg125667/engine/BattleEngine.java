@@ -7,6 +7,12 @@ import lombok.*;
 
 import java.util.*;
 
+/**
+ * Motore di calcolo deterministico per il sistema di combattimento.
+ * Agisce come arbitro neutrale: calcola i tiri di dado (RNG), i colpi critici 
+ * e le schivate, passando poi l'attacco "grezzo" ai difensori che applicheranno 
+ * autonomamente le proprie statistiche difensive.
+ */
 @Getter
 public class BattleEngine {
     
@@ -15,6 +21,13 @@ public class BattleEngine {
     private boolean isPlayerTurn;
     private final Random random;
 
+    /**
+     * Costruttore completo, utile per iniettare un Random specifico nei test (Mocking).
+     *
+     * @param player  Il giocatore.
+     * @param monster Il mostro.
+     * @param random  L'istanza del generatore randomico.
+     */
     public BattleEngine(Player player, Monster monster, Random random) {
         this.player = player;
         this.monster = monster;
@@ -22,10 +35,21 @@ public class BattleEngine {
         this.random = random;
     }
 
+    /**
+     * Costruttore di default.
+     *
+     * @param player  Il giocatore.
+     * @param monster Il mostro.
+     */
     public BattleEngine(Player player, Monster monster) {
         this(player, monster, new Random());
     }
 
+    /**
+     * Esegue il turno di attacco del giocatore contro il mostro.
+     *
+     * @return Il {@link TurnResult} contenente i dettagli dell'azione.
+     */
     public TurnResult executePlayerAttack() {
         int attackRoll = this.random.nextInt(100) + 1;
 
@@ -52,6 +76,11 @@ public class BattleEngine {
         return new TurnResult(log, actualDamage, isCrit, false);
     }
 
+    /**
+     * Esegue il turno di contrattacco del mostro contro il giocatore.
+     *
+     * @return Il {@link TurnResult} contenente i dettagli dell'azione.
+     */
     public TurnResult executeMonsterAttack() {
         int attackRoll = this.random.nextInt(100) + 1;
 
@@ -78,10 +107,20 @@ public class BattleEngine {
         return new TurnResult(log, actualDamage, isCrit, false);
     }
 
+    /**
+     * Verifica se la condizione di fine battaglia è stata raggiunta (almeno uno dei due combattenti è morto).
+     *
+     * @return true se la battaglia è finita.
+     */
     public boolean isBattleOver() {
         return !this.player.isAlive() || !this.monster.isAlive();
     }
 
+    /**
+     * Genera un messaggio riassuntivo che decreta il vincitore della battaglia.
+     *
+     * @return Una stringa indicante la vittoria o la sconfitta.
+     */
     public String getBattleResult() {
         if (this.player.isAlive() && !this.monster.isAlive()) {
             return "Vittoria! Hai sconfitto " + this.monster.getName() + "!";
@@ -91,6 +130,12 @@ public class BattleEngine {
         return "La battaglia è ancora in corso...";
     }
 
+    /**
+     * Calcola e assegna i punti esperienza al giocatore se vince la battaglia.
+     * Ritorna anche le informazioni testuali su eventuali "Level Up".
+     *
+     * @return La stringa di log che descrive le ricompense ottenute.
+     */
     public String grantRewards() {
         if (!this.player.isAlive() || this.monster.isAlive()) return "";
 

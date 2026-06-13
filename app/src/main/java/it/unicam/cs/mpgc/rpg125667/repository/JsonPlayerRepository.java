@@ -12,6 +12,14 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+/**
+ * Implementazione thread-safe del repository basata su file JSON.
+ * * Ottimizzazioni implementate:
+ * - Letture O(1) in memoria grazie all'uso di una {@link java.util.concurrent.ConcurrentHashMap}.
+ * - Scritture Asincrone: L'I/O su disco è delegato a un SingleThreadExecutor per non bloccare la UI.
+ * - Atomicità: Utilizza {@link java.nio.file.StandardCopyOption#ATOMIC_MOVE} per prevenire corruzioni.
+ * - Graceful Shutdown: Implementa un'attesa attiva alla chiusura per svuotare la coda di salvataggio.
+ */
 @Slf4j
 public class JsonPlayerRepository implements IPlayerRepository {
 
@@ -22,10 +30,16 @@ public class JsonPlayerRepository implements IPlayerRepository {
     
     private final ExecutorService ioExecutor = Executors.newSingleThreadExecutor();
 
+    /**
+     * Costruttore base. Inizializza il repository caricando la cache dal disco.
+     */
     public JsonPlayerRepository() {
         this.loadCache();
     }
 
+    /**
+     * Legge il file JSON (se esiste) e popola la cache in memoria all'avvio.
+     */
     private void loadCache() {
         if (!this.saveFile.exists()) return;
         try {
@@ -38,23 +52,43 @@ public class JsonPlayerRepository implements IPlayerRepository {
         }
     }
 
+    /**
+     * Restituisce tutti i giocatori attualmente nella cache.
+     *
+     * @return Una lista contenente tutti i giocatori.
+     */
     @Override
     public List<Player> findAll() {
         return new ArrayList<Player>(this.cachedPlayers.values());
     }
 
+    /**
+     * Aggiunge o aggiorna un giocatore nella cache e richiede un salvataggio asincrono su disco.
+     *
+     * @param player Il giocatore da salvare.
+     */
     @Override
     public void save(Player player) {
         this.cachedPlayers.put(player.getId(), player);
         this.flushAsync(new ArrayList<Player>(this.cachedPlayers.values()));
     }
 
+    /**
+     * Rimuove un giocatore dalla cache e richiede un salvataggio asincrono su disco.
+     *
+     * @param player Il giocatore da eliminare.
+     */
     @Override
     public void delete(Player player) {
         this.cachedPlayers.remove(player.getId());
         this.flushAsync(new ArrayList<Player>(this.cachedPlayers.values()));
     }
 
+    /**
+     * Esegue lo spegnimento sicuro del thread pool di I/O.
+     * Attende fino a 5 secondi il completamento dei salvataggi pendenti prima di forzare la chiusura,
+     * garantendo l'integrità dei salvataggi in fase di uscita dall'applicazione.
+     */
     @Override
     public void close() {
         log.info("Avvio spegnimento del layer di persistenza...");
@@ -72,6 +106,12 @@ public class JsonPlayerRepository implements IPlayerRepository {
         }
     }
 
+    /**
+     * Invia un task al thread di I/O per serializzare la cache aggiornata su file.
+     * Usa la scrittura atomica su file temporaneo per prevenire corruzioni.
+     *
+     * @param snapshot La "fotografia" della lista di giocatori da salvare.
+     */
     private void flushAsync(List<Player> snapshot) {
         this.ioExecutor.submit(() -> {
             File tempFile = new File(this.saveFile.getAbsolutePath() + ".tmp");

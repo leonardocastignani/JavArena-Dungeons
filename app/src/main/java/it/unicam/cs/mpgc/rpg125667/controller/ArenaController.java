@@ -11,6 +11,11 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
+/**
+ * Controller JavaFX responsabile della gestione della schermata di combattimento (Arena).
+ * Intercetta gli input dell'utente (Attacco, Cura, Fuga) e orchestra gli aggiornamenti
+ * della UI in base ai risultati elaborati dal {@link it.unicam.cs.mpgc.rpg125667.engine.BattleEngine}.
+ */
 @Slf4j
 public class ArenaController implements InjectableController {
 
@@ -28,6 +33,12 @@ public class ArenaController implements InjectableController {
     private BattleEngine engine;
     private GameService service;
 
+    /**
+     * Inizializza l'arena di combattimento, generando un nemico casuale calibrato sul livello 
+     * del giocatore e istanziando il motore di battaglia.
+     *
+     * @param player Il giocatore corrente che sta affrontando la battaglia.
+     */
     public void initData(Player player) {
         Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
         this.engine = new BattleEngine(player, randomEnemy);
@@ -40,11 +51,21 @@ public class ArenaController implements InjectableController {
         this.updateUI();
     }
 
+    /**
+     * Imposta il servizio di gioco associato al controller.
+     *
+     * @param service Il servizio di gioco da utilizzare.
+     */
     @Override
     public void setGameService(GameService service) {
         this.service = service;
     }
 
+    /**
+     * Gestisce l'evento di click sul pulsante "Attacca".
+     * Esegue il turno del giocatore e, se il nemico sopravvive, esegue il contrattacco.
+     * Verifica inoltre la condizione di fine battaglia ad ogni scambio di colpi.
+     */
     @FXML
     protected void onAttackClick() {
         TurnResult playerTurn = this.engine.executePlayerAttack();
@@ -63,6 +84,11 @@ public class ArenaController implements InjectableController {
         if (this.engine.isBattleOver()) this.endBattle();
     }
 
+    /**
+     * Gestisce l'evento di click sul pulsante "Usa Pozione".
+     * Consuma una pozione e fa saltare l'attacco al giocatore, subendo direttamente 
+     * il colpo del mostro nemico.
+     */
     @FXML
     protected void onHealClick() {
         if (this.engine.getPlayer().usePotion()) {
@@ -79,6 +105,12 @@ public class ArenaController implements InjectableController {
         }
     }
 
+    /**
+     * Aggiorna la UI della schermata di combattimento, riflettendo lo stato
+     * attuale del giocatore e del nemico.
+     * Aggiorna le etichette dei nomi, HP, statistiche e il numero di pozioni disponibili.
+     * Disabilita i pulsanti se la battaglia è terminata o se il giocatore non ha più pozioni.
+     */
     private void updateUI() {
         this.playerNameLabel.setText(this.engine.getPlayer().getName()+ " (Lv. " + this.engine.getPlayer().getLevel() + ")");
         this.playerHpLabel.setText("HP: " + this.engine.getPlayer().getCurrentHealth());
@@ -95,12 +127,23 @@ public class ArenaController implements InjectableController {
         this.healButton.setDisable(this.engine.getPlayer().getPotions() <= 0 || isBattleFinished);
     }
 
+    /**
+     * Aggiunge un nuovo messaggio testuale al log della battaglia visibile a schermo,
+     * assicurandosi che il testo scorra automaticamente verso il basso.
+     *
+     * @param message Il testo descrittivo dell'azione appena avvenuta.
+     */
     private void logMessage(String message) {
         if (message == null || message.isEmpty()) return;
         this.battleLog.appendText(message + "\n");
         log.debug("Azione: {}", message);
     }
 
+    /**
+     * Gestisce la logica di fine battaglia, aggiornando la UI e i pulsanti in base al risultato.
+     * Se il giocatore vince, vengono concessi i premi e salvati i progressi; se perde,
+     * viene reindirizzato alla schermata di Game Over. 
+     */
     private void endBattle() {
         this.updateUI();
         this.logMessage("\n--- FINE BATTAGLIA ---");
@@ -136,12 +179,21 @@ public class ArenaController implements InjectableController {
         }
     }
 
+    /**
+     * Gestisce l'evento di click sul pulsante "Torna al Menu".
+     * Chiude la schermata di combattimento e ritorna al menu principale del gioco.
+     */
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.backButton.getScene().getWindow();
         SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.service);
     }
 
+    /**
+     * Gestisce la transizione alla schermata di Game Over quando il giocatore perde la battaglia.
+     * Chiude la schermata di combattimento e carica la scena di Game Over.
+     */
+    @FXML
     private void goToGameOver() {
         Stage stage = (Stage) this.attackButton.getScene().getWindow();
         SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.service);
