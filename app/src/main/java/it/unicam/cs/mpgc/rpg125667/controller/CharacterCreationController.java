@@ -10,7 +10,7 @@ import javafx.stage.*;
 
 import java.util.*;
 
-public class CharacterCreationController {
+public class CharacterCreationController implements InjectableController {
 
     @FXML private TextField nameField;
     @FXML private Label errorLabel;
@@ -25,9 +25,13 @@ public class CharacterCreationController {
 
     @FXML
     public void initialize() {
-        this.repository = ServiceLocator.getPlayerRepository();
         this.random = new Random();
         this.rollStats();
+    }
+
+    @Override
+    public void setRepository(IPlayerRepository repository) {
+        this.repository = repository;
     }
 
     @FXML
@@ -67,21 +71,19 @@ public class CharacterCreationController {
         Player newHero = new Player(heroName, stats);
 
         this.repository.save(newHero);
-        this.repository.close();
 
         this.goToArena(newHero);
     }
 
     @FXML
     protected void onBackToMenuClick() {
-        this.repository.close();
         Stage stage = (Stage) this.nameField.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml");
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
     }
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.nameField.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml");
+        ArenaController arenaController = SceneManager.switchSceneWithController(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
         arenaController.initData(player);
     }
 }
