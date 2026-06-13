@@ -25,7 +25,7 @@ Per compilare il progetto e scaricare automaticamente tutte le dipendenze necess
 ./gradlew build
 ```
 
-E### secuzione
+### Esecuzione
 
 Per lanciare l'applicazione desktop, utilizza il comando:
 ```bash
