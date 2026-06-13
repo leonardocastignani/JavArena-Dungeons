@@ -1,5 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
+import it.unicam.cs.mpgc.rpg125667.util.*;
+
 import lombok.*;
 
 @Getter
@@ -25,8 +27,9 @@ public class Monster implements Combatant {
     }
 
     @Override
-    public void takeDamage(int damage) {
-        int actualDamage = Math.max(1, damage - this.stats.getBaseDefense());
+    public int takeDamage(int rawDamage) {
+        int actualDamage = Math.max(GameConfig.MIN_DAMAGE, rawDamage - this.stats.getBaseDefense());
         this.stats.reduceHealth(actualDamage);
+        return actualDamage;
     }
 }

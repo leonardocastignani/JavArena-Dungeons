@@ -34,18 +34,22 @@ public class BattleEngine {
             return new TurnResult(log, 0, false, true);
         }
 
-        int damage = Math.max(GameConfig.MIN_DAMAGE, this.player.getStats().getBaseAttack() - this.monster.getStats().getBaseDefense());
-
-        if (attackRoll > GameConfig.CRIT_THRESHOLD) {
-            damage *= GameConfig.CRIT_MULTIPLIER;
-            this.monster.getStats().reduceHealth(damage);
-            String log = "CRITICO! " + this.player.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
-            return new TurnResult(log, damage, true, false);
+        int rawDamage = this.player.getStats().getBaseAttack();
+        boolean isCrit = (attackRoll > GameConfig.CRIT_THRESHOLD);
+        if (isCrit) {
+            rawDamage *= GameConfig.CRIT_MULTIPLIER;
         }
 
-        this.monster.getStats().reduceHealth(damage);
-        String log = this.player.getName() + " attacca e infligge " + damage + " danni.";
-        return new TurnResult(log, damage, false, false);
+        int actualDamage = this.monster.takeDamage(rawDamage);
+
+        String log;
+        if (isCrit) {
+            log = "CRITICO! " + this.player.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
+        } else {
+            log = this.player.getName() + " attacca e infligge " + actualDamage + " danni.";
+        }
+        
+        return new TurnResult(log, actualDamage, isCrit, false);
     }
 
     public TurnResult executeMonsterAttack() {
@@ -56,18 +60,22 @@ public class BattleEngine {
             return new TurnResult(log, 0, false, true);
         }
 
-        int damage = Math.max(GameConfig.MIN_DAMAGE, this.monster.getStats().getBaseAttack() - this.player.getStats().getBaseDefense());
-
-        if (attackRoll > GameConfig.CRIT_THRESHOLD) {
-            damage *= GameConfig.CRIT_MULTIPLIER;
-            this.player.getStats().reduceHealth(damage);
-            String log = "CRITICO! " + this.monster.getName() + " sferra un colpo micidiale e infligge " + damage + " danni!";
-            return new TurnResult(log, damage, true, false);
+        int rawDamage = this.monster.getStats().getBaseAttack();
+        boolean isCrit = (attackRoll > GameConfig.CRIT_THRESHOLD);
+        if (isCrit) {
+            rawDamage *= GameConfig.CRIT_MULTIPLIER;
         }
 
-        this.player.getStats().reduceHealth(damage);
-        String log = this.monster.getName() + " attacca e infligge " + damage + " danni.";
-        return new TurnResult(log, damage, false, false);
+        int actualDamage = this.player.takeDamage(rawDamage);
+
+        String log;
+        if (isCrit) {
+            log = "CRITICO! " + this.monster.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
+        } else {
+            log = this.monster.getName() + " attacca e infligge " + actualDamage + " danni.";
+        }
+
+        return new TurnResult(log, actualDamage, isCrit, false);
     }
 
     public boolean isBattleOver() {

@@ -1,7 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
-import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 
 import javafx.fxml.*;
@@ -17,7 +17,7 @@ public class CharacterCreationController implements InjectableController {
     @FXML private Label attackLabel;
     @FXML private Label defenseLabel;
 
-    private IPlayerRepository repository;
+    private GameService service;
     private Random random;
 
     private int currentAttack;
@@ -30,8 +30,8 @@ public class CharacterCreationController implements InjectableController {
     }
 
     @Override
-    public void setRepository(IPlayerRepository repository) {
-        this.repository = repository;
+    public void setGameService(GameService service) {
+        this.service = service;
     }
 
     @FXML
@@ -70,7 +70,7 @@ public class CharacterCreationController implements InjectableController {
         CharacterStats stats = new CharacterStats(100, 100, this.currentAttack, this.currentDefense);
         Player newHero = new Player(heroName, stats);
 
-        this.repository.save(newHero);
+        this.service.saveProgress(newHero);
 
         this.goToArena(newHero);
     }
@@ -78,12 +78,12 @@ public class CharacterCreationController implements InjectableController {
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.nameField.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.service);
     }
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.nameField.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
+        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.service);
         arenaController.initData(player);
     }
 }

@@ -8,7 +8,7 @@ public interface Combatant {
     
     boolean isAlive();
     
-    void takeDamage(int damage);
+    int takeDamage(int rawDamage);
 
     CharacterStats getStats();
 }

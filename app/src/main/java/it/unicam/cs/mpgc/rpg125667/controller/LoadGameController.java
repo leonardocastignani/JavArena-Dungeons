@@ -1,7 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
-import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 
 import javafx.collections.*;
@@ -24,19 +24,22 @@ public class LoadGameController implements InjectableController {
     @FXML private Label detailStatsLabel;
     @FXML private Label detailPotionsLabel;
     
-    private IPlayerRepository repository;
+    private GameService service;
 
     @FXML
-    public void initialize() {}
+    public void initialize() {
+        if (this.service != null) {
+            this.loadPlayers();
+        }
+    }
 
     @Override
-    public void setRepository(IPlayerRepository repository) {
-        this.repository = repository;
-        this.loadPlayers();
+    public void setGameService(GameService service) {
+        this.service = service;
     }
 
     private void loadPlayers() {
-        List<Player> players = this.repository.findAll();
+        List<Player> players = this.service.getAllSavedPlayers();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
         
@@ -72,12 +75,12 @@ public class LoadGameController implements InjectableController {
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.service);
     }
 
     private void goToArena(Player player) {
         Stage stage = (Stage) this.playerListView.getScene().getWindow();
-        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.repository);
+        ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.service);
         arenaController.initData(player);
     }
 }

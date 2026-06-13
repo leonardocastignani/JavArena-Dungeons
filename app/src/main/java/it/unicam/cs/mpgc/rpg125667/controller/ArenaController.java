@@ -2,7 +2,7 @@ package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.engine.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
-import it.unicam.cs.mpgc.rpg125667.repository.*;
+import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 
 import lombok.extern.slf4j.*;
@@ -26,7 +26,7 @@ public class ArenaController implements InjectableController {
     @FXML private Button backButton;
 
     private BattleEngine engine;
-    private IPlayerRepository repository;
+    private GameService service;
 
     public void initData(Player player) {
         Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
@@ -41,8 +41,8 @@ public class ArenaController implements InjectableController {
     }
 
     @Override
-    public void setRepository(IPlayerRepository repository) {
-        this.repository = repository;
+    public void setGameService(GameService service) {
+        this.service = service;
     }
 
     @FXML
@@ -127,11 +127,11 @@ public class ArenaController implements InjectableController {
                 this.backButton.getStyleClass().add("victory-button");
             }
 
-            this.repository.save(this.engine.getPlayer());
+            this.service.saveProgress(this.engine.getPlayer());
             this.logMessage("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
             this.logMessage("Sei morto... I tuoi progressi non verranno salvati.");
-            this.repository.delete(this.engine.getPlayer());
+            this.service.deleteProgress(this.engine.getPlayer());
             this.goToGameOver();
         }
     }
@@ -139,11 +139,11 @@ public class ArenaController implements InjectableController {
     @FXML
     protected void onBackToMenuClick() {
         Stage stage = (Stage) this.backButton.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.repository);
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/main-menu.fxml", this.service);
     }
 
     private void goToGameOver() {
         Stage stage = (Stage) this.attackButton.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.repository);
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.service);
     }
 }
