@@ -6,6 +6,8 @@ import it.unicam.cs.mpgc.rpg125667.util.*;
 
 import lombok.*;
 
+import java.time.*;
+import java.time.format.*;
 import java.util.*;
 
 /**
@@ -25,6 +27,7 @@ public class Player implements Combatant {
     private int potions = 3;
     private int level = 1;
     private int xp = 0;
+    private String lastSaveDate;
 
     /**
      * Costruisce un nuovo giocatore con il nome e le statistiche fornite.
@@ -117,6 +120,15 @@ public class Player implements Combatant {
         this.level++;
         this.stats.upgradeStats(GameConfig.HP_BONUS_PER_LEVEL, GameConfig.ATK_BONUS_PER_LEVEL, GameConfig.DEF_BONUS_PER_LEVEL);
         this.potions = GameConfig.BASE_POTIONS;
+    }
+
+    /**
+     * Aggiorna la data di ultimo salvataggio formattata.
+     */
+    public void updateSaveDate() {
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        this.lastSaveDate = now.format(formatter);
     }
 
     @Override

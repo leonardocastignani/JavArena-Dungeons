@@ -29,6 +29,7 @@ public class LoadGameController implements InjectableController {
     @FXML private Label detailXpLabel;
     @FXML private Label detailStatsLabel;
     @FXML private Label detailPotionsLabel;
+    @FXML private Label detailSaveDateLabel;
     
     private GameService service;
 
@@ -61,6 +62,19 @@ public class LoadGameController implements InjectableController {
         List<Player> players = this.service.getAllSavedPlayers();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
+
+        this.playerListView.setCellFactory(param -> new ListCell<Player>() {
+            @Override
+            protected void updateItem(Player player, boolean empty) {
+                super.updateItem(player, empty);
+                if (empty || player == null) {
+                    setText(null);
+                } else {
+                    String date = (player.getLastSaveDate() != null) ? player.getLastSaveDate() : "Vecchia Partita";
+                    setText(player.getName() + " (Liv. " + player.getLevel() + ") - " + date);
+                }
+            }
+        });
         
         this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) this.showPlayerDetails(newValue);
@@ -82,6 +96,10 @@ public class LoadGameController implements InjectableController {
         this.detailXpLabel.setText("XP: " + p.getXp() + " / " + (p.getLevel() * GameConfig.LEVEL_UP_XP_MULTIPLIER));
         this.detailStatsLabel.setText("Att: " + p.getStats().getBaseAttack() + "  |  Dif: " + p.getStats().getBaseDefense());
         this.detailPotionsLabel.setText("Pozioni rimanenti: " + p.getPotions());
+        String dateToShow = (p.getLastSaveDate() != null) ? p.getLastSaveDate() : "Data sconosciuta";
+        if (this.detailSaveDateLabel != null) {
+            this.detailSaveDateLabel.setText("Ultimo Salvataggio: " + dateToShow);
+        }
     }
 
     /**

@@ -29,6 +29,7 @@ public class ArenaController implements InjectableController {
     @FXML private Button attackButton;
     @FXML private Button healButton;
     @FXML private Button backButton;
+    @FXML private Button saveButton;
 
     private BattleEngine engine;
     private GameService service;
@@ -40,6 +41,11 @@ public class ArenaController implements InjectableController {
      * @param player Il giocatore corrente che sta affrontando la battaglia.
      */
     public void initData(Player player) {
+        this.attackButton.setDisable(false);
+        this.healButton.setDisable(false);
+        this.backButton.setDisable(true);
+        this.saveButton.setDisable(true);
+
         Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
         this.engine = new BattleEngine(player, randomEnemy);
         
@@ -154,6 +160,7 @@ public class ArenaController implements InjectableController {
 
         if (this.engine.getPlayer().isAlive()) {
             this.backButton.setDisable(false);
+            this.saveButton.setDisable(false);
 
             String rewardLog = this.engine.grantRewards();
             this.logMessage(rewardLog);
@@ -170,6 +177,7 @@ public class ArenaController implements InjectableController {
                 this.backButton.getStyleClass().add("victory-button");
             }
 
+            this.engine.getPlayer().updateSaveDate();
             this.service.saveProgress(this.engine.getPlayer());
             this.logMessage("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
@@ -197,5 +205,19 @@ public class ArenaController implements InjectableController {
     private void goToGameOver() {
         Stage stage = (Stage) this.attackButton.getScene().getWindow();
         SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.service);
+    }
+
+    /**
+     * Gestisce il salvataggio manuale richiesto dall'utente.
+     */
+    @FXML
+    protected void onManualSaveClick() {
+        if (this.engine.getPlayer().isAlive()) {
+            this.engine.getPlayer().updateSaveDate();
+            this.service.saveProgress(this.engine.getPlayer());
+            this.logMessage("Partita salvata manualmente con successo!");
+        } else {
+            this.logMessage("Non puoi salvare da morto!");
+        }
     }
 }

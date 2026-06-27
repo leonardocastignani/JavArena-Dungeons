@@ -62,7 +62,7 @@ public class SceneManager {
 
             Scene scene = stage.getScene();
             if (scene == null) {
-                scene = new Scene(root, 600, 400);
+                scene = new Scene(root, 800, 600);
                 String css = SceneManager.class.getResource("/it/unicam/cs/mpgc/rpg125667/style/style.css").toExternalForm();
                 if (css != null) scene.getStylesheets().add(css);
                 stage.setScene(scene);

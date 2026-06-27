@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -8,43 +7,49 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg125667.controller.CharacterCreationController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
-
-    <Label text="Crea il tuo Eroe">
-        <font>
-            <Font name="System Bold" size="24.0" />
-        </font>
+<VBox alignment="CENTER" spacing="30.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unicam.cs.mpgc.rpg125667.controller.CharacterCreationController">
+    
+    <Label text="Creazione del tuo Eroe">
+        <font><Font name="System Bold" size="36.0" /></font>
     </Label>
 
-    <Label text="Come ti chiami, viandante?" />
-    <TextField fx:id="nameField" maxWidth="250.0" promptText="Inserisci il tuo nome..." />
-
-    <HBox alignment="CENTER" spacing="40.0">
-        <VBox alignment="CENTER" spacing="5.0">
-            <Label text="Attacco Base" textFill="DARKRED">
-                <font><Font name="System Bold" size="14.0" /></font>
-            </Label>
-            <Label fx:id="attackLabel" text="?">
-                <font><Font name="System Bold" size="20.0" /></font>
-            </Label>
-        </VBox>
-        <VBox alignment="CENTER" spacing="5.0">
-            <Label text="Difesa Base" textFill="DARKBLUE">
-                <font><Font name="System Bold" size="14.0" /></font>
-            </Label>
-            <Label fx:id="defenseLabel" text="?">
-                <font><Font name="System Bold" size="20.0" /></font>
-            </Label>
-        </VBox>
+    <HBox alignment="CENTER" spacing="20.0">
+        <Label text="Nome Eroe:">
+            <font><Font size="20.0" /></font>
+        </Label>
+        <TextField fx:id="nameField" prefWidth="300.0" prefHeight="40.0" promptText="Es. Valerius">
+            <font><Font size="18.0" /></font>
+        </TextField>
     </HBox>
 
-    <Button text="Rilancia Statistiche" onAction="#onRollStatsClick" />
+    <VBox alignment="CENTER" spacing="15.0" prefWidth="400.0" maxWidth="400.0" style="-fx-background-color: #f8f9fa; -fx-border-color: #bdc3c7; -fx-border-radius: 8; -fx-background-radius: 8;">
+        <padding>
+            <Insets top="25.0" right="25.0" bottom="25.0" left="25.0" />
+        </padding>
+        <Label text="Statistiche Iniziali Casuali" textFill="#34495e">
+            <font><Font name="System Bold" size="22.0" /></font>
+        </Label>
+        
+        <HBox alignment="CENTER" spacing="40.0">
+            <VBox alignment="CENTER" spacing="5.0">
+                <Label text="Attacco" textFill="#c0392b"><font><Font name="System Bold" size="18.0" /></font></Label>
+                <Label fx:id="attackLabel" text="?" textFill="#c0392b"><font><Font name="System Bold" size="24.0" /></font></Label>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5.0">
+                <Label text="Difesa" textFill="#2980b9"><font><Font name="System Bold" size="18.0" /></font></Label>
+                <Label fx:id="defenseLabel" text="?" textFill="#2980b9"><font><Font name="System Bold" size="24.0" /></font></Label>
+            </VBox>
+        </HBox>
+        
+        <Button text="Ritira Dadi 🎲" onAction="#onRollStatsClick" prefHeight="40.0" prefWidth="200.0" style="-fx-font-size: 16px; -fx-margin-top: 10px;" />
+    </VBox>
 
-    <Label fx:id="errorLabel" textFill="RED" />
+    <Label fx:id="errorLabel" textFill="#e74c3c" wrapText="true">
+        <font><Font name="System Bold" size="16.0" /></font>
+    </Label>
 
-    <Button text="Inizia l'Avventura" onAction="#onCreateHeroClick" prefHeight="40.0" />
-    <Button text="Torna al Menu" onAction="#onBackToMenuClick" />
+    <HBox alignment="CENTER" spacing="40.0">
+        <Button text="Torna al Menu" onAction="#onBackToMenuClick" prefHeight="45.0" prefWidth="180.0" style="-fx-font-size: 16px;" />
+        <Button text="Inizia Avventura" onAction="#onCreateHeroClick" prefHeight="45.0" prefWidth="180.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+    </HBox>
 </VBox>
