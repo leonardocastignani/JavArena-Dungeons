@@ -41,7 +41,7 @@
             </VBox>
         </HBox>
         
-        <Button text="Ritira Dadi 🎲" onAction="#onRollStatsClick" prefHeight="40.0" prefWidth="200.0" style="-fx-font-size: 16px; -fx-margin-top: 10px;" />
+        <Button text="Ritira Dadi 🎲" onAction="#onRollStatsClick" prefHeight="40.0" prefWidth="200.0" styleClass="action-button" style="-fx-font-size: 16px; -fx-margin-top: 10px;" />
     </VBox>
 
     <Label fx:id="errorLabel" textFill="#e74c3c" wrapText="true">
@@ -49,7 +49,7 @@
     </Label>
 
     <HBox alignment="CENTER" spacing="40.0">
-        <Button text="Torna al Menu" onAction="#onBackToMenuClick" prefHeight="45.0" prefWidth="180.0" style="-fx-font-size: 16px;" />
-        <Button text="Inizia Avventura" onAction="#onCreateHeroClick" prefHeight="45.0" prefWidth="180.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+        <Button text="Torna al Menu" onAction="#onBackToMenuClick" prefHeight="45.0" prefWidth="180.0" styleClass="action-button" style="-fx-font-size: 16px;" />
+        <Button text="Inizia Avventura" onAction="#onCreateHeroClick" prefHeight="45.0" prefWidth="180.0" styleClass="action-button" style="-fx-font-size: 16px;" />
     </HBox>
 </VBox>

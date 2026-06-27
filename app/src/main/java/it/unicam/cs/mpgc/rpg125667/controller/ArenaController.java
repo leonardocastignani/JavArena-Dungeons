@@ -4,6 +4,7 @@ import it.unicam.cs.mpgc.rpg125667.engine.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
+import it.unicam.cs.mpgc.rpg125667.engine.action.*;
 
 import lombok.extern.slf4j.*;
 
@@ -74,7 +75,9 @@ public class ArenaController implements InjectableController {
      */
     @FXML
     protected void onAttackClick() {
-        TurnResult playerTurn = this.engine.executePlayerAttack();
+        TurnResult playerTurn = this.engine.executeAction(this.engine.getPlayer(),
+                                                          this.engine.getMonster(),
+                                                          new BasicAttackAction());
         this.logMessage(playerTurn.logMessage());
 
         if (this.engine.isBattleOver()) {
@@ -82,7 +85,9 @@ public class ArenaController implements InjectableController {
             return;
         }
 
-        TurnResult monsterTurn = this.engine.executeMonsterAttack();
+        TurnResult monsterTurn = this.engine.executeAction(this.engine.getMonster(),
+                                                           this.engine.getPlayer(),
+                                                           new BasicAttackAction());
         this.logMessage(monsterTurn.logMessage());
 
         this.updateUI();
@@ -97,18 +102,21 @@ public class ArenaController implements InjectableController {
      */
     @FXML
     protected void onHealClick() {
-        if (this.engine.getPlayer().usePotion()) {
-            this.logMessage(this.engine.getPlayer().getName() + " beve una pozione e recupera 30 HP!");
+        TurnResult healTurn = this.engine.executeAction(this.engine.getPlayer(),
+                                                        this.engine.getMonster(),
+                                                        new HealAction());
+        this.logMessage(healTurn.logMessage());
 
-            if (!this.engine.isBattleOver()) {
-                TurnResult monsterTurn = this.engine.executeMonsterAttack();
-                this.logMessage(monsterTurn.logMessage());
-            }
-
-            this.updateUI();
-
-            if (this.engine.isBattleOver()) this.endBattle();
+        if (!this.engine.isBattleOver()) {
+            TurnResult monsterTurn = this.engine.executeAction(this.engine.getMonster(),
+                                                               this.engine.getPlayer(),
+                                                               new BasicAttackAction());
+            this.logMessage(monsterTurn.logMessage());
         }
+
+        this.updateUI();
+
+        if (this.engine.isBattleOver()) this.endBattle();
     }
 
     /**
@@ -152,7 +160,7 @@ public class ArenaController implements InjectableController {
      */
     private void endBattle() {
         this.updateUI();
-        this.logMessage("\n--- FINE BATTAGLIA ---");
+        this.logMessage("--- FINE BATTAGLIA ---");
         this.logMessage(this.engine.getBattleResult());
         
         this.attackButton.setDisable(true);
@@ -177,9 +185,7 @@ public class ArenaController implements InjectableController {
                 this.backButton.getStyleClass().add("victory-button");
             }
 
-            this.engine.getPlayer().updateSaveDate();
-            this.service.saveProgress(this.engine.getPlayer());
-            this.logMessage("I tuoi progressi sono stati salvati. Salute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
+            this.logMessage("La battaglia e' terminata. Se sei soddisfatto dell'esito, usa il pulsante 'Salva Partita' per mantenere i progressi!\nSalute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
             this.logMessage("Sei morto... I tuoi progressi non verranno salvati.");
             this.service.deleteProgress(this.engine.getPlayer());
@@ -216,6 +222,8 @@ public class ArenaController implements InjectableController {
             this.engine.getPlayer().updateSaveDate();
             this.service.saveProgress(this.engine.getPlayer());
             this.logMessage("Partita salvata manualmente con successo!");
+            this.saveButton.setDisable(true);
+            this.saveButton.setText("Salvato!");
         } else {
             this.logMessage("Non puoi salvare da morto!");
         }
