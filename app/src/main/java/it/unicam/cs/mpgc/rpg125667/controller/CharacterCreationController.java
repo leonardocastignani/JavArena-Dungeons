@@ -72,14 +72,12 @@ public class CharacterCreationController implements InjectableController {
      */
     @FXML
     protected void onCreateHeroClick() {
-        String heroName = this.nameField.getText().trim();
+        final String heroName = this.nameField.getText().trim();
 
-        if (heroName == null || heroName.trim().isEmpty()) {
+        if (heroName == null || heroName.isEmpty()) {
             this.errorLabel.setText("Errore: Il nome non può essere vuoto.");
             return;
         }
-
-        heroName = heroName.trim();
 
         if (heroName.length() < 3 || heroName.length() > 15) {
             this.errorLabel.setText("Errore: Il nome deve avere tra 3 e 15 caratteri.");
@@ -87,6 +85,15 @@ public class CharacterCreationController implements InjectableController {
         }
         if (!heroName.matches("^[a-zA-Z0-9 ]+$")) {
             this.errorLabel.setText("Errore: Ammessi solo caratteri alfanumerici.");
+            return;
+        }
+
+        boolean nameAlreadyExists = this.service.getAllSavedPlayers()
+                                        .stream()
+                                        .anyMatch(p -> p.getName().equalsIgnoreCase(heroName));
+
+        if (nameAlreadyExists) {
+            this.errorLabel.setText("Errore: Il nome è già stato utilizzato.");
             return;
         }
 
