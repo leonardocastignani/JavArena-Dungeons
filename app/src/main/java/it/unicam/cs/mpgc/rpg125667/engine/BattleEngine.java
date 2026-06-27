@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg125667.engine;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
+import it.unicam.cs.mpgc.rpg125667.engine.action.*;
 
 import lombok.*;
 
@@ -46,65 +47,16 @@ public class BattleEngine {
     }
 
     /**
-     * Esegue il turno di attacco del giocatore contro il mostro.
+     * Esegue una specifica azione di combattimento (Pattern Strategy).
+     * Disaccoppia la logica di risoluzione dell'attacco dal motore principale.
      *
-     * @return Il {@link TurnResult} contenente i dettagli dell'azione.
+     * @param attacker Il combattente che agisce.
+     * @param defender Il bersaglio dell'azione.
+     * @param action   L'azione (Attacco, Cura, Magia) da eseguire.
+     * @return Il risultato formattato del turno.
      */
-    public TurnResult executePlayerAttack() {
-        int attackRoll = this.random.nextInt(100) + 1;
-
-        if (attackRoll <= GameConfig.DODGE_THRESHOLD) {
-            String log = "SCHIVATA! " + this.monster.getName() + " evita agilmente l'attacco di " + this.player.getName() + "!";
-            return new TurnResult(log, 0, false, true);
-        }
-
-        int rawDamage = this.player.getStats().getBaseAttack();
-        boolean isCrit = (attackRoll > GameConfig.CRIT_THRESHOLD);
-        if (isCrit) {
-            rawDamage *= GameConfig.CRIT_MULTIPLIER;
-        }
-
-        int actualDamage = this.monster.takeDamage(rawDamage);
-
-        String log;
-        if (isCrit) {
-            log = "CRITICO! " + this.player.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
-        } else {
-            log = this.player.getName() + " attacca e infligge " + actualDamage + " danni.";
-        }
-        
-        return new TurnResult(log, actualDamage, isCrit, false);
-    }
-
-    /**
-     * Esegue il turno di contrattacco del mostro contro il giocatore.
-     *
-     * @return Il {@link TurnResult} contenente i dettagli dell'azione.
-     */
-    public TurnResult executeMonsterAttack() {
-        int attackRoll = this.random.nextInt(100) + 1;
-
-        if (attackRoll <= GameConfig.DODGE_THRESHOLD) {
-            String log = "SCHIVATA! " + this.player.getName() + " evita agilmente l'attacco di " + this.monster.getName() + "!";
-            return new TurnResult(log, 0, false, true);
-        }
-
-        int rawDamage = this.monster.getStats().getBaseAttack();
-        boolean isCrit = (attackRoll > GameConfig.CRIT_THRESHOLD);
-        if (isCrit) {
-            rawDamage *= GameConfig.CRIT_MULTIPLIER;
-        }
-
-        int actualDamage = this.player.takeDamage(rawDamage);
-
-        String log;
-        if (isCrit) {
-            log = "CRITICO! " + this.monster.getName() + " sferra un colpo micidiale e infligge " + actualDamage + " danni!";
-        } else {
-            log = this.monster.getName() + " attacca e infligge " + actualDamage + " danni.";
-        }
-
-        return new TurnResult(log, actualDamage, isCrit, false);
+    public TurnResult executeAction(Combatant attacker, Combatant defender, CombatAction action) {
+        return action.execute(attacker, defender, this.random);
     }
 
     /**

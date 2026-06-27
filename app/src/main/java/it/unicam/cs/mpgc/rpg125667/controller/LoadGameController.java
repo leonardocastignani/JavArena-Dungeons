@@ -137,4 +137,12 @@ public class LoadGameController implements InjectableController {
         ArenaController arenaController = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/arena.fxml", this.service);
         arenaController.initData(player);
     }
+
+    /**
+     * Forza l'aggiornamento della UI (Utile quando la scena viene recuperata dalla Cache).
+     */
+    public void refreshData() {
+        this.loadPlayers();
+        this.detailsPanel.setVisible(false);
+    }
 }

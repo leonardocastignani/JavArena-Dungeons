@@ -47,6 +47,7 @@ public class MainMenuController implements InjectableController {
     @FXML
     protected void onLoadGameClick() {
         Stage stage = (Stage) this.statusLabel.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/load-game.fxml", this.service);
+        LoadGameController controller = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/load-game.fxml", this.service);
+        controller.refreshData();
     }
 }

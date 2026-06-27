@@ -1,27 +1,14 @@
 [ {
-  "id" : "f47ac10b-58cc-4372-a567-0e02b2c3d479",
-  "name" : "Valerius",
+  "id" : "76b07c25-0303-4191-9b59-3d370f2af3e5",
+  "name" : "Prova",
   "stats" : {
-    "maxHealth" : 300,
-    "currentHealth" : 194,
-    "baseAttack" : 37,
-    "baseDefense" : 23
+    "maxHealth" : 120,
+    "currentHealth" : 96,
+    "baseAttack" : 21,
+    "baseDefense" : 9
   },
   "potions" : 3,
-  "level" : 11,
-  "xp" : 282,
-  "lastSaveDate" : "27/06/2026 16:45"
-}, {
-  "id" : "c90a1b23-64dd-4891-b345-9f8a7e6c5d4b",
-  "name" : "Nyx",
-  "stats" : {
-    "maxHealth" : 190,
-    "currentHealth" : 104,
-    "baseAttack" : 52,
-    "baseDefense" : 8
-  },
-  "potions" : 1,
-  "level" : 8,
-  "xp" : 198,
-  "lastSaveDate" : "25/06/2026 22:16"
+  "level" : 2,
+  "xp" : 67,
+  "lastSaveDate" : "27/06/2026 23:42"
 } ]
