@@ -15,8 +15,11 @@ import javafx.stage.*;
 
 /**
  * Controller JavaFX responsabile della gestione della schermata di combattimento (Arena).
- * Intercetta gli input dell'utente (Attacco, Cura, Fuga) e orchestra gli aggiornamenti
- * della UI in base ai risultati elaborati dal {@link it.unicam.cs.mpgc.rpg125667.engine.BattleEngine}.
+ * <p>
+ * Questo controller coordina l'interazione tra l'interfaccia grafica e il {@link BattleEngine}.
+ * Gestisce l'intero ciclo di vita di una battaglia, inclusi input utente (attacchi, pozioni),
+ * aggiornamento del log di gioco, aggiornamento della UI e transizioni post-battaglia (vittoria/sconfitta).
+ * </p>
  */
 @Slf4j
 public class ArenaController implements InjectableController {
@@ -38,8 +41,11 @@ public class ArenaController implements InjectableController {
     private int turnCounter = 1;
 
     /**
-     * Inizializza l'arena di combattimento, generando un nemico casuale calibrato sul livello 
-     * del giocatore e istanziando il motore di battaglia.
+     * Inizializza l'arena di combattimento.
+     * <p>
+     * Effettua il setup dell'engine di gioco, genera un nemico casuale basato sul livello
+     * del giocatore e configura lo stato iniziale della UI.
+     * </p>
      *
      * @param player Il giocatore corrente che sta affrontando la battaglia.
      */
@@ -78,8 +84,11 @@ public class ArenaController implements InjectableController {
 
     /**
      * Gestisce l'evento di click sul pulsante "Attacca".
-     * Esegue il turno del giocatore e, se il nemico sopravvive, esegue il contrattacco.
-     * Verifica inoltre la condizione di fine battaglia ad ogni scambio di colpi.
+     * <p>
+     * Esegue il turno del giocatore invocando {@link BattleEngine#executeAction}. 
+     * Se il mostro è ancora vivo, esegue automaticamente il contrattacco.
+     * Al termine, verifica le condizioni di vittoria/sconfitta e aggiorna la UI.
+     * </p>
      */
     @FXML
     protected void onAttackClick() {
@@ -109,8 +118,10 @@ public class ArenaController implements InjectableController {
 
     /**
      * Gestisce l'evento di click sul pulsante "Usa Pozione".
-     * Consuma una pozione e fa saltare l'attacco al giocatore, subendo direttamente 
-     * il colpo del mostro nemico.
+     * <p>
+     * Consuma una pozione del giocatore. A differenza dell'attacco, il giocatore 
+     * perde il suo turno di attacco, subendo il colpo del mostro (se ancora vivo).
+     * </p>
      */
     @FXML
     protected void onHealClick() {
@@ -136,10 +147,12 @@ public class ArenaController implements InjectableController {
     }
 
     /**
-     * Aggiorna la UI della schermata di combattimento, riflettendo lo stato
-     * attuale del giocatore e del nemico.
-     * Aggiorna le etichette dei nomi, HP, statistiche e il numero di pozioni disponibili.
-     * Disabilita i pulsanti se la battaglia è terminata o se il giocatore non ha più pozioni.
+     * Aggiorna la UI della schermata di combattimento sincronizzandola con lo stato attuale 
+     * del {@link BattleEngine}.
+     * <p>
+     * Aggiorna etichette (HP, statistiche, nomi) e gestisce lo stato di abilitazione
+     * dei bottoni (es. disabilita i pulsanti se le pozioni sono esaurite).
+     * </p>
      */
     private void updateUI() {
         this.playerNameLabel.setText(this.engine.getPlayer().getName()+ " (Lv. " + this.engine.getPlayer().getLevel() + ")");
@@ -170,9 +183,11 @@ public class ArenaController implements InjectableController {
     }
 
     /**
-     * Gestisce la logica di fine battaglia, aggiornando la UI e i pulsanti in base al risultato.
-     * Se il giocatore vince, vengono concessi i premi e salvati i progressi; se perde,
-     * viene reindirizzato alla schermata di Game Over. 
+     * Gestisce la logica di fine battaglia.
+     * <p>
+     * In caso di vittoria: premia il giocatore, abilita il salvataggio e permette di tornare al menu.
+     * In caso di sconfitta: elimina il progresso salvato e reindirizza alla schermata di Game Over.
+     * </p>
      */
     private void endBattle() {
         this.updateUI();

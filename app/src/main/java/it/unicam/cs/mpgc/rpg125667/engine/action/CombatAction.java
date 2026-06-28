@@ -6,8 +6,11 @@ import it.unicam.cs.mpgc.rpg125667.model.*;
 import java.util.*;
 
 /**
- * Rappresenta un'azione generica eseguibile durante un turno di combattimento (Pattern Strategy).
- * Permette al BattleEngine di eseguire attacchi, cure o magie senza conoscerne l'implementazione interna.
+ * Interfaccia strategia per definire le azioni eseguibili durante un combattimento.
+ * <p>
+ * Ogni classe concreta che implementa questa interfaccia deve definire la logica 
+ * specifica di esecuzione, interagendo con il giocatore e il bersaglio.
+ * </p>
  */
 public interface CombatAction {
     

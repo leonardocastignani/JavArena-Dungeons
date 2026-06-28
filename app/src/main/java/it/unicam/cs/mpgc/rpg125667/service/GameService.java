@@ -7,10 +7,18 @@ import java.util.*;
 
 /**
  * Rappresenta il Service Layer (Livello di Servizio) dell'applicazione.
+ * <p>
  * Funge da orchestratore centrale, disaccoppiando completamente l'interfaccia 
- * utente (JavaFX Controllers) dal livello di persistenza dei dati (Repository).
- * * Centralizza la logica applicativa per garantire che le viste siano "stupide" 
- * e si limitino a delegare le azioni dell'utente.
+ * utente (Controller JavaFX) dal livello di persistenza dei dati (Repository).
+ * </p>
+ * <p>
+ * **Responsabilità:**
+ * <ul>
+ * <li>Centralizzare la logica applicativa.</li>
+ * <li>Garantire che le viste siano "stupide", limitandosi a invocare metodi del servizio.</li>
+ * <li>Gestire il ciclo di vita del layer di persistenza.</li>
+ * </ul>
+ * </p>
  */
 public class GameService {
     

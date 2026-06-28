@@ -6,7 +6,10 @@ import lombok.*;
 
 /**
  * Rappresenta un'entità nemica gestita dal computer.
- * Implementa {@link Combatant} per partecipare alle battaglie nel motore di gioco.
+ * <p>
+ * Implementa {@link Combatant} per essere compatibile con il {@code BattleEngine}.
+ * Utilizza la composizione con {@link CharacterStats} per gestire i dati statistici.
+ * </p>
  */
 @Getter
 @Setter(AccessLevel.PRIVATE)

@@ -8,7 +8,11 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 
 /**
- * Controller per la schermata principale del gioco (Menu di avvio).
+ * Controller per la schermata principale del gioco.
+ * <p>
+ * Punto di ingresso per la navigazione tra le funzionalità principali: 
+ * avvio di una nuova partita o caricamento di una esistente.
+ * </p>
  */
 public class MainMenuController implements InjectableController {
 

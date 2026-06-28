@@ -14,9 +14,11 @@ import java.util.*;
 
 
 /**
- * Controller JavaFX responsabile della schermata di caricamento dei salvataggi.
- * Permette all'utente di visualizzare la lista degli eroi salvati, esaminarne 
- * i dettagli statistici e riprendere la partita.
+ * Controller JavaFX per la schermata di caricamento dei salvataggi.
+ * <p>
+ * Permette all'utente di selezionare un personaggio esistente da una {@link ListView}.
+ * Visualizza dinamicamente i dettagli statistici dell'eroe selezionato.
+ * </p>
  */
 public class LoadGameController implements InjectableController {
 
@@ -34,8 +36,11 @@ public class LoadGameController implements InjectableController {
     private GameService service;
 
     /**
-     * Metodo chiamato automaticamente dal runtime di JavaFX dopo il caricamento del file FXML.
-     * Inizializza i componenti grafici e i listener (eseguito una sola volta).
+     * Inizializza i componenti grafici.
+     * <p>
+     * Configura la {@code ListCell} per mostrare il formato personalizzato del giocatore
+     * e aggiunge un listener alla selezione per aggiornare il pannello dei dettagli.
+     * </p>
      */
     @FXML
     public void initialize() {
@@ -85,9 +90,9 @@ public class LoadGameController implements InjectableController {
     }
 
     /**
-     * Aggiorna il pannello laterale mostrando le statistiche dettagliate del giocatore selezionato.
+     * Aggiorna il pannello laterale visibile con i dati del giocatore selezionato.
      *
-     * @param p Il giocatore di cui mostrare i dettagli.
+     * @param p Il giocatore di cui mostrare le statistiche.
      */
     private void showPlayerDetails(Player p) {
         this.detailsPanel.setVisible(true);
@@ -142,7 +147,8 @@ public class LoadGameController implements InjectableController {
     }
 
     /**
-     * Forza l'aggiornamento della UI (Utile quando la scena viene recuperata dalla Cache).
+     * Forza l'aggiornamento della lista dei salvataggi e resetta la visibilità del pannello dettagli.
+     * Utile quando la scena viene recuperata dalla cache di {@link SceneManager}.
      */
     public void refreshData() {
         this.loadPlayers();

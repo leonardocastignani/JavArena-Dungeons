@@ -15,7 +15,11 @@ import java.util.concurrent.*;
 
 /**
  * Entry point principale dell'applicazione JavaFX.
- * Inizializza i servizi asincroni e coordina il ciclo di vita (start, stop).
+ * <p>
+ * Questa classe gestisce il ciclo di vita (lifecycle) dell'applicazione,
+ * orchestrando l'inizializzazione dei servizi, il caricamento asincrono delle risorse
+ * e la corretta chiusura delle operazioni di I/O.
+ * </p>
  */
 @Slf4j
 public class App extends Application {
@@ -23,8 +27,13 @@ public class App extends Application {
     private GameService gameService;
 
     /**
-     * Metodo di bootstrap. Carica le risorse (i mostri) asincronamente
-     * e inizializza la connessione al database.
+     * Metodo di bootstrap del ciclo di vita JavaFX.
+     * <p>
+     * Esegue il caricamento delle risorse pesanti (es. mostri tramite {@link MonsterLoader})
+     * in modo asincrono tramite {@link CompletableFuture} per evitare il congelamento
+     * dell'interfaccia utente all'avvio. Inizializza inoltre il {@link GameService}
+     * con l'implementazione del repository su file ({@link JsonPlayerRepository}).
+     * </p>
      */
     @Override
     public void init() {
@@ -36,9 +45,13 @@ public class App extends Application {
     }
 
     /**
-     * Avvia lo stage principale e carica il menu.
+     * Avvia lo stage principale dell'applicazione.
+     * <p>
+     * Configura il titolo della finestra e delega al {@link SceneManager} 
+     * il caricamento della scena iniziale (menu principale).
+     * </p>
      *
-     * @param stage La finestra principale fornita dal runtime di JavaFX.
+     * @param stage La finestra principale (Stage) fornita dal runtime di JavaFX.
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -47,7 +60,12 @@ public class App extends Application {
     }
 
     /**
-     * Chiamato quando l'utente chiude l'applicazione. Invoca il graceful shutdown.
+     * Metodo invocato alla chiusura dell'applicazione.
+     * <p>
+     * Garantisce un "graceful shutdown" invocando il metodo {@code shutdown()}
+     * del {@link GameService}. Questo è critico per assicurare che le operazioni di
+     * salvataggio pendenti vengano completate correttamente prima della chiusura del processo.
+     * </p>
      */
     @Override
     public void stop() {

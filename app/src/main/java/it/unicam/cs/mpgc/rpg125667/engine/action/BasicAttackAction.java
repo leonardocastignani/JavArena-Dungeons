@@ -7,8 +7,11 @@ import it.unicam.cs.mpgc.rpg125667.util.*;
 import java.util.*;
 
 /**
- * Implementazione di un attacco fisico base.
- * Calcola probabilità di schivata, colpo critico e applica il danno al difensore.
+ * Implementazione di {@link CombatAction} che gestisce l'attacco fisico.
+ * <p>
+ * Calcola il danno basandosi sulle statistiche di attacco del mittente e 
+ * la difesa del destinatario.
+ * </p>
  */
 public class BasicAttackAction implements CombatAction {
 

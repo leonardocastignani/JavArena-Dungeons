@@ -8,8 +8,10 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 
 /**
- * Controller JavaFX responsabile della schermata di "Game Over".
- * Viene mostrato quando il giocatore esaurisce i punti vita nell'Arena.
+ * Controller per la schermata di "Game Over".
+ * <p>
+ * Mostrato quando il giocatore viene sconfitto in battaglia.
+ * </p>
  */
 public class GameOverController implements InjectableController {
 

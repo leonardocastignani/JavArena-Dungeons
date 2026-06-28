@@ -11,12 +11,18 @@ import lombok.extern.slf4j.*;
 import java.util.*;
 
 /**
- * Gestore centralizzato e ottimizzato per la navigazione tra le scene di JavaFX.
- * * Implementa due pattern architetturali avanzati:
- * 1. View Caching: Mantiene in memoria i {@link javafx.scene.Parent} già parsati 
- * per azzerare l'overhead di I/O e prevenire Memory Leak durante i cambi schermata.
- * 2. Dependency Injection: Utilizza il ControllerFactory nativo di {@link javafx.fxml.FXMLLoader} 
- * per iniettare dinamicamente i servizi nei controller a tempo di istanziazione.
+ * Gestore centralizzato per la navigazione tra le scene di JavaFX.
+ * <p>
+ * Implementa due strategie ottimizzative per la gestione della UI:
+ * <ul>
+ * <li><b>View Caching:</b> Mantiene in memoria i nodi radice (Parent) già parsati 
+ * per eliminare l'overhead di I/O (caricamento FXML) e prevenire Memory Leak 
+ * durante i frequenti cambi di schermata.</li>
+ * <li><b>Dependency Injection:</b> Utilizza un {@code ControllerFactory} personalizzato 
+ * per iniettare dinamicamente il {@link GameService} nei controller che 
+ * implementano {@link InjectableController}.</li>
+ * </ul>
+ * </p>
  */
 @Slf4j
 public class SceneManager {
@@ -26,14 +32,15 @@ public class SceneManager {
 
     /**
      * Carica o recupera dalla cache una scena FXML, inietta il service nel controller 
-     * e la mostra nello stage corrente.
+     * associato e aggiorna lo {@code Stage} corrente.
      *
-     * @param stage    La finestra principale dell'applicazione.
-     * @param fxmlPath Il percorso assoluto della risorsa FXML da caricare.
-     * @param service  Il GameService da iniettare nel controller della scena.
-     * @param <T>      Il tipo inferito del Controller restituito.
-     * @return L'istanza del Controller associato alla scena, utile per inizializzazioni post-caricamento.
-     * @throws RuntimeException in caso di file FXML mancante o malformato.
+     * @param stage    La finestra (Stage) principale dell'applicazione.
+     * @param fxmlPath Il percorso assoluto della risorsa FXML da caricare (es. "/view/file.fxml").
+     * @param service  Il servizio di gioco da iniettare nei controller.
+     * @param <T>      Il tipo del controller associato.
+     * 
+     * @return L'istanza del controller caricato.
+     * @throws RuntimeException se il file FXML non è trovabile o se si verifica un errore durante l'iniezione.
      */
     @SuppressWarnings("unchecked")
     public static <T> T switchScene(Stage stage, String fxmlPath, GameService service) {

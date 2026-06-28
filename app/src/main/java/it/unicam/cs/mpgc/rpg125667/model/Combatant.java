@@ -1,9 +1,12 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
 /**
- * Contratto base per tutte le entità che partecipano a una battaglia.
- * Definisce i metodi necessari per l'interazione con il {@link it.unicam.cs.mpgc.rpg125667.engine.BattleEngine},
- * imponendo l'incapsulamento del calcolo dei danni subiti.
+ * Interfaccia che definisce il contratto per tutte le entità partecipi a una battaglia.
+ * <p>
+ * Qualsiasi classe che implementa {@code Combatant} deve essere in grado di fornire
+ * informazioni di stato (nome, salute) e gestire autonomamente la logica di ricezione danni
+ * (mitigazione in base alle proprie statistiche).
+ * </p>
  */
 public interface Combatant {
     
