@@ -1,4 +1,4 @@
-# 📌 JavArena Dungeons
+# ⚔️ JavArena Dungeons
 
 **JavArena Dungeons** è un videogioco RPG (Gioco di Ruolo) a turni con interfaccia grafica sviluppato in Java e JavaFX. Il giocatore può creare eroi personalizzati, affrontare mostri generati proceduralmente in un'arena, accumulare esperienza per salire di livello e gestire i propri progressi attraverso un sistema di persistenza automatica su file JSON.
 
@@ -7,8 +7,8 @@
 ## 🚀 Come eseguire il progetto
 
 ### Prerequisiti
-- **Java 25 (LTS)** (Il progetto utilizza feature moderne come i `Record` e richiede una versione LTS stabile).
-- **Gradle 9.5.1** (incluso tramite wrapper).
+- **Java 25 (LTS)**
+- **Gradle 9.5.1**
 
 ### Istruzioni
 
@@ -32,6 +32,21 @@ Per lanciare l'applicazione desktop, utilizza il comando:
 ./gradlew run
 ```
 
+## 🎮 Funzionalità Principali
+* **Creazione Personaggio:** Crea il tuo eroe unico.
+* **Combat System a Turni:** Sistema tattico che include probabilità di schivata, colpi critici e utilizzo di oggetti (pozioni).
+* **Permadeath:** Se i tuoi HP scendono a zero, il salvataggio viene eliminato in modo permanente e asincrono.
+* **Generazione Procedurale (Sliding Window):** I mostri si adattano al livello del giocatore. Non incontrerai mai nemici troppo deboli o impossibili da battere.
+* **Salvataggio Manuale:** I progressi (Esperienza, Livello, HP residui) vengono serializzati su disco in formato JSON.
+
+## 🏗️ Architettura e Pattern (Progetto Universitario)
+Il progetto è stato refattorizzato ponendo forte enfasi sull'Ingegneria del Software e sui principi **SOLID**:
+* **MVC Pattern:** Netta separazione tra View (FXML), Controller (Java) e Model (Logica di business).
+* **Strategy Pattern (`CombatAction`):** Il motore di combattimento delega la risoluzione delle azioni (Attacco, Cura) a classi esterne, rispettando l'Open/Closed Principle.
+* **Abstract Factory / Dependency Injection (`MonsterGenerator`):** La generazione dei mostri è separata dal caricamento su disco (I/O), garantendo testabilità e il Single Responsibility Principle.
+* **Stream API Avanzate:** Utilizzo massiccio di programmazione funzionale in Java per il filtraggio e il bilanciamento delle entità.
+* **Multithreading:** Scrittura su database JSON delegata a un thread pool asincrono per non bloccare il JavaFX Application Thread.
+
 ### 🤖 Uso di strumenti di AI
 Durante lo sviluppo di questo progetto è stato fatto un uso ragionato, consapevole e didattico di strumenti di Intelligenza Artificiale (Gemini), impiegati con il ruolo di "Senior Developer / Code Reviewer".
 
@@ -43,4 +58,5 @@ L'AI non è stata usata per farsi scrivere il progetto da zero, ma come supporto
 
 Tutto il codice generato in seguito ai suggerimenti dell'AI è stato analizzato, modificato, adattato alle specifiche universitarie e testato personalmente prima dell'integrazione finale.
 
-📌 Per una dichiarazione estremamente dettagliata dei refactoring applicati grazie all'AI e delle logiche architetturali apprese, si prega di fare riferimento alla Wiki del repository.
+### 📚 Documentazione
+Per una dichiarazione estremamente dettagliata dei refactoring applicati grazie all'AI e delle logiche architetturali apprese, si prega di fare riferimento alla Wiki del repository.
