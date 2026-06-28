@@ -12,7 +12,10 @@ import java.util.*;
 
 /**
  * Controller JavaFX responsabile della creazione di un nuovo personaggio.
- * Gestisce il rolling delle statistiche (dadi) e la validazione dei dati inseriti dall'utente.
+ * <p>
+ * Gestisce la generazione casuale delle statistiche iniziali tramite rolling di dadi 
+ * e la validazione rigorosa dei dati inseriti dall'utente (nome, unicità, formato).
+ * </p>
  */
 public class CharacterCreationController implements InjectableController {
 
@@ -56,7 +59,8 @@ public class CharacterCreationController implements InjectableController {
     }
 
     /**
-     * Genera valori casuali per Attacco e Difesa e aggiorna l'interfaccia grafica.
+     * Genera valori casuali per Attacco e Difesa entro i range predefiniti 
+     * e aggiorna le label della UI.
      */
     private void rollStats() {
         this.currentAttack = this.random.nextInt(11) + 10; 
@@ -67,8 +71,18 @@ public class CharacterCreationController implements InjectableController {
     }
 
     /**
-     * Gestisce il click sul pulsante di creazione dell'eroe.
-     * Valida il nome inserito, istanzia il nuovo oggetto Player, lo salva e avvia l'Arena.
+     * Gestisce il processo di creazione dell'eroe dopo il click sul pulsante di conferma.
+     * <p>
+     * Esegue i seguenti controlli di validazione:
+     * <ol>
+     * <li>Nome non vuoto.</li>
+     * <li>Lunghezza compresa tra 3 e 15 caratteri.</li>
+     * <li>Formato alfanumerico (spazi inclusi).</li>
+     * <li>Unicità del nome rispetto ai salvataggi esistenti.</li>
+     * </ol>
+     * Se la validazione fallisce, aggiorna la {@code errorLabel}. Se ha successo,
+     * salva il personaggio e avvia l'Arena.
+     * </p>
      */
     @FXML
     protected void onCreateHeroClick() {

@@ -1,14 +1,27 @@
 [ {
-  "id" : "a1e8ef42-cbcd-4959-ab53-39fd7fa24f85",
-  "name" : "Prova",
+  "id" : "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+  "name" : "Thorin",
   "stats" : {
-    "maxHealth" : 100,
-    "currentHealth" : 98,
-    "baseAttack" : 19,
-    "baseDefense" : 7
+    "maxHealth" : 160,
+    "currentHealth" : 160,
+    "baseAttack" : 27,
+    "baseDefense" : 11
   },
   "potions" : 3,
-  "level" : 1,
-  "xp" : 39,
-  "lastSaveDate" : "28/06/2026 15:06"
+  "level" : 4,
+  "xp" : 41,
+  "lastSaveDate" : "28/06/2026 16:43"
+}, {
+  "id" : "550e8400-e29b-41d4-a716-446655440000",
+  "name" : "Elara",
+  "stats" : {
+    "maxHealth" : 180,
+    "currentHealth" : 180,
+    "baseAttack" : 28,
+    "baseDefense" : 12
+  },
+  "potions" : 1,
+  "level" : 5,
+  "xp" : 250,
+  "lastSaveDate" : "28/06/2026 17:09"
 } ]

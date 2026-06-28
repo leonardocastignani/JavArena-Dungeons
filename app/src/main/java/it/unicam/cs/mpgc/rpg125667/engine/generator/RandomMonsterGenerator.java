@@ -8,9 +8,11 @@ import java.util.*;
 import java.util.stream.*;
 
 /**
- * Implementazione di MonsterGenerator che seleziona un mostro casuale,
- * filtrando tramite Stream API solo quelli adatti al livello del giocatore,
- * e applicando uno scaling procedurale delle statistiche.
+ * Implementazione di {@link MonsterGenerator} che crea nemici casuali.
+ * <p>
+ * Utilizza un generatore di numeri casuali per variare le statistiche e il tipo 
+ * di mostro generato in base al livello del giocatore.
+ * </p>
  */
 @Slf4j
 public class RandomMonsterGenerator implements MonsterGenerator {

@@ -14,11 +14,13 @@ import java.util.concurrent.*;
 
 /**
  * Implementazione thread-safe del repository basata su file JSON.
- * * Ottimizzazioni implementate:
- * - Letture O(1) in memoria grazie all'uso di una {@link java.util.concurrent.ConcurrentHashMap}.
- * - Scritture Asincrone: L'I/O su disco è delegato a un SingleThreadExecutor per non bloccare la UI.
- * - Atomicità: Utilizza {@link java.nio.file.StandardCopyOption#ATOMIC_MOVE} per prevenire corruzioni.
- * - Graceful Shutdown: Implementa un'attesa attiva alla chiusura per svuotare la coda di salvataggio.
+ * <p>
+ * **Architettura di persistenza:**
+ * <ul>
+ * <li><b>Cache:</b> Utilizza {@link ConcurrentHashMap} per accessi O(1) in memoria, garantendo la thread-safety.</li>
+ * <li><b>I/O Asincrono:</b> Il metodo {@code flushAsync} delega la scrittura su disco a un {@code ExecutorService} dedicato, evitando blocchi del thread principale (UI).</li>
+ * <li><b>Atomicità:</b> Le scritture avvengono su file temporanei seguite da {@code ATOMIC_MOVE}, garantendo che il file di salvataggio non venga mai corrotto durante il processo di I/O.</li>
+ * </ul>
  */
 @Slf4j
 public class JsonPlayerRepository implements IPlayerRepository {
@@ -85,9 +87,11 @@ public class JsonPlayerRepository implements IPlayerRepository {
     }
 
     /**
-     * Esegue lo spegnimento sicuro del thread pool di I/O.
-     * Attende fino a 5 secondi il completamento dei salvataggi pendenti prima di forzare la chiusura,
-     * garantendo l'integrità dei salvataggi in fase di uscita dall'applicazione.
+     * Esegue lo shutdown del layer di persistenza.
+     * <p>
+     * Tenta una chiusura "graceful" attendendo fino a 5 secondi il completamento dei salvataggi in coda.
+     * In caso di mancato completamento, forza la terminazione.
+     * </p>
      */
     @Override
     public void close() {

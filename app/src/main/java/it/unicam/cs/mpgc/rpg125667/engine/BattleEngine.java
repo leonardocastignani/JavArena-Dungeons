@@ -9,10 +9,12 @@ import lombok.*;
 import java.util.*;
 
 /**
- * Motore di calcolo deterministico per il sistema di combattimento.
- * Agisce come arbitro neutrale: calcola i tiri di dado (RNG), i colpi critici 
- * e le schivate, passando poi l'attacco "grezzo" ai difensori che applicheranno 
- * autonomamente le proprie statistiche difensive.
+ * Motore principale della logica di combattimento.
+ * <p>
+ * Questa classe gestisce lo stato corrente della battaglia, coordinando le interazioni 
+ * tra il {@link Player} e il mostro avversario. Elabora le azioni, calcola i risultati 
+ * dei turni e mantiene la coerenza del flusso di gioco.
+ * </p>
  */
 @Getter
 public class BattleEngine {
@@ -47,7 +49,7 @@ public class BattleEngine {
     }
 
     /**
-     * Esegue una specifica azione di combattimento (Pattern Strategy).
+     * Esegue una specifica azione di combattimento.
      * Disaccoppia la logica di risoluzione dell'attacco dal motore principale.
      *
      * @param attacker Il combattente che agisce.

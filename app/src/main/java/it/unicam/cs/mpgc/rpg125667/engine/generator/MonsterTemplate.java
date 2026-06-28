@@ -3,7 +3,11 @@ package it.unicam.cs.mpgc.rpg125667.engine.generator;
 import lombok.*;
 
 /**
- * Mappa la struttura del file JSON per la generazione dei mostri.
+ * Classe modello che definisce le proprietà di un mostro.
+ * <p>
+ * Include nome, statistiche di base e parametri necessari per l'inizializzazione 
+ * nell'engine di gioco.
+ * </p>
  */
 @Data
 @NoArgsConstructor

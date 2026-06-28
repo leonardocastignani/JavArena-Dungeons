@@ -6,8 +6,11 @@ import it.unicam.cs.mpgc.rpg125667.model.*;
 import java.util.*;
 
 /**
- * Azione che permette a un combattente (attualmente solo il Player) di consumare
- * una pozione per ripristinare la salute, saltando la fase offensiva.
+ * Implementazione di {@link CombatAction} che gestisce il recupero dei punti vita.
+ * <p>
+ * Consuma una pozione o un effetto curativo per ripristinare gli HP del giocatore 
+ * entro i limiti massimi.
+ * </p>
  */
 public class HealAction implements CombatAction {
 

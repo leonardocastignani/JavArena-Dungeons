@@ -11,10 +11,11 @@ import java.time.format.*;
 import java.util.*;
 
 /**
- * Rappresenta l'eroe controllato dal giocatore all'interno del gioco.
- * Implementa l'interfaccia {@link Combatant} per interagire nel sistema di combattimento.
- * Gestisce l'inventario (pozioni), il sistema di progressione (esperienza e livello) 
- * e le statistiche base tramite composizione con {@link CharacterStats}.
+ * Rappresenta l'eroe controllato dal giocatore.
+ * <p>
+ * Gestisce l'inventario, il sistema di progressione (esperienza/livello) 
+ * e le interazioni di combattimento tramite {@link Combatant}.
+ * </p>
  */
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -94,11 +95,15 @@ public class Player implements Combatant {
     }
 
     /**
-     * Aggiunge punti esperienza al giocatore e gestisce l'eventuale passaggio di livello
-     * basato sul moltiplicatore configurato in {@link it.unicam.cs.mpgc.rpg125667.util.GameConfig}.
+     * Aggiunge esperienza e gestisce il controllo del passaggio di livello.
+     * <p>
+     * Se l'esperienza accumulata supera la soglia necessaria (calcolata tramite 
+     * {@code GameConfig}), il metodo invoca automaticamente {@code levelUp()}
+     * finché l'esperienza non è esaurita.
+     * </p>
      *
-     * @param amount La quantità di punti esperienza guadagnati.
-     * @return true se l'aggiunta di esperienza ha causato uno o più passaggi di livello, false altrimenti.
+     * @param amount Punti esperienza guadagnati.
+     * @return {@code true} se il giocatore ha effettuato almeno un passaggio di livello.
      */
     public boolean gainXp(int amount) {
         this.xp += amount;
@@ -113,8 +118,11 @@ public class Player implements Combatant {
     }
 
     /**
-     * Gestisce la logica di avanzamento di livello.
-     * Incrementa il livello attuale, ripristina le pozioni di base e potenzia le statistiche.
+     * Esegue il level-up del personaggio.
+     * <p>
+     * Incrementa il livello, ripristina le pozioni ai valori base e potenzia le statistiche 
+     * tramite {@link CharacterStats#upgradeStats}.
+     * </p>
      */
     private void levelUp() {
         this.level++;
