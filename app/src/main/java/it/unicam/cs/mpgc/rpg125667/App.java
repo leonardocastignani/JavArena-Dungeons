@@ -30,7 +30,7 @@ public class App extends Application {
     public void init() {
         log.info("Inizializzazione motore di gioco...");
         CompletableFuture.runAsync(() -> {
-            MonsterFactory.loadMonsters();
+            MonsterLoader.loadMonsters();
         });
         this.gameService = new GameService(new JsonPlayerRepository());
     }

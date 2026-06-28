@@ -35,10 +35,27 @@ public class LoadGameController implements InjectableController {
 
     /**
      * Metodo chiamato automaticamente dal runtime di JavaFX dopo il caricamento del file FXML.
-     * Inizializza i componenti grafici se le dipendenze sono già state soddisfatte.
+     * Inizializza i componenti grafici e i listener (eseguito una sola volta).
      */
     @FXML
     public void initialize() {
+        this.playerListView.setCellFactory(param -> new ListCell<Player>() {
+            @Override
+            protected void updateItem(Player player, boolean empty) {
+                super.updateItem(player, empty);
+                if (empty || player == null) {
+                    setText(null);
+                } else {
+                    String date = (player.getLastSaveDate() != null) ? player.getLastSaveDate() : "Vecchia Partita";
+                    setText(player.getName() + " (Liv. " + player.getLevel() + ") - " + date);
+                }
+            }
+        });
+        
+        this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) this.showPlayerDetails(newValue);
+        });
+
         if (this.service != null) {
             this.loadPlayers();
         }
@@ -56,29 +73,15 @@ public class LoadGameController implements InjectableController {
 
     /**
      * Recupera la lista dei giocatori salvati dal database e la inserisce nella ListView.
-     * Configura inoltre un listener per aggiornare i dettagli quando cambia la selezione.
      */
     private void loadPlayers() {
+        if (this.service == null) return;
+        
         List<Player> players = this.service.getAllSavedPlayers();
         ObservableList<Player> observablePlayers = FXCollections.observableArrayList(players);
         this.playerListView.setItems(observablePlayers);
-
-        this.playerListView.setCellFactory(param -> new ListCell<Player>() {
-            @Override
-            protected void updateItem(Player player, boolean empty) {
-                super.updateItem(player, empty);
-                if (empty || player == null) {
-                    setText(null);
-                } else {
-                    String date = (player.getLastSaveDate() != null) ? player.getLastSaveDate() : "Vecchia Partita";
-                    setText(player.getName() + " (Liv. " + player.getLevel() + ") - " + date);
-                }
-            }
-        });
         
-        this.playerListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) this.showPlayerDetails(newValue);
-        });
+        this.playerListView.getSelectionModel().clearSelection();
     }
 
     /**
