@@ -5,7 +5,8 @@ import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 import it.unicam.cs.mpgc.rpg125667.engine.action.*;
-
+import it.unicam.cs.mpgc.rpg125667.engine.generator.MonsterGenerator;
+import it.unicam.cs.mpgc.rpg125667.engine.generator.RandomMonsterGenerator;
 import lombok.extern.slf4j.*;
 
 import javafx.fxml.*;
@@ -34,6 +35,7 @@ public class ArenaController implements InjectableController {
 
     private BattleEngine engine;
     private GameService service;
+    private int turnCounter = 1;
 
     /**
      * Inizializza l'arena di combattimento, generando un nemico casuale calibrato sul livello 
@@ -47,14 +49,20 @@ public class ArenaController implements InjectableController {
         this.backButton.setDisable(true);
         this.saveButton.setDisable(true);
 
-        Monster randomEnemy = MonsterFactory.generateRandomMonster(player.getLevel());
+        MonsterGenerator generator = new RandomMonsterGenerator(MonsterLoader.getTemplates());
+        Monster randomEnemy = generator.generate(player.getLevel());
+        
         this.engine = new BattleEngine(player, randomEnemy);
         
-        this.battleLog.clear();
+        if (this.battleLog != null) {
+            this.battleLog.clear();
+        }
+        this.turnCounter = 1;
         log.info("Inizializzazione battaglia: {} vs {}", player.getName(), randomEnemy.getName());
         System.out.println("\n========================================");
         this.logMessage("Un " + randomEnemy.getName() + " ti sbarra la strada!");
         this.logMessage("--- INIZIO BATTAGLIA ---");
+        this.battleLog.appendText("\n");
         this.updateUI();
     }
 
@@ -75,10 +83,12 @@ public class ArenaController implements InjectableController {
      */
     @FXML
     protected void onAttackClick() {
+        this.logMessage("--- TURNO " + this.turnCounter + " ---");
+
         TurnResult playerTurn = this.engine.executeAction(this.engine.getPlayer(),
                                                           this.engine.getMonster(),
                                                           new BasicAttackAction());
-        this.logMessage(playerTurn.logMessage());
+        this.logMessage(">> " + playerTurn.logMessage());
 
         if (this.engine.isBattleOver()) {
             this.endBattle();
@@ -88,8 +98,10 @@ public class ArenaController implements InjectableController {
         TurnResult monsterTurn = this.engine.executeAction(this.engine.getMonster(),
                                                            this.engine.getPlayer(),
                                                            new BasicAttackAction());
-        this.logMessage(monsterTurn.logMessage());
+        this.logMessage(">> " + monsterTurn.logMessage());
 
+        this.battleLog.appendText("\n");
+        this.turnCounter++;
         this.updateUI();
 
         if (this.engine.isBattleOver()) this.endBattle();
@@ -102,18 +114,22 @@ public class ArenaController implements InjectableController {
      */
     @FXML
     protected void onHealClick() {
+        this.logMessage("--- TURNO " + this.turnCounter + " ---");
+
         TurnResult healTurn = this.engine.executeAction(this.engine.getPlayer(),
                                                         this.engine.getMonster(),
                                                         new HealAction());
-        this.logMessage(healTurn.logMessage());
+        this.logMessage(">> " + healTurn.logMessage());
 
         if (!this.engine.isBattleOver()) {
             TurnResult monsterTurn = this.engine.executeAction(this.engine.getMonster(),
                                                                this.engine.getPlayer(),
                                                                new BasicAttackAction());
-            this.logMessage(monsterTurn.logMessage());
+            this.logMessage(">> " + monsterTurn.logMessage());
         }
 
+        this.battleLog.appendText("\n"); // Riga vuota
+        this.turnCounter++;
         this.updateUI();
 
         if (this.engine.isBattleOver()) this.endBattle();
@@ -161,6 +177,7 @@ public class ArenaController implements InjectableController {
     private void endBattle() {
         this.updateUI();
         this.logMessage("--- FINE BATTAGLIA ---");
+        this.battleLog.appendText("\n");
         this.logMessage(this.engine.getBattleResult());
         
         this.attackButton.setDisable(true);
