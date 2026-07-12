@@ -21,6 +21,12 @@ import java.util.concurrent.*;
  * <li><b>I/O Asincrono:</b> Il metodo {@code flushAsync} delega la scrittura su disco a un {@code ExecutorService} dedicato, evitando blocchi del thread principale (UI).</li>
  * <li><b>Atomicità:</b> Le scritture avvengono su file temporanei seguite da {@code ATOMIC_MOVE}, garantendo che il file di salvataggio non venga mai corrotto durante il processo di I/O.</li>
  * </ul>
+ * <p>
+ * Il salvataggio non è automatico: {@link #save(Player)} viene invocato esplicitamente
+ * dal livello superiore (tipicamente in risposta a un'azione manuale dell'utente, come
+ * la pressione del pulsante "Salva Partita" nell'interfaccia), non da un timer o da un
+ * meccanismo periodico interno a questa classe.
+ * </p>
  */
 @Slf4j
 public class JsonPlayerRepository implements IPlayerRepository {
@@ -33,7 +39,9 @@ public class JsonPlayerRepository implements IPlayerRepository {
     private final ExecutorService ioExecutor = Executors.newSingleThreadExecutor();
 
     /**
-     * Costruttore base. Inizializza il repository caricando la cache dal disco.
+     * Costruttore base. Inizializza il repository caricando in modo sincrono
+     * (bloccante) la cache in memoria a partire dal file di salvataggio su disco,
+     * se presente.
      */
     public JsonPlayerRepository() {
         this.loadCache();
@@ -41,6 +49,11 @@ public class JsonPlayerRepository implements IPlayerRepository {
 
     /**
      * Legge il file JSON (se esiste) e popola la cache in memoria all'avvio.
+     * <p>
+     * In caso di errore di lettura o parsing, l'eccezione viene intercettata e
+     * loggata: il repository prosegue comunque l'inizializzazione con la cache
+     * vuota, senza propagare l'errore al chiamante.
+     * </p>
      */
     private void loadCache() {
         if (!this.saveFile.exists()) return;
@@ -112,9 +125,17 @@ public class JsonPlayerRepository implements IPlayerRepository {
 
     /**
      * Invia un task al thread di I/O per serializzare la cache aggiornata su file.
-     * Usa la scrittura atomica su file temporaneo per prevenire corruzioni.
+     * <p>
+     * La scrittura avviene prima su un file temporaneo ({@code .tmp}); solo al termine
+     * della serializzazione il file temporaneo viene spostato sopra al file di
+     * salvataggio definitivo tramite {@link StandardCopyOption#ATOMIC_MOVE}, in modo
+     * che un eventuale crash o errore durante la scrittura non lasci mai il file di
+     * salvataggio in uno stato parziale o corrotto. In caso di errore di I/O,
+     * l'eccezione viene loggata e il file temporaneo residuo viene eliminato.
+     * </p>
      *
-     * @param snapshot La "fotografia" della lista di giocatori da salvare.
+     * @param snapshot La "fotografia" (copia immutabile al momento della chiamata)
+     *                 della lista di giocatori da salvare.
      */
     private void flushAsync(List<Player> snapshot) {
         this.ioExecutor.submit(() -> {

@@ -52,6 +52,7 @@ public class App extends Application {
      * </p>
      *
      * @param stage La finestra principale (Stage) fornita dal runtime di JavaFX.
+     * @throws IOException se si verifica un errore durante il caricamento della risorsa FXML del menu principale.
      */
     @Override
     public void start(Stage stage) throws IOException {
@@ -73,11 +74,16 @@ public class App extends Application {
     }
 
     /**
-     * Metodo standard di lancio Java.
+     * Metodo standard di lancio Java, punto di ingresso della JVM.
+     * <p>
+     * Inoltra gli argomenti da riga di comando al runtime JavaFX tramite
+     * {@link Application#launch(String...)}, rendendoli disponibili tramite
+     * {@link Application#getParameters()} nei metodi del ciclo di vita.
+     * </p>
      *
      * @param args Argomenti passati da riga di comando.
      */
     public static void main(String[] args) {
-        launch();
+        launch(args);
     }
 }

@@ -20,10 +20,34 @@ public class RandomMonsterGenerator implements MonsterGenerator {
     private final List<MonsterTemplate> templates;
     private final Random random = new Random();
 
+    /**
+     * Crea un generatore che pesca casualmente da un pool di template dati.
+     *
+     * @param templates La lista dei {@link MonsterTemplate} disponibili, tipicamente ottenuta
+     *                   da {@link it.unicam.cs.mpgc.rpg125667.engine.MonsterLoader#getTemplates()}.
+     */
     public RandomMonsterGenerator(List<MonsterTemplate> templates) {
         this.templates = templates;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Seleziona fino a 3 template idonei (con {@code minLevel <= playerLevel}), privilegiando
+     * quelli con il livello minimo più alto tra gli idonei, e ne sceglie uno casualmente. Se
+     * nessun template risulta idoneo al livello richiesto, ricade sull'intero pool disponibile
+     * registrando un avviso nel log. Le statistiche del mostro generato (salute, attacco,
+     * difesa) sono estratte casualmente dagli intervalli {@code [min, max]} del template scelto
+     * e scalate applicando un moltiplicatore crescente linearmente con il livello del giocatore
+     * (+20% per ogni livello oltre il primo).
+     * </p>
+     *
+     * @param playerLevel Livello attuale del giocatore.
+     * @return Una nuova istanza di {@link Monster} con statistiche scalate al livello richiesto.
+     * @throws IllegalArgumentException se il pool di template (sia quello idoneo sia, in
+     *                                   fallback, quello completo) è vuoto, poiché in tal caso
+     *                                   {@link Random#nextInt(int)} riceve un limite non positivo.
+     */
     @Override
     public Monster generate(int playerLevel) {
         List<MonsterTemplate> suitableMonsters = this.templates.stream()

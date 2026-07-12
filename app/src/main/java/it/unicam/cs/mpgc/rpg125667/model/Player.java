@@ -33,6 +33,10 @@ public class Player implements Combatant {
     /**
      * Costruisce un nuovo giocatore con il nome e le statistiche fornite.
      * Genera automaticamente un ID univoco per la persistenza dei dati.
+     * <p>
+     * Il giocatore parte con i valori predefiniti di livello 1, esperienza nulla
+     * e 3 pozioni curative disponibili.
+     * </p>
      *
      * @param name  Il nome scelto dal giocatore per l'eroe.
      * @param stats Le statistiche iniziali (Salute, Attacco, Difesa) dell'eroe.
@@ -66,10 +70,15 @@ public class Player implements Combatant {
     }
 
     /**
-     * Gestisce la ricezione dei danni decurtandoli della propria armatura.
+     * Gestisce la ricezione dei danni decurtandoli della propria difesa
+     * e aggiorna la salute corrente del giocatore di conseguenza.
+     * <p>
+     * Il danno effettivo non scende mai sotto {@code GameConfig.MIN_DAMAGE}, anche
+     * qualora la difesa del giocatore sia superiore o uguale al danno grezzo ricevuto.
+     * </p>
      *
-     * @param rawDamage Il danno base.
-     * @return I danni effettivi subiti.
+     * @param rawDamage Il danno grezzo in arrivo, prima della mitigazione da difesa.
+     * @return I danni effettivi subiti, dopo la mitigazione.
      */
     @Override
     public int takeDamage(int rawDamage) {
@@ -131,7 +140,8 @@ public class Player implements Combatant {
     }
 
     /**
-     * Aggiorna la data di ultimo salvataggio formattata.
+     * Aggiorna la data e ora dell'ultimo salvataggio, valorizzando {@code lastSaveDate}
+     * con l'istante corrente formattato secondo il pattern {@code "dd/MM/yyyy HH:mm"}.
      */
     public void updateSaveDate() {
         LocalDateTime now = LocalDateTime.now();
@@ -139,6 +149,12 @@ public class Player implements Combatant {
         this.lastSaveDate = now.format(formatter);
     }
 
+    /**
+     * Restituisce una rappresentazione testuale sintetica del giocatore,
+     * comprensiva di nome e livello attuale.
+     *
+     * @return Una stringa nel formato {@code "<nome> (Lvl. <livello>)"}.
+     */
     @Override
     public String toString() {
         return this.name + " (Lvl. " + this.level + ")";

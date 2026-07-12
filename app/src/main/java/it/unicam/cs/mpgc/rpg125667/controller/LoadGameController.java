@@ -40,6 +40,9 @@ public class LoadGameController implements InjectableController {
      * <p>
      * Configura la {@code ListCell} per mostrare il formato personalizzato del giocatore
      * e aggiunge un listener alla selezione per aggiornare il pannello dei dettagli.
+     * Se il {@link GameService} è già stato iniettato al momento della chiamata,
+     * avvia immediatamente il caricamento della lista dei salvataggi tramite
+     * {@link #loadPlayers()}.
      * </p>
      */
     @FXML

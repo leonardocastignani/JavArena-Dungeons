@@ -13,6 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterStats {
+    
     private int maxHealth;
     private int currentHealth;
     private int baseAttack;
@@ -59,11 +60,13 @@ public class CharacterStats {
      * Incrementa permanentemente le statistiche dell'entità.
      * <p>
      * Metodo utilizzato durante l'avanzamento di livello per aggiornare i massimali.
+     * Al termine dell'incremento, la salute corrente viene riportata al nuovo
+     * valore massimo tramite {@link #fullHeal()}.
      * </p>
      *
      * @param healthBonus  Incremento ai punti vita massimi.
-     * @param atkBonus     Incremento all'attacco base.
-     * @param defBonus     Incremento alla difesa base.
+     * @param attackBonus  Incremento all'attacco base.
+     * @param defenseBonus Incremento alla difesa base.
      */
     public void upgradeStats(int healthBonus, int attackBonus, int defenseBonus) {
         this.maxHealth += healthBonus;
