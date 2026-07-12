@@ -21,7 +21,12 @@ public class MainMenuController implements InjectableController {
     private GameService service;
 
     /**
-     * Inizializzazione standard FXML.
+     * Metodo di inizializzazione richiesto dal ciclo di vita di JavaFX/FXML.
+     * <p>
+     * Non esegue alcuna logica poiché la schermata del menu principale non
+     * richiede uno stato iniziale dinamico: tutte le azioni sono gestite
+     * dagli handler dei pulsanti.
+     * </p>
      */
     @FXML
     public void initialize() {}

@@ -5,8 +5,8 @@ import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
 import it.unicam.cs.mpgc.rpg125667.engine.action.*;
-import it.unicam.cs.mpgc.rpg125667.engine.generator.MonsterGenerator;
-import it.unicam.cs.mpgc.rpg125667.engine.generator.RandomMonsterGenerator;
+import it.unicam.cs.mpgc.rpg125667.engine.generator.*;
+
 import lombok.extern.slf4j.*;
 
 import javafx.fxml.*;
@@ -246,7 +246,16 @@ public class ArenaController implements InjectableController {
     }
 
     /**
-     * Gestisce il salvataggio manuale richiesto dall'utente.
+     * Gestisce il salvataggio manuale della partita richiesto dall'utente al termine
+     * di una battaglia vinta.
+     * <p>
+     * Se il giocatore è ancora vivo, aggiorna la data dell'ultimo salvataggio e
+     * persiste i progressi tramite {@link GameService#saveProgress}, disabilitando
+     * poi il pulsante di salvataggio per evitare salvataggi duplicati. Se il
+     * giocatore è morto (caso non normalmente raggiungibile da UI, poiché il
+     * pulsante viene disabilitato in caso di sconfitta), il salvataggio viene
+     * rifiutato e viene mostrato un messaggio nel log di battaglia.
+     * </p>
      */
     @FXML
     protected void onManualSaveClick() {

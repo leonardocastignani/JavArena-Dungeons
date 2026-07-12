@@ -27,7 +27,7 @@ public class GameService {
     /**
      * Costruisce il servizio iniettando la dipendenza del repository.
      *
-     * @param repo Il repository da utilizzare per la persistenza dei giocatori.
+     * @param repository Il repository da utilizzare per la persistenza dei giocatori.
      */
     public GameService(IPlayerRepository repository) {
         this.repository = repository;
@@ -44,8 +44,13 @@ public class GameService {
 
     /**
      * Salva o aggiorna i dati di un giocatore.
+     * <p>
+     * Il salvataggio è manuale: questo metodo non viene invocato automaticamente
+     * a intervalli regolari, ma esclusivamente su richiesta esplicita dell'utente
+     * (es. pressione del pulsante "Salva Partita" nell'interfaccia grafica).
+     * </p>
      *
-     * @param p Il giocatore da salvare.
+     * @param player Il giocatore da salvare.
      */
     public void saveProgress(Player player) {
         this.repository.save(player);
@@ -54,7 +59,7 @@ public class GameService {
     /**
      * Elimina definitivamente i dati di un giocatore.
      *
-     * @param p Il giocatore da eliminare.
+     * @param player Il giocatore da eliminare.
      */
     public void deleteProgress(Player player) {
         this.repository.delete(player);

@@ -50,10 +50,15 @@ public class Monster implements Combatant {
     }
 
     /**
-     * Calcola il danno finale sottraendo la difesa del mostro e aggiorna le statistiche.
+     * Calcola il danno finale sottraendo la difesa del mostro dal danno grezzo in arrivo
+     * e aggiorna la salute corrente del mostro di conseguenza.
+     * <p>
+     * Il danno effettivo non scende mai sotto {@code GameConfig.MIN_DAMAGE}, anche
+     * qualora la difesa del mostro sia superiore o uguale al danno grezzo ricevuto.
+     * </p>
      *
-     * @param rawDamage Il danno grezzo in arrivo.
-     * @return Il danno effettivo subito.
+     * @param rawDamage Il danno grezzo in arrivo, prima della mitigazione da difesa.
+     * @return Il danno effettivo subito, dopo la mitigazione.
      */
     @Override
     public int takeDamage(int rawDamage) {

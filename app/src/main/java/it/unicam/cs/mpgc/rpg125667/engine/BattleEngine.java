@@ -1,7 +1,6 @@
 package it.unicam.cs.mpgc.rpg125667.engine;
 
 import it.unicam.cs.mpgc.rpg125667.model.*;
-import it.unicam.cs.mpgc.rpg125667.util.*;
 import it.unicam.cs.mpgc.rpg125667.engine.action.*;
 
 import lombok.*;
@@ -11,9 +10,9 @@ import java.util.*;
 /**
  * Motore principale della logica di combattimento.
  * <p>
- * Questa classe gestisce lo stato corrente della battaglia, coordinando le interazioni 
- * tra il {@link Player} e il mostro avversario. Elabora le azioni, calcola i risultati 
- * dei turni e mantiene la coerenza del flusso di gioco.
+ * Questa classe coordina lo stato corrente della battaglia tra il {@link Player} e il mostro
+ * avversario, delegando l'esecuzione delle singole azioni a {@link CombatAction} e il calcolo
+ * delle ricompense di fine battaglia a {@link RewardCalculator}.
  * </p>
  */
 @Getter
@@ -23,19 +22,22 @@ public class BattleEngine {
     private final Monster monster;
     private boolean isPlayerTurn;
     private final Random random;
+    private final RewardCalculator rewardCalculator;
 
     /**
-     * Costruttore completo, utile per iniettare un Random specifico nei test (Mocking).
+     * Costruttore completo, utile per iniettare un Random e un RewardCalculator specifici nei test (Mocking).
      *
-     * @param player  Il giocatore.
-     * @param monster Il mostro.
-     * @param random  L'istanza del generatore randomico.
+     * @param player           Il giocatore.
+     * @param monster          Il mostro.
+     * @param random           L'istanza del generatore randomico.
+     * @param rewardCalculator La strategia di calcolo delle ricompense di fine battaglia.
      */
-    public BattleEngine(Player player, Monster monster, Random random) {
+    public BattleEngine(Player player, Monster monster, Random random, RewardCalculator rewardCalculator) {
         this.player = player;
         this.monster = monster;
         this.isPlayerTurn = true;
         this.random = random;
+        this.rewardCalculator = rewardCalculator;
     }
 
     /**
@@ -45,7 +47,7 @@ public class BattleEngine {
      * @param monster Il mostro.
      */
     public BattleEngine(Player player, Monster monster) {
-        this(player, monster, new Random());
+        this(player, monster, new Random(), new DefaultRewardCalculator());
     }
 
     /**
@@ -85,25 +87,12 @@ public class BattleEngine {
     }
 
     /**
-     * Calcola e assegna i punti esperienza al giocatore se vince la battaglia.
-     * Ritorna anche le informazioni testuali su eventuali "Level Up".
+     * Calcola e assegna le ricompense al giocatore se vince la battaglia, delegando la logica
+     * alla strategia di {@link RewardCalculator} configurata.
      *
      * @return La stringa di log che descrive le ricompense ottenute.
      */
     public String grantRewards() {
-        if (!this.player.isAlive() || this.monster.isAlive()) return "";
-
-        int xpReward = GameConfig.BASE_XP_REWARD + (this.monster.getStats().getMaxHealth() / 2);
-        boolean leveledUp = this.player.gainXp(xpReward);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("Hai ottenuto ").append(xpReward).append(" punti esperienza!");
-        
-        if (leveledUp) {
-            sb.append("\nSALI DI LIVELLO! Sei ora al Livello ").append(this.player.getLevel()).append("!");
-            sb.append("\nSalute e pozioni ripristinate. Statistiche aumentate!");
-        }
-
-        return sb.toString();
+        return this.rewardCalculator.grantRewards(this.player, this.monster);
     }
 }

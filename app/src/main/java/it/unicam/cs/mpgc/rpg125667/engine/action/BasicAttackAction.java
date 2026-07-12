@@ -15,6 +15,23 @@ import java.util.*;
  */
 public class BasicAttackAction implements CombatAction {
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Prima estrae un numero casuale in {@code [1, 100]}: se ricade entro
+     * {@link GameConfig#DODGE_THRESHOLD} il difensore schiva l'attacco e non subisce danni.
+     * Altrimenti il danno grezzo è pari all'attacco base dell'attaccante, moltiplicato per
+     * {@link GameConfig#CRIT_MULTIPLIER} se il tiro supera {@link GameConfig#CRIT_THRESHOLD}
+     * (colpo critico). Il danno effettivo, già ridotto dalla difesa del bersaglio, è calcolato
+     * da {@link Combatant#takeDamage(int)}.
+     * </p>
+     *
+     * @param attacker Il combattente che sferra l'attacco.
+     * @param defender Il combattente che subisce (o schiva) l'attacco.
+     * @param rng      L'istanza Random usata per determinare schivata e colpo critico.
+     * @return Il {@link TurnResult} con il log descrittivo, il danno inflitto e i flag di
+     *         critico/schivata.
+     */
     @Override
     public TurnResult execute(Combatant attacker, Combatant defender, Random rng) {
         int attackRoll = rng.nextInt(100) + 1;

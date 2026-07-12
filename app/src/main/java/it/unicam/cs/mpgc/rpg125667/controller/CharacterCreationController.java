@@ -59,8 +59,8 @@ public class CharacterCreationController implements InjectableController {
     }
 
     /**
-     * Genera valori casuali per Attacco e Difesa entro i range predefiniti 
-     * e aggiorna le label della UI.
+     * Genera valori casuali per Attacco (compreso tra 10 e 20) e Difesa
+     * (compreso tra 2 e 8) e aggiorna le rispettive label nella UI.
      */
     private void rollStats() {
         this.currentAttack = this.random.nextInt(11) + 10; 
