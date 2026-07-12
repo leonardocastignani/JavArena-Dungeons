@@ -1,6 +1,6 @@
 # ⚔️ JavArena Dungeons
 
-**JavArena Dungeons** è un videogioco RPG (Gioco di Ruolo) a turni con interfaccia grafica sviluppato in Java e JavaFX. Il giocatore può creare eroi personalizzati, affrontare mostri generati proceduralmente in un'arena, accumulare esperienza per salire di livello e gestire i propri progressi attraverso un sistema di persistenza automatica su file JSON.
+**JavArena Dungeons** è un videogioco RPG (Gioco di Ruolo) a turni con interfaccia grafica sviluppato in Java e JavaFX. Il giocatore può creare eroi personalizzati, affrontare mostri generati proceduralmente in un'arena, accumulare esperienza per salire di livello e gestire i propri progressi attraverso un sistema di salvataggio manuale su file JSON.
 
 ---
 
@@ -44,7 +44,8 @@ Il progetto è stato refattorizzato ponendo forte enfasi sull'Ingegneria del Sof
 * **MVC Pattern:** Netta separazione tra View (FXML), Controller (Java) e Model (Logica di business).
 * **Strategy Pattern (`CombatAction`):** Il motore di combattimento delega la risoluzione delle azioni (Attacco, Cura) a classi esterne, rispettando l'Open/Closed Principle.
 * **Abstract Factory / Dependency Injection (`MonsterGenerator`):** La generazione dei mostri è separata dal caricamento su disco (I/O), garantendo testabilità e il Single Responsibility Principle.
-* **Stream API Avanzate:** Utilizzo massiccio di programmazione funzionale in Java per il filtraggio e il bilanciamento delle entità.
+* **Strategy Pattern (`RewardCalculator`):** Il calcolo delle ricompense di fine battaglia (XP, level-up) è isolato in una strategia dedicata, disaccoppiata da `BattleEngine` e sostituibile senza modificarne il codice.
+* **Stream API:** Uso mirato di programmazione funzionale per il filtraggio dei mostri idonei al livello del giocatore (`RandomMonsterGenerator`) e la ricerca di eroi salvati per nome (`CharacterCreationController`).
 * **Multithreading:** Scrittura su database JSON delegata a un thread pool asincrono per non bloccare il JavaFX Application Thread.
 
 ### 🤖 Uso di strumenti di AI
@@ -59,4 +60,10 @@ L'AI non è stata usata per farsi scrivere il progetto da zero, ma come supporto
 Tutto il codice generato in seguito ai suggerimenti dell'AI è stato analizzato, modificato, adattato alle specifiche universitarie e testato personalmente prima dell'integrazione finale.
 
 ### 📚 Documentazione
-Per una dichiarazione estremamente dettagliata dei refactoring applicati grazie all'AI e delle logiche architetturali apprese, si prega di fare riferimento alla Wiki del repository.
+Per una dichiarazione estremamente dettagliata dei refactoring applicati grazie all'AI e delle logiche architetturali apprese, si prega di fare riferimento alla Wiki del repository, organizzata nelle seguenti pagine tematiche:
+- [**Architettura e Design**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/Architettura-e-Design)
+- [**Classi Principali**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/Classi-Principali)
+- [**Estendibilità**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/Estendibilita)
+- [**Persistenza e Concorrenza**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/Persistenza-e-Concorrenza)
+- [**SOLID e Design Pattern**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/SOLID-e-Design-Pattern)
+- [**Uso dell'AI**](https://github.com/leonardocastignani/JavArena-Dungeons/wiki/Uso-dell-AI)
