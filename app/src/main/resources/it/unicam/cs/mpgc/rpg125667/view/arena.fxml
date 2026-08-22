@@ -38,6 +38,7 @@
         <Button fx:id="attackButton" text="Attacca" onAction="#onAttackClick" prefHeight="50.0" minWidth="160.0" styleClass="attack-button, action-button" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
         <Button fx:id="healButton" text="Cura" onAction="#onHealClick" prefHeight="50.0" minWidth="160.0" styleClass="heal-button, action-button" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
         <Button fx:id="saveButton" text="Salva Partita" onAction="#onManualSaveClick" prefHeight="50.0" minWidth="180.0" styleClass="action-button" style="-fx-font-size: 16px;" />
+        <Button fx:id="nextBattleButton" text="Prossima Partita" onAction="#onNextBattleClick" disable="true" prefHeight="50.0" minWidth="180.0" styleClass="action-button" style="-fx-font-size: 16px;" />
         <Button fx:id="backButton" text="Torna alla Home" onAction="#onBackToMenuClick" disable="true" prefHeight="50.0" minWidth="180.0" styleClass="action-button" style="-fx-font-size: 16px;" />
     </HBox>
 </VBox>

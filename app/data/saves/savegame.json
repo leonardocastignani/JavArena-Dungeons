@@ -2,15 +2,15 @@
   "id" : "f47ac10b-58cc-4372-a567-0e02b2c3d479",
   "name" : "Thorin",
   "stats" : {
-    "maxHealth" : 160,
-    "currentHealth" : 160,
-    "baseAttack" : 27,
-    "baseDefense" : 11
+    "maxHealth" : 180,
+    "currentHealth" : 180,
+    "baseAttack" : 29,
+    "baseDefense" : 12
   },
   "potions" : 3,
-  "level" : 4,
-  "xp" : 41,
-  "lastSaveDate" : "12/07/2026 22:43"
+  "level" : 5,
+  "xp" : 33,
+  "lastSaveDate" : "22/08/2026 23:44"
 }, {
   "id" : "550e8400-e29b-41d4-a716-446655440000",
   "name" : "Elara",

@@ -35,6 +35,7 @@ public class ArenaController implements InjectableController {
     @FXML private Button healButton;
     @FXML private Button backButton;
     @FXML private Button saveButton;
+    @FXML private Button nextBattleButton;
 
     private BattleEngine engine;
     private GameService service;
@@ -51,9 +52,23 @@ public class ArenaController implements InjectableController {
      */
     public void initData(Player player) {
         this.attackButton.setDisable(false);
+        this.attackButton.setVisible(true);
+        this.attackButton.setManaged(true);
         this.healButton.setDisable(false);
+        this.healButton.setVisible(true);
+        this.healButton.setManaged(true);
         this.backButton.setDisable(true);
         this.saveButton.setDisable(true);
+        this.saveButton.setVisible(false);
+        this.saveButton.setManaged(false);
+        this.nextBattleButton.setDisable(true);
+        this.nextBattleButton.setVisible(false);
+        this.nextBattleButton.setManaged(false);
+
+        this.backButton.setText("Torna alla Home");
+        this.backButton.getStyleClass().remove("victory-button");
+        this.monsterNameLabel.getStyleClass().remove("victory-label");
+        this.saveButton.setText("Salva Partita");
 
         MonsterGenerator generator = new RandomMonsterGenerator(MonsterLoader.getTemplates());
         Monster randomEnemy = generator.generate(player.getLevel());
@@ -199,8 +214,18 @@ public class ArenaController implements InjectableController {
         this.healButton.setDisable(true);
 
         if (this.engine.getPlayer().isAlive()) {
+            this.attackButton.setVisible(false);
+            this.attackButton.setManaged(false);
+            this.healButton.setVisible(false);
+            this.healButton.setManaged(false);
+
             this.backButton.setDisable(false);
             this.saveButton.setDisable(false);
+            this.saveButton.setVisible(true);
+            this.saveButton.setManaged(true);
+            this.nextBattleButton.setDisable(false);
+            this.nextBattleButton.setVisible(true);
+            this.nextBattleButton.setManaged(true);
 
             String rewardLog = this.engine.grantRewards();
             this.logMessage(rewardLog);
@@ -217,7 +242,7 @@ public class ArenaController implements InjectableController {
                 this.backButton.getStyleClass().add("victory-button");
             }
 
-            this.logMessage("La battaglia e' terminata. Se sei soddisfatto dell'esito, usa il pulsante 'Salva Partita' per mantenere i progressi!\nSalute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
+            this.logMessage("La battaglia e' terminata. Usa 'Prossima Battaglia' per continuare, oppure 'Salva Partita' per mettere al sicuro i progressi!\nSalute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
         } else {
             this.logMessage("Sei morto... I tuoi progressi non verranno salvati.");
             this.service.deleteProgress(this.engine.getPlayer());
@@ -268,5 +293,20 @@ public class ArenaController implements InjectableController {
         } else {
             this.logMessage("Non puoi salvare da morto!");
         }
+    }
+
+    /**
+     * Gestisce il click sul pulsante "Prossima Battaglia".
+     * <p>
+     * Riavvia immediatamente l'Arena riutilizzando lo stesso {@link Player} già in memoria
+     * (con esperienza, livello e pozioni aggiornati dall'ultima vittoria), senza richiedere
+     * un salvataggio o un rientro dal menu principale. Il salvataggio resta un'azione
+     * indipendente e facoltativa, disponibile in qualsiasi momento tramite
+     * {@link #onManualSaveClick()}.
+     * </p>
+     */
+    @FXML
+    protected void onNextBattleClick() {
+        this.initData(this.engine.getPlayer());
     }
 }
