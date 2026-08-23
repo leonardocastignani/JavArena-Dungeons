@@ -8,12 +8,14 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 
 /**
- * Controller per la schermata di "Game Over".
+ * Controller per la schermata di vittoria di partita.
  * <p>
- * Mostrato quando il giocatore viene sconfitto in battaglia.
+ * Mostrato una tantum quando il giocatore raggiunge {@link it.unicam.cs.mpgc.rpg125667.util.GameConfig#VICTORY_LEVEL}
+ * per la prima volta (vedi {@link it.unicam.cs.mpgc.rpg125667.model.Player#shouldShowVictoryScreen()}),
+ * distinta dalla vittoria di una singola battaglia. L'eroe resta pienamente giocabile dopo questa schermata.
  * </p>
  */
-public class GameOverController implements InjectableController {
+public class GameWonController implements InjectableController {
 
     @FXML private Button menuButton;
 

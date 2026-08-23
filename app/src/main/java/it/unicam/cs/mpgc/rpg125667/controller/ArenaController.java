@@ -219,6 +219,20 @@ public class ArenaController implements InjectableController {
             this.healButton.setVisible(false);
             this.healButton.setManaged(false);
 
+            String rewardLog = this.engine.grantRewards();
+            this.logMessage(rewardLog);
+
+            this.updateUI();
+
+            if (this.engine.getPlayer().shouldShowVictoryScreen()) {
+                this.logMessage("Hai raggiunto il Livello " + this.engine.getPlayer().getLevel() + ": la tua leggenda e' completa!");
+                this.engine.getPlayer().markVictorySeen();
+                this.engine.getPlayer().updateSaveDate();
+                this.service.saveProgress(this.engine.getPlayer());
+                this.goToGameWon();
+                return;
+            }
+
             this.backButton.setDisable(false);
             this.saveButton.setDisable(false);
             this.saveButton.setVisible(true);
@@ -226,11 +240,6 @@ public class ArenaController implements InjectableController {
             this.nextBattleButton.setDisable(false);
             this.nextBattleButton.setVisible(true);
             this.nextBattleButton.setManaged(true);
-
-            String rewardLog = this.engine.grantRewards();
-            this.logMessage(rewardLog);
-
-            this.updateUI();
 
             this.monsterNameLabel.setText("VITTORIA!");
             this.monsterNameLabel.getStyleClass().add("victory-label");
@@ -268,6 +277,16 @@ public class ArenaController implements InjectableController {
     private void goToGameOver() {
         Stage stage = (Stage) this.attackButton.getScene().getWindow();
         SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-over.fxml", this.service);
+    }
+
+    /**
+     * Gestisce la transizione alla schermata di vittoria di partita, mostrata una tantum
+     * quando il giocatore raggiunge {@link it.unicam.cs.mpgc.rpg125667.util.GameConfig#VICTORY_LEVEL}
+     * per la prima volta. Chiude la schermata di combattimento e carica la scena di vittoria.
+     */
+    private void goToGameWon() {
+        Stage stage = (Stage) this.attackButton.getScene().getWindow();
+        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/game-won.fxml", this.service);
     }
 
     /**
