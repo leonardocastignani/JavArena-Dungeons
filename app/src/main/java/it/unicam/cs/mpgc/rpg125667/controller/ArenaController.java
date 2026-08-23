@@ -194,7 +194,7 @@ public class ArenaController implements InjectableController {
     private void logMessage(String message) {
         if (message == null || message.isEmpty()) return;
         this.battleLog.appendText(message + "\n");
-        log.debug("Azione: {}", message);
+        log.info("Azione: {}", message);
     }
 
     /**

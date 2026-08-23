@@ -1,8 +1,8 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
-import com.fasterxml.jackson.annotation.*;
-
 import it.unicam.cs.mpgc.rpg125667.util.*;
+
+import jakarta.persistence.*;
 
 import lombok.*;
 
@@ -13,17 +13,21 @@ import java.util.*;
 /**
  * Rappresenta l'eroe controllato dal giocatore.
  * <p>
- * Gestisce l'inventario, il sistema di progressione (esperienza/livello) 
- * e le interazioni di combattimento tramite {@link Combatant}.
+ * Gestisce l'inventario, il sistema di progressione (esperienza/livello)
+ * e le interazioni di combattimento tramite {@link Combatant}. Entità JPA persistita
+ * tramite {@link it.unicam.cs.mpgc.rpg125667.repository.HibernatePlayerRepository}.
  * </p>
  */
+@Entity
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class Player implements Combatant {
 
+    @Id
     private String id;
     private String name;
+    @Embedded
     private CharacterStats stats;
     private int potions = 3;
     private int level = 1;
@@ -49,12 +53,11 @@ public class Player implements Combatant {
     }
 
     /**
-     * Restituisce la salute attuale del giocatore (ignorato da Jackson per non duplicare dati).
+     * Restituisce la salute attuale del giocatore.
      *
      * @return I punti vita attuali.
      */
     @Override
-    @JsonIgnore
     public int getCurrentHealth() {
         return this.stats.getCurrentHealth();
     }
@@ -65,7 +68,6 @@ public class Player implements Combatant {
      * @return true se il giocatore è vivo.
      */
     @Override
-    @JsonIgnore
     public boolean isAlive() {
         return this.stats.getCurrentHealth() > 0;
     }

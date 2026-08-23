@@ -1,6 +1,6 @@
 # ⚔️ JavArena Dungeons
 
-**JavArena Dungeons** è un videogioco RPG (Gioco di Ruolo) a turni con interfaccia grafica sviluppato in Java e JavaFX. Il giocatore può creare eroi personalizzati, affrontare mostri generati proceduralmente in un'arena, accumulare esperienza per salire di livello e gestire i propri progressi attraverso un sistema di salvataggio manuale su file JSON.
+**JavArena Dungeons** è un videogioco RPG (Gioco di Ruolo) a turni con interfaccia grafica sviluppato in Java e JavaFX. Il giocatore può creare eroi personalizzati, affrontare mostri generati proceduralmente in un'arena, accumulare esperienza per salire di livello e gestire i propri progressi attraverso un sistema di salvataggio manuale su database H2 tramite JPA/Hibernate.
 
 ---
 
@@ -35,9 +35,11 @@ Per lanciare l'applicazione desktop, utilizza il comando:
 ## 🎮 Funzionalità Principali
 * **Creazione Personaggio:** Crea il tuo eroe unico.
 * **Combat System a Turni:** Sistema tattico che include probabilità di schivata, colpi critici e utilizzo di oggetti (pozioni).
-* **Permadeath:** Se i tuoi HP scendono a zero, il salvataggio viene eliminato in modo permanente e asincrono.
+* **Continuazione Fluida:** Dopo una vittoria puoi affrontare subito la battaglia successiva con lo stesso eroe, senza dover salvare e ricaricare la partita.
+* **Vittoria di Partita:** Al completamento della progressione (livello massimo con barra XP piena) l'eroe raggiunge un traguardo celebrativo una tantum, restando comunque pienamente giocabile in seguito.
+* **Permadeath:** Se i tuoi HP scendono a zero, il salvataggio viene eliminato in modo permanente.
 * **Generazione Procedurale (Sliding Window):** I mostri si adattano al livello del giocatore. Non incontrerai mai nemici troppo deboli o impossibili da battere.
-* **Salvataggio Manuale:** I progressi (Esperienza, Livello, HP residui) vengono serializzati su disco in formato JSON.
+* **Salvataggio Manuale:** I progressi (Esperienza, Livello, HP residui) vengono persistiti su un database H2 embedded tramite JPA/Hibernate.
 
 ## 🏗️ Architettura e Pattern (Progetto Universitario)
 Il progetto è stato refattorizzato ponendo forte enfasi sull'Ingegneria del Software e sui principi **SOLID**:
@@ -46,7 +48,7 @@ Il progetto è stato refattorizzato ponendo forte enfasi sull'Ingegneria del Sof
 * **Abstract Factory / Dependency Injection (`MonsterGenerator`):** La generazione dei mostri è separata dal caricamento su disco (I/O), garantendo testabilità e il Single Responsibility Principle.
 * **Strategy Pattern (`RewardCalculator`):** Il calcolo delle ricompense di fine battaglia (XP, level-up) è isolato in una strategia dedicata, disaccoppiata da `BattleEngine` e sostituibile senza modificarne il codice.
 * **Stream API:** Uso mirato di programmazione funzionale per il filtraggio dei mostri idonei al livello del giocatore (`RandomMonsterGenerator`) e la ricerca di eroi salvati per nome (`CharacterCreationController`).
-* **Multithreading:** Scrittura su database JSON delegata a un thread pool asincrono per non bloccare il JavaFX Application Thread.
+* **Persistenza Transazionale (JPA/Hibernate):** Il salvataggio è delegato a un database H2 embedded tramite `HibernatePlayerRepository`, senza cache applicativa manuale da tenere sincronizzata: la coerenza tra dato persistito e oggetto `Player` è garantita direttamente dalle transazioni JPA.
 
 ### 🤖 Uso di strumenti di AI
 Durante lo sviluppo di questo progetto è stato fatto un uso ragionato, consapevole e didattico di strumenti di Intelligenza Artificiale (Gemini), impiegati con il ruolo di "Senior Developer / Code Reviewer".
