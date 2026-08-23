@@ -1,5 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.model;
 
+import jakarta.persistence.*;
+
 import lombok.*;
 
 /**
@@ -7,8 +9,10 @@ import lombok.*;
  * <p>
  * Questa classe gestisce la logica di calcolo sicura per la variazione della salute
  * (impedendo valori negativi o eccedenze oltre il massimo) e il potenziamento dei parametri.
+ * Incorporata come {@link Embeddable} all'interno di {@link Player} tramite JPA.
  * </p>
  */
+@Embeddable
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

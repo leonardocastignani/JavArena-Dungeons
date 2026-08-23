@@ -32,7 +32,7 @@ public class App extends Application {
      * Esegue il caricamento delle risorse pesanti (es. mostri tramite {@link MonsterLoader})
      * in modo asincrono tramite {@link CompletableFuture} per evitare il congelamento
      * dell'interfaccia utente all'avvio. Inizializza inoltre il {@link GameService}
-     * con l'implementazione del repository su file ({@link JsonPlayerRepository}).
+     * con l'implementazione del repository su database H2 ({@link HibernatePlayerRepository}).
      * </p>
      */
     @Override
@@ -41,7 +41,7 @@ public class App extends Application {
         CompletableFuture.runAsync(() -> {
             MonsterLoader.loadMonsters();
         });
-        this.gameService = new GameService(new JsonPlayerRepository());
+        this.gameService = new GameService(new HibernatePlayerRepository());
     }
 
     /**

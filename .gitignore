@@ -32,10 +32,6 @@ build
 # Ignore Kotlin plugin data
 .kotlin
 
-# Ignore H2 database files
-app/src/data/*.db
-app/src/data/*.trace.db
-
 # Ignore IntelliJ IDEA project files
 .idea/
 
@@ -51,6 +47,10 @@ nbproject/
 
 # Ignore Maven target directory
 target/
+
+# Ignore H2 database files
+app/data/saves/*.lock.db
+app/data/saves/*.trace.db
 
 # Extra
 docs/
