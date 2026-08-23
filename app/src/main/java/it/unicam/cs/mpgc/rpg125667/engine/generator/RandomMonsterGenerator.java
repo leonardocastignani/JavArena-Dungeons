@@ -61,7 +61,7 @@ public class RandomMonsterGenerator implements MonsterGenerator {
             suitableMonsters = this.templates;
         }
 
-        MonsterTemplate t = suitableMonsters.get(random.nextInt(suitableMonsters.size()));
+        MonsterTemplate t = suitableMonsters.get(this.random.nextInt(suitableMonsters.size()));
 
         double multiplier = 1.0 + ((playerLevel - 1) * 0.2);
         int hp = (int) ((this.random.nextInt((t.getMaxHp() - t.getMinHp()) + 1) + t.getMinHp()) * multiplier);

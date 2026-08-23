@@ -29,6 +29,7 @@ public class Player implements Combatant {
     private int level = 1;
     private int xp = 0;
     private String lastSaveDate;
+    private boolean victorySeen = false;
 
     /**
      * Costruisce un nuovo giocatore con il nome e le statistiche fornite.
@@ -106,9 +107,12 @@ public class Player implements Combatant {
     /**
      * Aggiunge esperienza e gestisce il controllo del passaggio di livello.
      * <p>
-     * Se l'esperienza accumulata supera la soglia necessaria (calcolata tramite 
+     * Se l'esperienza accumulata supera la soglia necessaria (calcolata tramite
      * {@code GameConfig}), il metodo invoca automaticamente {@code levelUp()}
-     * finché l'esperienza non è esaurita.
+     * finché l'esperienza non è esaurita, fino a un massimo di {@link GameConfig#VICTORY_LEVEL}:
+     * raggiunto tale livello, l'esperienza continua ad accumularsi ma resta comunque limitata
+     * alla soglia del livello massimo, cosicché la vittoria di partita ({@link #hasWonGame()})
+     * corrisponda esattamente al completamento della barra XP (es. "250/250").
      * </p>
      *
      * @param amount Punti esperienza guadagnati.
@@ -117,12 +121,18 @@ public class Player implements Combatant {
     public boolean gainXp(int amount) {
         this.xp += amount;
         boolean leveledUp = false;
-        
-        while (this.xp >= (this.level * GameConfig.LEVEL_UP_XP_MULTIPLIER)) {
+
+        while (this.level < GameConfig.VICTORY_LEVEL && this.xp >= (this.level * GameConfig.LEVEL_UP_XP_MULTIPLIER)) {
             this.xp -= (this.level * GameConfig.LEVEL_UP_XP_MULTIPLIER);
             this.levelUp();
             leveledUp = true;
         }
+
+        if (this.level >= GameConfig.VICTORY_LEVEL) {
+            int maxXp = GameConfig.VICTORY_LEVEL * GameConfig.LEVEL_UP_XP_MULTIPLIER;
+            this.xp = Math.min(this.xp, maxXp);
+        }
+
         return leveledUp;
     }
 
@@ -137,6 +147,47 @@ public class Player implements Combatant {
         this.level++;
         this.stats.upgradeStats(GameConfig.HP_BONUS_PER_LEVEL, GameConfig.ATK_BONUS_PER_LEVEL, GameConfig.DEF_BONUS_PER_LEVEL);
         this.potions = GameConfig.BASE_POTIONS;
+    }
+
+    /**
+     * Verifica se il giocatore ha completato l'intera progressione di gioco, distinta dalla
+     * vittoria di una singola battaglia ({@link it.unicam.cs.mpgc.rpg125667.engine.BattleEngine#isBattleOver}).
+     * <p>
+     * Non basta raggiungere {@link GameConfig#VICTORY_LEVEL}: è necessario aver anche riempito
+     * per intero la barra XP di quel livello (es. "250/250"), poiché {@link #gainXp(int)} smette
+     * di far salire di livello oltre il massimo ma continua ad accumulare esperienza fino a quel
+     * limite. A differenza di {@link #shouldShowVictoryScreen()}, questo metodo resta vero anche
+     * dopo che la schermata di vittoria è già stata mostrata: è pensato per essere usato ovunque si
+     * debba segnalare che l'eroe ha completato il traguardo (es. tag "MAX" nella selezione salvataggi).
+     * </p>
+     *
+     * @return {@code true} se il livello massimo è stato raggiunto e la relativa barra XP è piena.
+     */
+    public boolean hasWonGame() {
+        return this.level >= GameConfig.VICTORY_LEVEL
+                && this.xp >= (GameConfig.VICTORY_LEVEL * GameConfig.LEVEL_UP_XP_MULTIPLIER);
+    }
+
+    /**
+     * Verifica se al giocatore va mostrata la schermata di vittoria finale.
+     * <p>
+     * La vittoria di partita è un traguardo celebrativo una tantum: va segnalata solo la prima
+     * volta che il livello massimo viene raggiunto, dopodiché l'eroe resta pienamente giocabile.
+     * Diventa {@code false} non appena {@link #markVictorySeen()} viene invocato.
+     * </p>
+     *
+     * @return {@code true} se il livello massimo è stato raggiunto e non è ancora stato celebrato.
+     */
+    public boolean shouldShowVictoryScreen() {
+        return this.hasWonGame() && !this.victorySeen;
+    }
+
+    /**
+     * Segna la vittoria di partita come già mostrata al giocatore, impedendo che la schermata
+     * di vittoria venga riproposta nelle battaglie successive.
+     */
+    public void markVictorySeen() {
+        this.victorySeen = true;
     }
 
     /**

@@ -52,10 +52,10 @@ public class LoadGameController implements InjectableController {
             protected void updateItem(Player player, boolean empty) {
                 super.updateItem(player, empty);
                 if (empty || player == null) {
-                    setText(null);
+                    this.setText(null);
                 } else {
                     String date = (player.getLastSaveDate() != null) ? player.getLastSaveDate() : "Vecchia Partita";
-                    setText(player.getName() + " (Liv. " + player.getLevel() + ") - " + date);
+                    this.setText(player.getName() + " (Liv. " + formatLevel(player) + ") - " + date);
                 }
             }
         });
@@ -93,6 +93,19 @@ public class LoadGameController implements InjectableController {
     }
 
     /**
+     * Formatta il livello di un giocatore per la visualizzazione rispetto al livello massimo
+     * di partita, segnalando con il suffisso "MAX" gli eroi che lo hanno raggiunto.
+     *
+     * @param player Il giocatore di cui formattare il livello.
+     * @return Una stringa nel formato {@code "<livello> / <VICTORY_LEVEL>"}, con suffisso
+     *         {@code " MAX"} se il livello massimo è stato raggiunto.
+     */
+    private String formatLevel(Player player) {
+        String base = player.getLevel() + " / " + GameConfig.VICTORY_LEVEL;
+        return player.hasWonGame() ? base + " MAX" : base;
+    }
+
+    /**
      * Aggiorna il pannello laterale visibile con i dati del giocatore selezionato.
      *
      * @param p Il giocatore di cui mostrare le statistiche.
@@ -102,7 +115,7 @@ public class LoadGameController implements InjectableController {
         this.errorLabel.setText("");
 
         this.detailNameLabel.setText(p.getName());
-        this.detailLevelLabel.setText("Livello: " + p.getLevel());
+        this.detailLevelLabel.setText("Livello: " + this.formatLevel(p));
         this.detailHpLabel.setText("Salute: " + p.getCurrentHealth() + " / " + p.getStats().getMaxHealth());
         this.detailXpLabel.setText("XP: " + p.getXp() + " / " + (p.getLevel() * GameConfig.LEVEL_UP_XP_MULTIPLIER));
         this.detailStatsLabel.setText("Att: " + p.getStats().getBaseAttack() + "  |  Dif: " + p.getStats().getBaseDefense());

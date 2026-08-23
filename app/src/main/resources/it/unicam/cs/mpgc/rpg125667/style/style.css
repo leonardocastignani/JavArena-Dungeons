@@ -131,6 +131,22 @@
     -fx-text-fill: #1a0f0f;
 }
 
+#game-won-root {
+    -fx-background-color: #0f1a0f;
+}
+#game-won-root .label {
+    -fx-text-fill: #d4af37;
+}
+#game-won-root .button {
+    -fx-background-color: #1b5e20;
+    -fx-border-color: #d4af37;
+    -fx-text-fill: #ffffff;
+}
+#game-won-root .button:hover {
+    -fx-background-color: #d4af37;
+    -fx-text-fill: #0f1a0f;
+}
+
 .victory-button {
     -fx-background-color: #2e7d32;
     -fx-border-color: #d4af37;
