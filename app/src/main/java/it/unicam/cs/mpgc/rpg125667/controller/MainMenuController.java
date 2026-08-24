@@ -47,7 +47,8 @@ public class MainMenuController implements InjectableController {
     @FXML
     protected void onNewGameClick() {
         Stage stage = (Stage) this.statusLabel.getScene().getWindow();
-        SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/character-creation.fxml", this.service);
+        CharacterCreationController controller = SceneManager.switchScene(stage, "/it/unicam/cs/mpgc/rpg125667/view/character-creation.fxml", this.service);
+        controller.resetForm();
     }
 
     /**

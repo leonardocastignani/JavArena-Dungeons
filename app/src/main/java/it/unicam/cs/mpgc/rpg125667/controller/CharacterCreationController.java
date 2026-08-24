@@ -59,6 +59,21 @@ public class CharacterCreationController implements InjectableController {
     }
 
     /**
+     * Riporta il modulo di creazione allo stato iniziale: svuota il nome inserito,
+     * cancella eventuali messaggi d'errore e tira nuove statistiche casuali.
+     * <p>
+     * Necessario perché {@link SceneManager} mantiene in cache il controller: senza
+     * questo reset, rientrando nella schermata resterebbero visibili nome e statistiche
+     * dell'eroe creato in precedenza.
+     * </p>
+     */
+    public void resetForm() {
+        this.nameField.clear();
+        this.errorLabel.setText("");
+        this.rollStats();
+    }
+
+    /**
      * Genera valori casuali per Attacco (compreso tra 10 e 20) e Difesa
      * (compreso tra 2 e 8) e aggiorna le rispettive label nella UI.
      */

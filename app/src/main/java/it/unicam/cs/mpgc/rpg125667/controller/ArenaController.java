@@ -1,6 +1,7 @@
 package it.unicam.cs.mpgc.rpg125667.controller;
 
 import it.unicam.cs.mpgc.rpg125667.engine.*;
+import it.unicam.cs.mpgc.rpg125667.engine.outcome.*;
 import it.unicam.cs.mpgc.rpg125667.model.*;
 import it.unicam.cs.mpgc.rpg125667.service.*;
 import it.unicam.cs.mpgc.rpg125667.util.*;
@@ -13,16 +14,27 @@ import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.stage.*;
 
+import java.util.*;
+
 /**
  * Controller JavaFX responsabile della gestione della schermata di combattimento (Arena).
  * <p>
  * Questo controller coordina l'interazione tra l'interfaccia grafica e il {@link BattleEngine}.
  * Gestisce l'intero ciclo di vita di una battaglia, inclusi input utente (attacchi, pozioni),
- * aggiornamento del log di gioco, aggiornamento della UI e transizioni post-battaglia (vittoria/sconfitta).
+ * aggiornamento del log di gioco, aggiornamento della UI e transizioni post-battaglia. La
+ * risoluzione dell'esito di fine battaglia (vittoria, sconfitta, prosecuzione, o qualunque
+ * nuova regola di progressione futura) è delegata a una catena di {@link BattleOutcomeHandler},
+ * cosi' che aggiungerne una nuova non richieda di modificare questo controller.
  * </p>
  */
 @Slf4j
-public class ArenaController implements InjectableController {
+public class ArenaController implements InjectableController, BattleOutcomeView {
+
+    private final List<BattleOutcomeHandler> outcomeHandlers = List.of(
+            new DefeatOutcomeHandler(),
+            new FinalVictoryOutcomeHandler(),
+            new ContinueOutcomeHandler()
+    );
 
     @FXML private Label playerNameLabel;
     @FXML private Label playerHpLabel;
@@ -186,12 +198,11 @@ public class ArenaController implements InjectableController {
     }
 
     /**
-     * Aggiunge un nuovo messaggio testuale al log della battaglia visibile a schermo,
-     * assicurandosi che il testo scorra automaticamente verso il basso.
-     *
-     * @param message Il testo descrittivo dell'azione appena avvenuta.
+     * {@inheritDoc}
+     * Assicura inoltre che il testo scorra automaticamente verso il basso nel log a schermo.
      */
-    private void logMessage(String message) {
+    @Override
+    public void logMessage(String message) {
         if (message == null || message.isEmpty()) return;
         this.battleLog.appendText(message + "\n");
         log.info("Azione: {}", message);
@@ -200,8 +211,9 @@ public class ArenaController implements InjectableController {
     /**
      * Gestisce la logica di fine battaglia.
      * <p>
-     * In caso di vittoria: premia il giocatore, abilita il salvataggio e permette di tornare al menu.
-     * In caso di sconfitta: elimina il progresso salvato e reindirizza alla schermata di Game Over.
+     * Assegna le ricompense in caso di vittoria, quindi delega la risoluzione dell'esito
+     * (sconfitta, vittoria di partita, o prosecuzione) al primo {@link BattleOutcomeHandler}
+     * della catena che si applica allo stato corrente.
      * </p>
      */
     private void endBattle() {
@@ -209,7 +221,7 @@ public class ArenaController implements InjectableController {
         this.logMessage("--- FINE BATTAGLIA ---");
         this.battleLog.appendText("\n");
         this.logMessage(this.engine.getBattleResult());
-        
+
         this.attackButton.setDisable(true);
         this.healButton.setDisable(true);
 
@@ -221,42 +233,60 @@ public class ArenaController implements InjectableController {
 
             String rewardLog = this.engine.grantRewards();
             this.logMessage(rewardLog);
-
             this.updateUI();
-
-            if (this.engine.getPlayer().shouldShowVictoryScreen()) {
-                this.logMessage("Hai raggiunto il Livello " + this.engine.getPlayer().getLevel() + ": la tua leggenda e' completa!");
-                this.engine.getPlayer().markVictorySeen();
-                this.engine.getPlayer().updateSaveDate();
-                this.service.saveProgress(this.engine.getPlayer());
-                this.goToGameWon();
-                return;
-            }
-
-            this.backButton.setDisable(false);
-            this.saveButton.setDisable(false);
-            this.saveButton.setVisible(true);
-            this.saveButton.setManaged(true);
-            this.nextBattleButton.setDisable(false);
-            this.nextBattleButton.setVisible(true);
-            this.nextBattleButton.setManaged(true);
-
-            this.monsterNameLabel.setText("VITTORIA!");
-            this.monsterNameLabel.getStyleClass().add("victory-label");
-            this.monsterHpLabel.setText("Nemico annientato");
-            this.monsterStatsLabel.setText("💀"); 
-            
-            this.backButton.setText("Torna al Menu");
-            if (!this.backButton.getStyleClass().contains("victory-button")) {
-                this.backButton.getStyleClass().add("victory-button");
-            }
-
-            this.logMessage("La battaglia e' terminata. Usa 'Prossima Battaglia' per continuare, oppure 'Salva Partita' per mettere al sicuro i progressi!\nSalute rimanente: " + this.engine.getPlayer().getCurrentHealth() + " HP.");
-        } else {
-            this.logMessage("Sei morto... I tuoi progressi non verranno salvati.");
-            this.service.deleteProgress(this.engine.getPlayer());
-            this.goToGameOver();
         }
+
+        BattleOutcomeContext context = new BattleOutcomeContext(this.engine, this.service, this);
+        this.outcomeHandlers.stream()
+                .filter(handler -> handler.appliesTo(this.engine))
+                .findFirst()
+                .ifPresent(handler -> handler.handle(context));
+    }
+
+    /**
+     * {@inheritDoc}
+     * Reindirizza alla schermata di Game Over.
+     */
+    @Override
+    public void transitionToDefeat() {
+        this.goToGameOver();
+    }
+
+    /**
+     * {@inheritDoc}
+     * Reindirizza alla schermata di vittoria di partita.
+     */
+    @Override
+    public void transitionToVictory() {
+        this.goToGameWon();
+    }
+
+    /**
+     * {@inheritDoc}
+     * Abilita "Prossima Battaglia"/"Salva Partita" e applica lo stile di vittoria alla battaglia
+     * appena conclusa.
+     */
+    @Override
+    public void enableContinuation(String remainingHealthMessage) {
+        this.backButton.setDisable(false);
+        this.saveButton.setDisable(false);
+        this.saveButton.setVisible(true);
+        this.saveButton.setManaged(true);
+        this.nextBattleButton.setDisable(false);
+        this.nextBattleButton.setVisible(true);
+        this.nextBattleButton.setManaged(true);
+
+        this.monsterNameLabel.setText("VITTORIA!");
+        this.monsterNameLabel.getStyleClass().add("victory-label");
+        this.monsterHpLabel.setText("Nemico annientato");
+        this.monsterStatsLabel.setText("💀");
+
+        this.backButton.setText("Torna al Menu");
+        if (!this.backButton.getStyleClass().contains("victory-button")) {
+            this.backButton.getStyleClass().add("victory-button");
+        }
+
+        this.logMessage(remainingHealthMessage);
     }
 
     /**
